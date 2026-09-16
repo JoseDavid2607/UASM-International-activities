@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agenda Internacional 2026 · Facultad de Administración, Uniandes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#101A24;
+  --ink-soft:#3B4956;
+  --ink-faint:#7C8894;
+  --uniandes:#0B2E59;
+  --route:#1B4F8C;      --route-soft:#EAF1F9;
+  --brass:#9C7A2E;      --brass-soft:#F4ECD8;
+  --verified:#1F6E4A;   --verified-soft:#E7F3EC;
+  --wine:#8A3B41;       --wine-soft:#F5E8E8;
+  --paper:#F1F4F6;
+  --paper-raised:#FFFFFF;
+  --line:rgba(16,26,36,.14);
+  --line-soft:rgba(16,26,36,.08);
+  --shadow:0 1px 2px rgba(16,26,36,.06), 0 10px 26px rgba(16,26,36,.07);
+  --r:3px;
+  --serif:'Source Serif 4', Georgia, serif;
+  --sans:'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono:'IBM Plex Mono', ui-monospace, monospace;
+  --maxw:1080px;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --controls-h:74px;
+  --paper-outer:#DEE3E8;
+}
+*,*::before,*::after{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  *{animation-duration:.001ms !important;transition-duration:.001ms !important;}
+}
+body{
+  margin:0;background:var(--paper-outer);color:var(--ink);
+  font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;
+}
+.page-sheet{max-width:1200px;margin:0 auto;background:var(--paper);}
+@media (min-width:1281px){
+  body{padding:30px 0;}
+  .page-sheet{box-shadow:0 0 1px rgba(16,26,36,.06), 0 40px 90px -24px rgba(16,26,36,.22), 0 12px 32px rgba(16,26,36,.08);}
+}
+img{max-width:100%;display:block;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+a{color:inherit;}
+
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s var(--ease), transform .6s var(--ease);}
+.reveal.in{opacity:1;transform:translateY(0);}
+
+/* ---------- letterhead ---------- */
+.letterhead{max-width:var(--maxw);margin:0 auto;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line);}
+.letterhead img{height:32px;width:auto;}
+.letterhead .tag{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);}
+
+/* ---------- hero ---------- */
+.hero{max-width:var(--maxw);margin:0 auto;padding:52px 24px 26px;position:relative;}
+.hero-watermark{position:absolute;top:10px;right:24px;width:120px;opacity:.045;pointer-events:none;filter:grayscale(1);}
+.hero-eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--route);display:flex;align-items:center;gap:10px;margin-bottom:16px;font-weight:600;}
+.hero-eyebrow::before{content:"";width:20px;height:1px;background:var(--brass);display:inline-block;}
+.hero h1{font-family:var(--serif);font-weight:600;font-style:italic;font-size:clamp(30px,4.6vw,46px);line-height:1.1;color:var(--uniandes);letter-spacing:-.005em;max-width:16ch;}
+.hero p{font-size:15.5px;color:var(--ink-soft);max-width:56ch;margin-top:14px;line-height:1.6;}
+.quicklinks{display:flex;gap:24px;margin-top:18px;flex-wrap:wrap;}
+.quicklinks a{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.02em;color:var(--ink-soft);text-decoration:underline;text-decoration-color:var(--brass);text-underline-offset:4px;transition:color .15s ease;}
+.quicklinks a:hover{color:var(--uniandes);}
+
+/* ---------- next-event ticket ---------- */
+.next-wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px 6px;}
+.next-ticket{margin-top:22px;display:flex;align-items:stretch;background:var(--paper-raised);border:1px solid var(--line);border-left:3px solid var(--brass);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;width:100%;text-align:left;transition:transform .18s var(--ease), box-shadow .18s var(--ease);}
+.next-ticket:hover{transform:translateY(-2px);box-shadow:0 4px 4px rgba(16,26,36,.06),0 16px 32px rgba(16,26,36,.1);}
+.next-ticket:focus-visible{outline:2px solid var(--brass);outline-offset:2px;}
+.next-stub{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);padding:15px 20px;border-right:1px dashed var(--line);display:flex;flex-direction:column;justify-content:center;gap:4px;min-width:110px;}
+.next-stub b{font-size:23px;color:var(--uniandes);font-family:var(--mono);}
+.next-body{padding:13px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex:1;flex-wrap:wrap;}
+.next-body .label{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:3px;}
+.next-body .title{font-weight:600;font-size:15.5px;color:var(--ink);}
+.next-arrow{font-size:18px;color:var(--brass);}
+
+/* ---------- sticky filter controls (global) ---------- */
+.status-wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+.data-status{font-family:var(--mono);font-size:12px;line-height:1.5;padding:9px 14px;border-radius:var(--r);background:var(--brass-soft);color:#6b5220;border:1px solid rgba(156,122,46,.3);margin-top:14px;}
+.data-status[data-error="true"]{background:var(--wine-soft);color:var(--wine);border-color:rgba(138,59,65,.3);}
+.controls{position:sticky;top:0;z-index:30;background:rgba(241,244,246,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);padding:13px 0;}
+.controls-inner{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:9px;}
+.chip{font-family:var(--sans);font-weight:600;font-size:12.5px;display:inline-flex;align-items:center;gap:7px;padding:6px 13px 6px 10px;border-radius:100px;border:1.3px solid var(--col);color:var(--col);background:var(--tint);transition:.15s ease;}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:var(--col);flex:none;}
+.chip[data-active="false"]{background:transparent;color:var(--ink-faint);border-color:var(--line);}
+.chip[data-active="false"] .dot{background:var(--ink-faint);}
+.count-line{font-family:var(--mono);font-size:11.5px;color:var(--ink-faint);}
+
+/* ---------- month nav (now lives at the top of the timeline section) ---------- */
+.timeline-nav-wrap{position:sticky;top:var(--controls-h);z-index:20;background:rgba(241,244,246,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line-soft);padding:10px 0;margin-top:4px;}
+.timeline-nav-inner{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+.monthnav{display:flex;gap:5px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;}
+.monthnav::-webkit-scrollbar{display:none;}
+.monthnav button{font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.04em;padding:6px 11px;border-radius:var(--r);background:var(--paper-raised);color:var(--ink-soft);border:1px solid var(--line);flex:none;transition:.15s ease;}
+.monthnav button[aria-current="true"]{background:var(--uniandes);color:#fff;border-color:var(--uniandes);}
+
+/* ---------- section headers ---------- */
+.section-head{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+.section-head h2{font-family:var(--serif);font-style:italic;font-weight:600;font-size:clamp(23px,3vw,30px);color:var(--uniandes);margin-bottom:7px;}
+.section-head p{color:var(--ink-soft);font-size:14px;max-width:60ch;line-height:1.55;}
+
+/* ---------- transition divider ---------- */
+.transition-divider{max-width:var(--maxw);margin:10px auto 0;padding:56px 24px;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.transition-line{width:1px;height:0;background:var(--brass);transition:height 1s var(--ease);}
+.transition-divider.in .transition-line{height:64px;}
+.transition-diamond{width:7px;height:7px;background:var(--brass);transform:rotate(45deg);opacity:0;transition:opacity .5s ease .5s;}
+.transition-divider.in .transition-diamond{opacity:1;}
+.transition-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);opacity:0;transition:opacity .5s ease .7s;}
+.transition-divider.in .transition-label{opacity:1;}
+
+/* ============================================================
+   SECTION 1 — CRONOGRAMA DETALLADO (Pregrado / Posgrado)
+   ============================================================ */
+.gantt-section{padding:34px 0 8px;}
+.gantt-legend{max-width:var(--maxw);margin:14px auto 0;padding:0 24px;display:flex;gap:20px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-faint);font-family:var(--mono);}
+.gantt-legend span{display:inline-flex;align-items:center;gap:6px;}
+.legend-bar{width:15px;height:8px;border-radius:2px;background:var(--ink-faint);}
+.legend-diamond{width:8px;height:8px;transform:rotate(45deg);background:var(--ink-faint);}
+
+.gantt-panel{max-width:var(--maxw);margin:36px auto 0;padding:0 24px;}
+.gantt-panel-head{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;}
+.gantt-panel-head h3{font-family:var(--serif);font-style:italic;font-weight:600;font-size:20px;color:var(--ink);}
+.gantt-panel-head .count{font-family:var(--mono);font-size:11px;color:var(--ink-faint);}
+.gantt-panel-head::after{content:"";flex:1;height:1px;background:var(--line);}
+.panel-link-btn{
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.03em;color:#fff;background:var(--brass);
+  padding:7px 13px;border-radius:var(--r);white-space:nowrap;transition:background .15s ease;display:inline-flex;align-items:center;gap:6px;
+}
+.panel-link-btn:hover{background:#7d631f;}
+
+.gantt-scroll{overflow-x:auto;padding-bottom:6px;}
+.gantt-inner{position:relative;min-width:1240px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--paper-raised);}
+.gantt-row{display:flex;align-items:stretch;}
+.lane-label{width:170px;flex:none;display:flex;align-items:center;gap:8px;font-weight:600;font-size:13px;padding:0 14px;position:sticky;left:0;background:var(--paper-raised);z-index:6;border-right:1px solid var(--line-soft);}
+.lane-label .dot{width:8px;height:8px;border-radius:50%;background:var(--col);flex:none;}
+.header-row{position:sticky;top:0;z-index:7;background:var(--uniandes);}
+.header-row .lane-label{background:var(--uniandes);color:#CBD8E8;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;border-right:1px solid rgba(255,255,255,.12);}
+.month-cols{display:flex;width:1070px;flex:none;}
+.month-col{flex:1 1 0;min-width:0;padding:11px 0 9px 10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;color:#CBD8E8;border-left:1px solid rgba(255,255,255,.12);font-weight:600;}
+.lane-row{border-top:1px solid var(--line-soft);transition:opacity .3s ease, filter .3s ease;}
+.lane-row[data-hidden="true"]{opacity:.13;filter:grayscale(.75);}
+.lane-track{width:1070px;flex:none;position:relative;height:62px;}
+.lane-track::before{content:"";position:absolute;inset:0;background:var(--tint);opacity:.35;}
+.milestone{position:absolute;top:50%;width:15px;height:15px;transform:translate(-50%,-50%) rotate(45deg);background:var(--paper-raised);border:2.5px solid var(--col);cursor:pointer;transition:.15s ease;z-index:2;}
+.milestone:hover{background:var(--col);transform:translate(-50%,-50%) rotate(45deg) scale(1.3);}
+.bar{position:absolute;top:50%;transform:translateY(-50%);height:26px;border-radius:2px;background:var(--paper-raised);border:1.5px solid var(--col);cursor:pointer;display:flex;align-items:center;padding:0 9px;font-size:10.5px;font-weight:600;color:var(--col);white-space:nowrap;overflow:hidden;transition:transform .15s ease;z-index:2;}
+.bar:hover{transform:translateY(-50%) scale(1.03);}
+.today-line{position:absolute;top:0;bottom:0;width:0;border-left:1.5px dashed var(--brass);z-index:5;pointer-events:none;}
+.today-line-label{position:absolute;top:-1px;transform:translateX(-50%);background:var(--brass);color:#fff;font-family:var(--mono);font-size:9.5px;font-weight:600;padding:2px 6px;letter-spacing:.05em;white-space:nowrap;z-index:8;}
+
+.gantt-tooltip{
+  position:fixed;z-index:150;max-width:250px;background:var(--paper-raised);border:1px solid var(--line);
+  border-left:3px solid var(--col,var(--brass));border-radius:var(--r);box-shadow:0 14px 34px rgba(16,26,36,.2);
+  padding:10px 13px;pointer-events:none;opacity:0;transition:opacity .12s ease;
+}
+.gantt-tooltip[data-show="true"]{opacity:1;}
+.gantt-tooltip .tt-cat{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--col);font-weight:600;margin-bottom:3px;}
+.gantt-tooltip .tt-date{font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);margin-bottom:5px;}
+.gantt-tooltip .tt-title{font-weight:600;font-size:13px;color:var(--ink);margin-bottom:3px;line-height:1.3;}
+.gantt-tooltip .tt-desc{font-size:11.5px;color:var(--ink-soft);line-height:1.4;}
+
+@media (max-width:760px){ .gantt-inner{min-width:980px;} }
+
+/* ============================================================
+   SECTION 2 — LÍNEA DE TIEMPO (vertical)
+   ============================================================ */
+.timeline{max-width:var(--maxw);margin:0 auto;padding:26px 24px 0;position:relative;}
+.month-block{position:relative;padding-bottom:6px;}
+.month-head{display:flex;align-items:baseline;gap:14px;margin-bottom:24px;}
+.month-num{font-family:var(--serif);font-style:italic;font-weight:600;font-size:38px;color:var(--line);line-height:1;}
+.month-name{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;}
+.month-head::after{content:"";flex:1;height:1px;background:var(--line);margin-left:4px;}
+.rows{display:flex;flex-direction:column;gap:18px;}
+.row{display:grid;grid-template-columns:1fr 36px 1fr;align-items:start;transition:opacity .3s ease, filter .3s ease;}
+.row[data-hidden="true"]{opacity:.13;filter:grayscale(.7);}
+.row .side.left{grid-column:1;padding-right:24px;}
+.row .side.right{grid-column:3;padding-left:24px;}
+.row.align-right .side.left{visibility:hidden;}
+.row.align-left .side.right{visibility:hidden;}
+.node{grid-column:2;justify-self:center;width:30px;height:30px;border-radius:50%;background:var(--paper-raised);border:2px solid var(--col);display:flex;align-items:center;justify-content:center;font-size:13px;margin-top:5px;box-shadow:0 0 0 5px var(--paper);position:relative;z-index:2;}
+.card{background:var(--paper-raised);border-radius:var(--r);box-shadow:var(--shadow);border-left:3px solid var(--col);width:100%;text-align:left;cursor:pointer;overflow:hidden;transition:transform .18s var(--ease), box-shadow .18s var(--ease);}
+.card:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(16,26,36,.06),0 14px 28px rgba(16,26,36,.1);}
+.card:focus-visible{outline:2px solid var(--brass);outline-offset:2px;}
+.card-top{display:flex;align-items:center;gap:8px;padding:11px 13px;border-bottom:1px dashed var(--line);background:var(--tint);flex-wrap:wrap;}
+.card-date{font-family:var(--mono);font-weight:600;font-size:12.5px;color:var(--col);white-space:nowrap;}
+.card-cat{font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--col);opacity:.85;}
+.card-audience{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);margin-left:auto;background:rgba(16,26,36,.06);padding:2px 7px;border-radius:100px;}
+.card-status{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:#6b5220;background:var(--brass-soft);padding:2px 7px;border-radius:100px;}
+.card-body{padding:12px 13px 14px;}
+.card-title{font-weight:600;font-size:14.5px;line-height:1.32;margin-bottom:4px;color:var(--ink);}
+.card-desc{font-size:13px;color:var(--ink-soft);line-height:1.42;}
+.reminder-tag{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;color:var(--verified);margin-top:7px;}
+@keyframes cardPulse{0%{box-shadow:0 0 0 0 rgba(156,122,46,.5);}70%{box-shadow:0 0 0 12px rgba(156,122,46,0);}100%{box-shadow:0 0 0 0 rgba(156,122,46,0);}}
+.card-pulse{animation:cardPulse 1.5s ease-out;}
+
+.today-row{display:grid;grid-template-columns:1fr 36px 1fr;align-items:center;margin:2px 0;}
+.today-node{grid-column:2;justify-self:center;width:16px;height:16px;background:var(--brass);transform:rotate(45deg);box-shadow:0 0 0 5px var(--brass-soft),0 0 0 7px var(--paper);position:relative;z-index:2;}
+.today-flag{grid-column:3;padding-left:24px;font-family:var(--mono);font-size:11.5px;font-weight:600;color:var(--brass);display:flex;align-items:center;gap:8px;}
+.today-flag::before{content:"HOY";background:var(--brass);color:#fff;padding:3px 8px;font-size:10px;letter-spacing:.04em;}
+
+@media (max-width:760px){
+  .row{grid-template-columns:36px 1fr;}
+  .row .side.left{display:none;}
+  .row .side.right{grid-column:2;padding-left:14px;}
+  .node{grid-column:1;margin-left:3px;}
+  .today-row{grid-template-columns:36px 1fr;}
+  .today-node{grid-column:1;margin-left:7px;}
+  .today-flag{grid-column:2;padding-left:14px;}
+  .hero{padding:40px 18px 20px;}
+  .next-ticket{flex-direction:column;}
+  .next-stub{border-right:none;border-bottom:1px dashed var(--line);flex-direction:row;justify-content:space-between;}
+}
+
+/* ---------- footer ---------- */
+.footer{max-width:var(--maxw);margin:70px auto 0;padding:28px 24px 40px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.footer img{height:26px;width:auto;}
+.footer .credit{font-family:var(--mono);font-size:11px;color:var(--ink-faint);line-height:1.5;}
+
+/* ---------- modal ---------- */
+.overlay{position:fixed;inset:0;background:rgba(16,26,36,.5);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;padding:20px;z-index:100;}
+.overlay[data-open="true"]{display:flex;}
+.modal{background:var(--paper-raised);border-radius:6px;max-width:440px;width:100%;overflow:hidden;box-shadow:0 30px 70px rgba(16,26,36,.35);animation:pop .18s var(--ease);}
+@keyframes pop{from{transform:scale(.97);opacity:0;}to{transform:scale(1);opacity:1;}}
+.modal-top{padding:19px 22px;border-bottom:1px dashed var(--line);position:relative;}
+.modal-close{position:absolute;top:13px;right:13px;width:28px;height:28px;border-radius:50%;background:rgba(16,26,36,.06);font-size:15px;color:var(--ink);display:flex;align-items:center;justify-content:center;}
+.modal-cat{font-size:11.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--col);}
+.modal-audience{font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);margin-top:2px;}
+.modal-date{font-family:var(--mono);font-weight:600;font-size:20px;margin-top:4px;color:var(--ink);}
+.modal-body{padding:19px 22px 22px;}
+.modal-title{font-family:var(--serif);font-weight:600;font-size:21px;margin-bottom:9px;line-height:1.28;color:var(--ink);}
+.modal-desc{font-size:14px;color:var(--ink-soft);line-height:1.55;}
+.modal-cta{margin-top:17px;width:100%;padding:12px;border-radius:var(--r);background:var(--uniandes);color:#fff;font-weight:600;font-size:13.5px;transition:.15s ease;}
+.modal-cta:hover{background:var(--col);}
+.modal-link{margin-top:9px;display:none;align-items:center;justify-content:center;gap:6px;width:100%;padding:11px;border-radius:var(--r);border:1.3px solid var(--line);color:var(--ink-soft);font-weight:600;font-size:13px;text-decoration:none;transition:.15s ease;}
+.modal-link:hover{border-color:var(--uniandes);color:var(--uniandes);}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--uniandes);color:#fff;padding:11px 18px;border-radius:var(--r);font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:.25s ease;z-index:200;box-shadow:var(--shadow);}
+.toast[data-show="true"]{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+<div class="page-sheet">
+
+<div class="letterhead">
+  <img src="assets/img/logo_uniandes_admon_negro.png" alt="Universidad de los Andes · Facultad de Administración">
+  <span class="tag">Oficina de Relaciones Internacionales · 2026</span>
+</div>
+
+<header class="hero">
+  <img class="hero-watermark" src="assets/img/Logo_Uniandes.png" alt="">
+  <div class="hero-eyebrow">Agenda internacional</div>
+  <h1>Todo lo internacional del año, en un solo lugar.</h1>
+  <p>Convocatorias, movilidades, sesiones informativas y eventos, organizados por Pregrado y por Posgrado (EPOS). Filtra por tema y toca cualquier actividad para ver el detalle.</p>
+</header>
+
+<div class="next-wrap">
+  <button class="next-ticket" id="nextTicket">
+    <div class="next-stub"><span>Próximo</span><b id="nextDateBig">–</b></div>
+    <div class="next-body">
+      <div>
+        <div class="label" id="nextSub">cargando…</div>
+        <div class="title" id="nextTitle">Buscando el próximo evento…</div>
+      </div>
+      <div class="next-arrow">→</div>
+    </div>
+  </button>
+</div>
+
+<div class="status-wrap">
+  <div class="data-status" id="dataStatus" style="display:none;"></div>
+</div>
+
+<div class="controls">
+  <div class="controls-inner">
+    <div class="filters" id="filters"></div>
+    <div class="count-line" id="countLine">– actividades este año</div>
+  </div>
+</div>
+
+<!-- ============ SECTION 1 — CRONOGRAMA DETALLADO ============ -->
+<section class="gantt-section" id="section-gantt">
+  <div class="section-head reveal">
+    <div class="hero-eyebrow">Sección 1</div>
+    <h2>Cronograma detallado del año</h2>
+    <p>Separado por Pregrado y Posgrado (EPOS). Cada fila es una categoría: las barras son ventanas de postulación y los rombos son fechas puntuales. Desliza hacia los lados para ver los 12 meses — los filtros de arriba también aplican aquí.</p>
+  </div>
+  <div class="gantt-legend reveal">
+    <span><span class="legend-bar"></span> Ventana de postulación</span>
+    <span><span class="legend-diamond"></span> Fecha puntual</span>
+  </div>
+
+  <div class="gantt-panel reveal">
+    <div class="gantt-panel-head"><h3>🎓 Pregrado</h3><span class="count" id="countPregrado"></span><a class="panel-link-btn" href="manual-requisito-internacional/index.html">📖 Manual del requisito internacional</a></div>
+    <div class="gantt-scroll"><div class="gantt-inner" id="ganttPregrado"></div></div>
+  </div>
+
+  <div class="gantt-panel reveal">
+    <div class="gantt-panel-head"><h3>📘 Posgrado · EPOS</h3><span class="count" id="countPosgrado"></span></div>
+    <div class="gantt-scroll"><div class="gantt-inner" id="ganttPosgrado"></div></div>
+  </div>
+</section>
+
+<div class="transition-divider" id="transitionDivider">
+  <div class="transition-line"></div>
+  <div class="transition-diamond"></div>
+  <div class="transition-label">Línea de tiempo, mes a mes</div>
+</div>
+
+<!-- ============ SECTION 2 — LÍNEA DE TIEMPO ============ -->
+<section id="timeline">
+  <div class="section-head reveal" style="margin-bottom:0;">
+    <div class="hero-eyebrow">Sección 2</div>
+    <h2>Recorrido mes a mes</h2>
+    <p>La misma información anterior, en orden cronológico, con Pregrado y Posgrado mezclados por fecha. Ideal para ver qué sigue justo después de hoy.</p>
+  </div>
+
+  <div class="timeline-nav-wrap">
+    <div class="timeline-nav-inner">
+      <div class="monthnav" id="monthnav"></div>
+    </div>
+  </div>
+
+  <main class="timeline" id="timelineList"></main>
+</section>
+
+<footer class="footer">
+  <img src="assets/img/logo_uniandes_admon_negro.png" alt="Universidad de los Andes · Facultad de Administración">
+  <div class="credit">Oficina de Relaciones Internacionales · Facultad de Administración<br>Universidad de los Andes, Bogotá</div>
+</footer>
+
+</div><!-- /.page-sheet -->
+
+<div class="overlay" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-top" id="modalTop">
+      <button class="modal-close" id="modalClose" aria-label="Cerrar">✕</button>
+      <div class="modal-cat" id="modalCat">Categoría</div>
+      <div class="modal-audience" id="modalAudience"></div>
+      <div class="modal-date" id="modalDate">01 ene</div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-title" id="modalTitle">Título</div>
+      <div class="modal-desc" id="modalDesc">Descripción</div>
+      <button class="modal-cta" id="modalCta">Quiero recibir un recordatorio</button>
+      <a class="modal-link" id="modalLink" target="_blank" rel="noopener">↗ Más información</a>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">✓ Listo, te avisaremos antes del evento</div>
+<div class="gantt-tooltip" id="ganttTooltip"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+/* ================== catálogo y utilidades — no dependen de los datos del Excel ================== */
+const CATS = {
+  convocatoria: { label:'Convocatoria',      icon:'📋', col:'--brass',    tint:'--brass-soft'    },
+  intercambio:  { label:'Movilidad',          icon:'✈️', col:'--route',    tint:'--route-soft'    },
+  reunion:      { label:'Sesión informativa', icon:'💬', col:'--verified', tint:'--verified-soft' },
+  evento:       { label:'Evento',             icon:'🌍', col:'--wine',     tint:'--wine-soft'     },
+};
+const CAT_ORDER = ['convocatoria','intercambio','reunion','evento'];
+const CAT_LABEL_TO_KEY = {
+  'Convocatoria':'convocatoria',
+  'Movilidad':'intercambio',
+  'Sesión informativa':'reunion',
+  'Evento':'evento',
+};
+
+const MONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const MONTHS_SHORT = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+
+// ⚠️ CONFIGURACIÓN — datos del archivo de Excel en Google Drive.
+// 1) Comparte el archivo en Drive como "Cualquier persona con el enlace: Lector".
+// 2) Copia su ID (la parte entre /d/ y /view en el link para compartir).
+// 3) Pega aquí tu API key de Google (con la Drive API habilitada) y ese ID.
+const DRIVE_API_KEY = 'AIzaSyDpliU-N1s07NlbSCC1ot7-lJSNzfQB5zQ';
+const DRIVE_FILE_ID = '1Hu7iJYf-FWxiGQaP2VSgF203C877Nj8M';
+const DATA_SHEET = 'Actividades';
+// Archivo .xlsx real subido a Drive (no un Google Sheet nativo) -> alt=media.
+const DATA_FILE = `https://www.googleapis.com/drive/v3/files/${DRIVE_FILE_ID}?alt=media&key=${DRIVE_API_KEY}`;
+
+/* ---------------- Ventana móvil: 2 meses atrás + hoy + 10 meses adelante ---------------- */
+const now = new Date();
+const TODAY = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+const MONTHS_BACK = 2;
+const MONTHS_FORWARD = 10;
+const WINDOW_MONTHS = [];
+{
+  const y0 = TODAY.getFullYear();
+  const m0 = TODAY.getMonth() + 1; // 1-12
+  for (let offset = -MONTHS_BACK; offset <= MONTHS_FORWARD; offset++) {
+    let mm = m0 + offset, yy = y0;
+    while (mm < 1) { mm += 12; yy -= 1; }
+    while (mm > 12) { mm -= 12; yy += 1; }
+    WINDOW_MONTHS.push({ year: yy, month: mm });
+  }
+}
+const WINDOW_START = new Date(WINDOW_MONTHS[0].year, WINDOW_MONTHS[0].month - 1, 1);
+const lastWM = WINDOW_MONTHS[WINDOW_MONTHS.length - 1];
+const WINDOW_END = new Date(lastWM.year, lastWM.month, 1); // exclusivo: 1º día del mes siguiente al último
+const WINDOW_DAYS = Math.round((WINDOW_END - WINDOW_START) / 86400000);
+
+const TRACK_W = 1070;
+const LABEL_W = 170;
+
+function eventDate(e){ return new Date(e.year, e.m-1, e.d); }
+function eventEndDate(e){ return (e.m2 && e.d2) ? new Date(e.y2||e.year, e.m2-1, e.d2) : eventDate(e); }
+function inWindow(e){ return eventEndDate(e) >= WINDOW_START && eventDate(e) < WINDOW_END; }
+function fmtShort(e){ return String(e.d).padStart(2,'0') + ' ' + MONTHS_SHORT[e.m-1].slice(0,3).toLowerCase(); }
+function fmtLong(e){
+  if (e.m2 && e.d2) {
+    return 'Del ' + e.d + ' de ' + MONTHS[e.m-1].toLowerCase() + ' al ' + e.d2 + ' de ' + MONTHS[e.m2-1].toLowerCase();
+  }
+  return e.d + ' de ' + MONTHS[e.m-1].toLowerCase();
+}
+function dayOffset(dateObj){ return Math.round((dateObj - WINDOW_START) / 86400000); }
+
+/* ================== estado de carga del Excel ================== */
+const dataStatusEl = document.getElementById('dataStatus');
+function setStatus(msg, isError){
+  if (!dataStatusEl) return;
+  dataStatusEl.textContent = msg;
+  dataStatusEl.dataset.error = isError ? 'true' : 'false';
+  dataStatusEl.style.display = msg ? 'block' : 'none';
+}
+
+/* ================== fila de Excel -> objeto de evento ================== */
+function excelRowToEvent(row){
+  const estado = String(row['Estado'] || 'Confirmada').trim();
+  if (estado === 'Cancelada') return null;
+  const catLabel = String(row['Categoría'] || '').trim();
+  const catKey = CAT_LABEL_TO_KEY[catLabel];
+  const program = String(row['Programa'] || '').trim();
+  const title = String(row['Título'] || '').trim();
+  const start = row['Fecha inicio'];
+  if (!catKey || !program || !title || !(start instanceof Date) || isNaN(start)) return null;
+  const ev = {
+    year: start.getFullYear(), m: start.getMonth()+1, d: start.getDate(),
+    cat: catKey, program, title,
+    desc: String(row['Descripción corta'] || '').trim(),
+    long: String(row['Descripción larga'] || row['Descripción corta'] || '').trim(),
+    estado,
+    link: String(row['Enlace / formulario'] || '').trim() || null,
+  };
+  const end = row['Fecha fin (opcional)'];
+  if (end instanceof Date && !isNaN(end)) {
+    ev.y2 = end.getFullYear(); ev.m2 = end.getMonth()+1; ev.d2 = end.getDate();
+  }
+  return ev;
+}
+
+/* ================== cargar el Excel desde Drive (vía Drive API) y arrancar la página ================== */
+setStatus('Cargando actividades desde Google Drive…', false);
+
+fetch(DATA_FILE)
+  .then(res => { if (!res.ok) throw new Error('HTTP ' + res.status); return res.arrayBuffer(); })
+  .then(buf => {
+    const wb = XLSX.read(buf, { type:'array', cellDates:true });
+    const sheetName = wb.SheetNames.includes(DATA_SHEET) ? DATA_SHEET : wb.SheetNames[0];
+    const sheet = wb.Sheets[sheetName];
+    const rows = XLSX.utils.sheet_to_json(sheet, { defval:null });
+    const allEvents = rows.map(excelRowToEvent).filter(Boolean);
+    const eventsPregrado = allEvents.filter(e => e.program === 'Pregrado');
+    const eventsPosgrado = allEvents.filter(e => e.program !== 'Pregrado');
+    if (allEvents.length === 0) {
+      setStatus('El archivo se cargó desde Drive pero no tiene actividades válidas. Revisa las columnas Programa, Categoría, Título y Fecha inicio.', true);
+    } else {
+      setStatus('', false);
+    }
+    init(eventsPregrado, eventsPosgrado);
+  })
+  .catch(err => {
+    console.error(err);
+    setStatus('No se pudo cargar el archivo desde Google Drive. Verifica que DRIVE_API_KEY y DRIVE_FILE_ID estén bien puestos, que la Drive API esté habilitada en tu proyecto de Google Cloud, y que el archivo esté compartido como "Cualquier persona con el enlace: Lector".', true);
+    init([], []);
+  });
+
+
+/* ================== construir toda la página a partir de los eventos ================== */
+function init(EVENTS_PREGRADO, EVENTS_POSGRADO){
+
+  const EVENTS_PREGRADO_WIN = EVENTS_PREGRADO.filter(inWindow);
+  const EVENTS_POSGRADO_WIN = EVENTS_POSGRADO.filter(inWindow);
+  const ALL_EVENTS = EVENTS_PREGRADO_WIN.concat(EVENTS_POSGRADO_WIN);
+
+  let activeCats = new Set(Object.keys(CATS));
+
+  // ---------- filter chips ----------
+  const filtersEl = document.getElementById('filters');
+  filtersEl.innerHTML = '';
+  Object.entries(CATS).forEach(([key, c]) => {
+    const chip = document.createElement('button');
+    chip.className = 'chip';
+    chip.style.setProperty('--col', `var(${c.col})`);
+    chip.style.setProperty('--tint', `var(${c.tint})`);
+    chip.dataset.active = 'true';
+    chip.dataset.cat = key;
+    chip.innerHTML = `<span class="dot"></span>${c.icon} ${c.label}`;
+    chip.addEventListener('click', () => {
+      if (activeCats.has(key)) { activeCats.delete(key); chip.dataset.active='false'; }
+      else { activeCats.add(key); chip.dataset.active='true'; }
+      applyFilters();
+    });
+    filtersEl.appendChild(chip);
+  });
+
+  // ---------- month nav (lives at the top of the timeline section) ----------
+  const monthnavEl = document.getElementById('monthnav');
+  monthnavEl.innerHTML = '';
+  WINDOW_MONTHS.forEach(({year, month}) => {
+    const key = year + '-' + month;
+    const btn = document.createElement('button');
+    btn.textContent = MONTHS_SHORT[month-1] + "'" + String(year).slice(2);
+    btn.dataset.month = key;
+    btn.addEventListener('click', () => {
+      document.getElementById('month-' + key).scrollIntoView({behavior:'smooth', block:'start'});
+    });
+    monthnavEl.appendChild(btn);
+  });
+
+  // ---------- vertical timeline (Pregrado + Posgrado mezclados por fecha) ----------
+  const timelineEl = document.getElementById('timelineList');
+  timelineEl.innerHTML = '';
+  let sideToggle = true;
+
+  WINDOW_MONTHS.forEach(({year, month}) => {
+    const monthNum = month;
+    const key = year + '-' + month;
+    const monthEvents = ALL_EVENTS.filter(e => e.m === monthNum && e.year === year).sort((a,b) => a.d - b.d);
+
+    const block = document.createElement('section');
+    block.className = 'month-block reveal';
+    block.id = 'month-' + key;
+    block.innerHTML = `<div class="month-head"><span class="month-num">${String(monthNum).padStart(2,'0')}</span><span class="month-name">${MONTHS[monthNum-1]} ${year}</span></div>`;
+
+    const rows = document.createElement('div');
+    rows.className = 'rows';
+
+    monthEvents.forEach(e => {
+      sideToggle = !sideToggle;
+      const c = CATS[e.cat];
+      const row = document.createElement('div');
+      row.className = 'row ' + (sideToggle ? 'align-left' : 'align-right');
+      row.dataset.cat = e.cat;
+
+      const cardHTML = `
+        <button class="card" style="--col:var(${c.col});--tint:var(${c.tint})">
+          <div class="card-top">
+            <span class="card-date">${fmtShort(e)}</span>
+            <span class="card-cat">${c.icon} ${c.label}</span>
+            ${e.estado === 'Por confirmar' ? '<span class="card-status">Por confirmar</span>' : ''}
+            <span class="card-audience">${e.program}</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">${e.title}</div>
+            <div class="card-desc">${e.desc}</div>
+            ${e.cat==='reunion' ? '<div class="reminder-tag">🔔 Puedes pedir recordatorio</div>' : ''}
+          </div>
+        </button>`;
+
+      row.innerHTML = `
+        <div class="side left">${sideToggle ? cardHTML : ''}</div>
+        <div class="node" style="--col:var(${c.col})">${c.icon}</div>
+        <div class="side right">${!sideToggle ? cardHTML : ''}</div>
+      `;
+      row.querySelector('.card').addEventListener('click', () => openModal(e));
+      rows.appendChild(row);
+    });
+
+    block.appendChild(rows);
+
+    if (monthNum === TODAY.getMonth()+1 && year === TODAY.getFullYear()) {
+      const todayRow = document.createElement('div');
+      todayRow.className = 'today-row';
+      todayRow.innerHTML = `<div></div><div class="today-node"></div><div class="today-flag">${TODAY.getDate()} de ${MONTHS[TODAY.getMonth()].toLowerCase()}</div>`;
+      block.appendChild(todayRow);
+    }
+
+    timelineEl.appendChild(block);
+  });
+
+  function applyFilters(){
+    const rows = document.querySelectorAll('.row');
+    let visible = 0;
+    rows.forEach(r => {
+      const show = activeCats.has(r.dataset.cat);
+      r.dataset.hidden = show ? 'false' : 'true';
+      if (show) visible++;
+    });
+    document.getElementById('countLine').textContent = `${visible} de ${ALL_EVENTS.length} actividades`;
+    document.querySelectorAll('.lane-row').forEach(l => {
+      l.dataset.hidden = activeCats.has(l.dataset.cat) ? 'false' : 'true';
+    });
+  }
+
+  // ---------- scroll spy for month nav ----------
+  const monthButtons = [...monthnavEl.children];
+  const spyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const key = entry.target.id.slice('month-'.length);
+        monthButtons.forEach(b => b.removeAttribute('aria-current'));
+        const btn = monthButtons.find(b => b.dataset.month === key);
+        if (btn) { btn.setAttribute('aria-current','true'); btn.scrollIntoView({inline:'center', block:'nearest', behavior:'smooth'}); }
+      }
+    });
+  }, { rootMargin: '-45% 0px -45% 0px' });
+  document.querySelectorAll('.month-block').forEach(b => spyObserver.observe(b));
+
+  // ---------- subtle reveal-on-scroll ----------
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add('in'); revealObserver.unobserve(entry.target); }
+    });
+  }, { threshold: .12, rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  const td = document.getElementById('transitionDivider');
+  const divObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { td.classList.add('in'); divObserver.unobserve(td); } });
+  }, { threshold:.4 });
+  divObserver.observe(td);
+
+  // ---------- next event ticker ----------
+  function refreshNext(){
+    const upcoming = ALL_EVENTS.map(e => ({ e, date: eventDate(e) })).filter(x => x.date >= TODAY).sort((a,b) => a.date - b.date)[0];
+    if (!upcoming) return;
+    const days = Math.round((upcoming.date - TODAY) / 86400000);
+    const dayLabel = days === 0 ? 'Hoy' : (days === 1 ? 'En 1 día' : 'En ' + days + ' días');
+    document.getElementById('nextDateBig').textContent = upcoming.e.d + ' ' + MONTHS_SHORT[upcoming.e.m-1];
+    document.getElementById('nextSub').textContent = dayLabel + ' · ' + CATS[upcoming.e.cat].label + ' · ' + upcoming.e.program;
+    document.getElementById('nextTitle').textContent = upcoming.e.title;
+    document.getElementById('nextTicket').onclick = () => goToEvent(upcoming.e);
+  }
+  refreshNext();
+
+  // ---------- scroll straight to a specific event's card (matched by title + date, since titles repeat) ----------
+  function goToEvent(e){
+    const wanted = fmtShort(e);
+    const card = [...document.querySelectorAll('.card')].find(el =>
+      el.querySelector('.card-title').textContent === e.title && el.querySelector('.card-date').textContent === wanted
+    );
+    if (!card) return;
+    const block = card.closest('.month-block');
+    if (block) block.classList.add('in'); // reveal instantly, don't wait for the scroll-in observer
+
+    const controlsH = document.querySelector('.controls').offsetHeight;
+    const navH = document.querySelector('.timeline-nav-wrap').offsetHeight;
+    const offset = controlsH + navH + 18;
+    const top = card.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({ top, behavior: 'smooth' });
+
+    card.classList.remove('card-pulse');
+    void card.offsetWidth; // restart animation if clicked twice
+    card.classList.add('card-pulse');
+    setTimeout(() => card.classList.remove('card-pulse'), 1600);
+  }
+
+  // ---------- project view (gantt) — built once per audience ----------
+  const ganttTooltip = document.getElementById('ganttTooltip');
+  function showTooltip(ev, e){
+    const c = CATS[e.cat];
+    ganttTooltip.style.setProperty('--col', `var(${c.col})`);
+    ganttTooltip.innerHTML = `
+      <div class="tt-cat">${c.icon} ${c.label} · ${e.program}${e.estado==='Por confirmar' ? ' · Por confirmar' : ''}</div>
+      <div class="tt-date">${fmtLong(e)}</div>
+      <div class="tt-title">${e.title}</div>
+      <div class="tt-desc">${e.desc}</div>`;
+    const rect = ev.currentTarget.getBoundingClientRect();
+    let left = rect.left + rect.width / 2;
+    left = Math.max(135, Math.min(window.innerWidth - 135, left));
+    const showBelow = rect.top < 130;
+    ganttTooltip.style.left = left + 'px';
+    ganttTooltip.style.top = showBelow ? (rect.bottom + 10) + 'px' : (rect.top - 10) + 'px';
+    ganttTooltip.style.transform = showBelow ? 'translate(-50%, 0)' : 'translate(-50%, -100%)';
+    ganttTooltip.dataset.show = 'true';
+  }
+  function hideTooltip(){ ganttTooltip.dataset.show = 'false'; }
+
+  function buildGantt(containerEl, events){
+    containerEl.innerHTML = '';
+
+    const headerRow = document.createElement('div');
+    headerRow.className = 'gantt-row header-row';
+    const rangeLabel = WINDOW_MONTHS[0].year === lastWM.year ? String(lastWM.year) : (WINDOW_MONTHS[0].year + '–' + lastWM.year);
+    headerRow.innerHTML = `<div class="lane-label">${rangeLabel}</div><div class="month-cols">${WINDOW_MONTHS.map(({year,month}) => `<div class="month-col">${MONTHS_SHORT[month-1]}<br>${String(year).slice(2)}</div>`).join('')}</div>`;
+    containerEl.appendChild(headerRow);
+
+    const presentCats = CAT_ORDER.filter(key => events.some(e => e.cat === key));
+
+    presentCats.forEach(key => {
+      const c = CATS[key];
+      const laneRow = document.createElement('div');
+      laneRow.className = 'gantt-row lane-row';
+      laneRow.dataset.cat = key;
+
+      const track = document.createElement('div');
+      track.className = 'lane-track';
+      track.style.setProperty('--tint', `var(${c.tint})`);
+
+      events.filter(e => e.cat === key).forEach(e => {
+        const startOffsetPx = (dayOffset(eventDate(e)) / WINDOW_DAYS) * TRACK_W;
+        const hasRange = !!(e.m2 && e.d2);
+        if (hasRange) {
+          const endOffsetPx = (dayOffset(eventEndDate(e)) / WINDOW_DAYS) * TRACK_W;
+          const leftPx = Math.max(startOffsetPx, 0);
+          const rightPx = Math.min(endOffsetPx, TRACK_W);
+          const widthPx = Math.max(rightPx - leftPx, 46);
+          const bar = document.createElement('button');
+          bar.className = 'bar';
+          bar.style.left = leftPx + 'px';
+          bar.style.width = widthPx + 'px';
+          bar.style.setProperty('--col', `var(${c.col})`);
+          bar.textContent = widthPx > 70 ? e.title : c.icon;
+          bar.addEventListener('mouseenter', (ev) => showTooltip(ev, e));
+          bar.addEventListener('mouseleave', hideTooltip);
+          bar.addEventListener('focus', (ev) => showTooltip(ev, e));
+          bar.addEventListener('blur', hideTooltip);
+          bar.addEventListener('click', () => goToEvent(e));
+          track.appendChild(bar);
+        } else {
+          const dot = document.createElement('button');
+          dot.className = 'milestone';
+          dot.style.left = startOffsetPx + 'px';
+          dot.style.setProperty('--col', `var(${c.col})`);
+          dot.addEventListener('mouseenter', (ev) => showTooltip(ev, e));
+          dot.addEventListener('mouseleave', hideTooltip);
+          dot.addEventListener('focus', (ev) => showTooltip(ev, e));
+          dot.addEventListener('blur', hideTooltip);
+          dot.addEventListener('click', () => goToEvent(e));
+          track.appendChild(dot);
+        }
+      });
+
+      laneRow.innerHTML = `<div class="lane-label" style="--col:var(${c.col})"><span class="dot"></span>${c.icon} ${c.label}</div>`;
+      laneRow.appendChild(track);
+      containerEl.appendChild(laneRow);
+    });
+
+    const todayLeft = LABEL_W + (dayOffset(TODAY) / WINDOW_DAYS) * TRACK_W;
+    const todayLine = document.createElement('div');
+    todayLine.className = 'today-line';
+    todayLine.style.left = todayLeft + 'px';
+    const todayLabel = document.createElement('div');
+    todayLabel.className = 'today-line-label';
+    todayLabel.style.left = todayLeft + 'px';
+    todayLabel.textContent = 'HOY';
+    containerEl.appendChild(todayLine);
+    containerEl.appendChild(todayLabel);
+  }
+
+  buildGantt(document.getElementById('ganttPregrado'), EVENTS_PREGRADO_WIN);
+  buildGantt(document.getElementById('ganttPosgrado'), EVENTS_POSGRADO_WIN);
+  document.getElementById('countPregrado').textContent = EVENTS_PREGRADO_WIN.length + ' actividades';
+  document.getElementById('countPosgrado').textContent = EVENTS_POSGRADO_WIN.length + ' actividades';
+
+  applyFilters();
+
+  // ---------- keep the sticky month-nav offset accurate ----------
+  function syncControlsHeight(){
+    const h = document.querySelector('.controls').offsetHeight;
+    document.documentElement.style.setProperty('--controls-h', h + 'px');
+  }
+  syncControlsHeight();
+  window.addEventListener('resize', syncControlsHeight);
+
+  // ---------- modal ----------
+  const overlay = document.getElementById('overlay');
+  function openModal(e, scrollTo){
+    const c = CATS[e.cat];
+    document.getElementById('modalTop').style.background = `var(${c.tint})`;
+    document.getElementById('modalCat').style.color = `var(${c.col})`;
+    document.getElementById('modalCat').textContent = c.icon + ' ' + c.label + (e.estado === 'Por confirmar' ? ' · Por confirmar' : '');
+    document.getElementById('modalAudience').textContent = e.program;
+    document.getElementById('modalDate').textContent = fmtLong(e);
+    document.getElementById('modalTitle').textContent = e.title;
+    document.getElementById('modalDesc').textContent = e.long;
+    const linkEl = document.getElementById('modalLink');
+    if (e.link) { linkEl.href = e.link; linkEl.style.display = 'inline-flex'; }
+    else { linkEl.removeAttribute('href'); linkEl.style.display = 'none'; }
+    document.getElementById('modalCta').style.setProperty('--col', `var(${c.col})`);
+    overlay.dataset.open = 'true';
+    if (scrollTo) {
+      const target = [...document.querySelectorAll('.card')].find(el => el.querySelector('.card-title').textContent === e.title);
+      if (target) setTimeout(() => target.scrollIntoView({behavior:'smooth', block:'center'}), 300);
+    }
+  }
+  document.getElementById('modalClose').addEventListener('click', () => overlay.dataset.open='false');
+  overlay.addEventListener('click', (ev) => { if (ev.target === overlay) overlay.dataset.open='false'; });
+  document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') overlay.dataset.open='false'; });
+
+  const toast = document.getElementById('toast');
+  document.getElementById('modalCta').addEventListener('click', () => {
+    toast.dataset.show = 'true';
+    setTimeout(() => toast.dataset.show = 'false', 2400);
+    overlay.dataset.open = 'false';
+  });
+}
+</script>
+</body>
+</html>
