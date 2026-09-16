@@ -68,6 +68,8 @@ a{color:inherit;}
 .quicklinks{display:flex;gap:24px;margin-top:18px;flex-wrap:wrap;}
 .quicklinks a{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.02em;color:var(--ink-soft);text-decoration:underline;text-decoration-color:var(--brass);text-underline-offset:4px;transition:color .15s ease;}
 .quicklinks a:hover{color:var(--uniandes);}
+.hero-cta{display:inline-flex;align-items:center;gap:8px;margin-top:18px;font-family:var(--mono);font-size:12.5px;font-weight:600;letter-spacing:.02em;color:#fff;background:var(--uniandes);padding:10px 17px;border-radius:100px;text-decoration:none;transition:.15s ease;border:none;cursor:pointer;}
+.hero-cta:hover{background:var(--route);transform:translateY(-1px);}
 
 /* ---------- next-event ticket ---------- */
 .next-wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px 6px;}
@@ -197,9 +199,18 @@ a{color:inherit;}
 .card-body{padding:12px 13px 14px;}
 .card-title{font-weight:600;font-size:14.5px;line-height:1.32;margin-bottom:4px;color:var(--ink);}
 .card-desc{font-size:13px;color:var(--ink-soft);line-height:1.42;}
-.reminder-tag{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;color:var(--verified);margin-top:7px;}
-@keyframes cardPulse{0%{box-shadow:0 0 0 0 rgba(156,122,46,.5);}70%{box-shadow:0 0 0 12px rgba(156,122,46,0);}100%{box-shadow:0 0 0 0 rgba(156,122,46,0);}}
-.card-pulse{animation:cardPulse 1.5s ease-out;}
+.card-tags{display:flex;flex-wrap:wrap;gap:5px 14px;margin-top:8px;}
+.card-tag{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;}
+.card-tag.reminder{color:var(--verified);}
+.card-tag.session{color:var(--route);}
+.card-tag.recording{color:var(--ink-soft);}
+@keyframes cardPulse{
+  0%{box-shadow:0 0 0 0 rgba(156,122,46,.55);}
+  25%{box-shadow:0 0 0 3px var(--col,var(--brass)),0 0 0 3px var(--col,var(--brass));}
+  75%{box-shadow:0 0 0 16px rgba(156,122,46,0);}
+  100%{box-shadow:0 0 0 0 rgba(156,122,46,0);}
+}
+.card-pulse{animation:cardPulse 2.3s ease-out;position:relative;z-index:3;}
 
 .today-row{display:grid;grid-template-columns:1fr 36px 1fr;align-items:center;margin:2px 0;}
 .today-node{grid-column:2;justify-self:center;width:16px;height:16px;background:var(--brass);transform:rotate(45deg);box-shadow:0 0 0 5px var(--brass-soft),0 0 0 7px var(--paper);position:relative;z-index:2;}
@@ -224,6 +235,16 @@ a{color:inherit;}
 .footer img{height:26px;width:auto;}
 .footer .credit{font-family:var(--mono);font-size:11px;color:var(--ink-faint);line-height:1.5;}
 
+/* ---------- consejerías ---------- */
+.consejerias-section{max-width:var(--maxw);margin:64px auto 0;padding:0 24px 10px;}
+.consejeria-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px;}
+@media (max-width:640px){.consejeria-grid{grid-template-columns:1fr;}}
+.consejeria-card{background:var(--paper-raised);border:1px solid var(--line);border-left:3px solid var(--brass);border-radius:var(--r);padding:20px 22px;box-shadow:var(--shadow);}
+.consejeria-name{font-family:var(--serif);font-style:italic;font-weight:600;font-size:18px;color:var(--uniandes);}
+.consejeria-role{font-family:var(--mono);font-size:11.5px;color:var(--ink-faint);margin-top:3px;margin-bottom:16px;line-height:1.5;}
+.consejeria-btn{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:13px;color:#fff;background:var(--brass);padding:10px 16px;border-radius:var(--r);text-decoration:none;transition:background .15s ease;}
+.consejeria-btn:hover{background:#7d631f;}
+
 /* ---------- modal ---------- */
 .overlay{position:fixed;inset:0;background:rgba(16,26,36,.5);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;padding:20px;z-index:100;}
 .overlay[data-open="true"]{display:flex;}
@@ -239,6 +260,10 @@ a{color:inherit;}
 .modal-desc{font-size:14px;color:var(--ink-soft);line-height:1.55;}
 .modal-cta{margin-top:17px;width:100%;padding:12px;border-radius:var(--r);background:var(--uniandes);color:#fff;font-weight:600;font-size:13.5px;transition:.15s ease;}
 .modal-cta:hover{background:var(--col);}
+.modal-action-btn{margin-top:9px;width:100%;padding:12px;border-radius:var(--r);background:var(--btncol,var(--uniandes));color:#fff;font-weight:600;font-size:13.5px;transition:.15s ease;display:flex;align-items:center;justify-content:center;gap:7px;text-decoration:none;}
+.modal-action-btn:hover{filter:brightness(1.08);}
+.modal-gcal-link{display:block;text-align:center;margin-top:8px;font-family:var(--mono);font-size:11.5px;color:var(--ink-faint);text-decoration:underline;text-decoration-color:var(--line);}
+.modal-gcal-link:hover{color:var(--uniandes);}
 .modal-link{margin-top:9px;display:none;align-items:center;justify-content:center;gap:6px;width:100%;padding:11px;border-radius:var(--r);border:1.3px solid var(--line);color:var(--ink-soft);font-weight:600;font-size:13px;text-decoration:none;transition:.15s ease;}
 .modal-link:hover{border-color:var(--uniandes);color:var(--uniandes);}
 
@@ -259,6 +284,7 @@ a{color:inherit;}
   <div class="hero-eyebrow">Agenda internacional</div>
   <h1>Todo lo internacional del año, en un solo lugar.</h1>
   <p>Convocatorias, movilidades, sesiones informativas y eventos, organizados por Pregrado y por Posgrado (EPOS). Filtra por tema y toca cualquier actividad para ver el detalle.</p>
+  <a class="hero-cta" href="#consejerias">📅 Agenda tu consejería internacional</a>
 </header>
 
 <div class="next-wrap">
@@ -331,6 +357,26 @@ a{color:inherit;}
   <main class="timeline" id="timelineList"></main>
 </section>
 
+<section class="consejerias-section reveal" id="consejerias">
+  <div class="section-head" style="padding:0;">
+    <div class="hero-eyebrow">¿Tienes dudas?</div>
+    <h2>Agenda tu consejería internacional</h2>
+    <p>Habla directo con el equipo de la ORI para resolver dudas puntuales sobre tu proceso de intercambio, dobles titulaciones o el Requisito Internacional.</p>
+  </div>
+  <div class="consejeria-grid">
+    <div class="consejeria-card">
+      <div class="consejeria-name">Sophie Fernández Leal</div>
+      <div class="consejeria-role">Profesional Internacional Pregrado</div>
+      <a class="consejeria-btn" href="https://consejeriascoordinaciones.bookeau.com/#/login" target="_blank" rel="noopener">Agendar cita →</a>
+    </div>
+    <div class="consejeria-card">
+      <div class="consejeria-name">Juan Pablo Izquierdo</div>
+      <div class="consejeria-role">Soluciones a Estudiantes CSA</div>
+      <a class="consejeria-btn" href="https://outlook.office365.com/book/ConsejerasInternacionales@uniandes.onmicrosoft.com/?ismsaljsauthenabled=true" target="_blank" rel="noopener">Agendar cita →</a>
+    </div>
+  </div>
+</section>
+
 <footer class="footer">
   <img src="assets/img/logo_uniandes_admon_negro.png" alt="Universidad de los Andes · Facultad de Administración">
   <div class="credit">Oficina de Relaciones Internacionales · Facultad de Administración<br>Universidad de los Andes, Bogotá</div>
@@ -349,13 +395,16 @@ a{color:inherit;}
     <div class="modal-body">
       <div class="modal-title" id="modalTitle">Título</div>
       <div class="modal-desc" id="modalDesc">Descripción</div>
-      <button class="modal-cta" id="modalCta">Quiero recibir un recordatorio</button>
+      <a class="modal-action-btn" id="modalSessionLink" style="--btncol:var(--verified);display:none;" target="_blank" rel="noopener">🔗 Unirme a la sesión</a>
+      <button class="modal-cta" id="modalCta">📅 Agregar a mi calendario</button>
+      <a class="modal-gcal-link" id="modalGcalLink" target="_blank" rel="noopener">o añadir directo en Google Calendar</a>
+      <a class="modal-action-btn" id="modalRecordingLink" style="--btncol:var(--ink-soft);display:none;" target="_blank" rel="noopener">🎥 Ver la grabación</a>
       <a class="modal-link" id="modalLink" target="_blank" rel="noopener">↗ Más información</a>
     </div>
   </div>
 </div>
 
-<div class="toast" id="toast">✓ Listo, te avisaremos antes del evento</div>
+<div class="toast" id="toast">✓ Descargado — ábrelo para agregarlo a tu calendario</div>
 <div class="gantt-tooltip" id="ganttTooltip"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -424,6 +473,7 @@ function fmtLong(e){
   return e.d + ' de ' + MONTHS[e.m-1].toLowerCase();
 }
 function dayOffset(dateObj){ return Math.round((dateObj - WINDOW_START) / 86400000); }
+function isPast(e){ return eventEndDate(e) < TODAY; }
 
 /* ================== estado de carga del Excel ================== */
 const dataStatusEl = document.getElementById('dataStatus');
@@ -451,6 +501,8 @@ function excelRowToEvent(row){
     long: String(row['Descripción larga'] || row['Descripción corta'] || '').trim(),
     estado,
     link: String(row['Enlace / formulario'] || '').trim() || null,
+    sessionLink: String(row['Enlace de la sesión'] || '').trim() || null,
+    recording: String(row['Enlace de la grabación'] || '').trim() || null,
   };
   const end = row['Fecha fin (opcional)'];
   if (end instanceof Date && !isNaN(end)) {
@@ -553,6 +605,12 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO){
       row.className = 'row ' + (sideToggle ? 'align-left' : 'align-right');
       row.dataset.cat = e.cat;
 
+      const past = isPast(e);
+      const tags = [];
+      if (!past) tags.push('<span class="card-tag reminder">🔔 Puedes pedir recordatorio</span>');
+      if (e.sessionLink && !past) tags.push('<span class="card-tag session">🔗 Enlace de la sesión</span>');
+      if (e.recording && past) tags.push('<span class="card-tag recording">🎥 Grabación disponible</span>');
+
       const cardHTML = `
         <button class="card" style="--col:var(${c.col});--tint:var(${c.tint})">
           <div class="card-top">
@@ -564,7 +622,7 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO){
           <div class="card-body">
             <div class="card-title">${e.title}</div>
             <div class="card-desc">${e.desc}</div>
-            ${e.cat==='reunion' ? '<div class="reminder-tag">🔔 Puedes pedir recordatorio</div>' : ''}
+            ${tags.length ? `<div class="card-tags">${tags.join('')}</div>` : ''}
           </div>
         </button>`;
 
@@ -663,7 +721,7 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO){
     card.classList.remove('card-pulse');
     void card.offsetWidth; // restart animation if clicked twice
     card.classList.add('card-pulse');
-    setTimeout(() => card.classList.remove('card-pulse'), 1600);
+    setTimeout(() => card.classList.remove('card-pulse'), 2400);
   }
 
   // ---------- project view (gantt) — built once per audience ----------
@@ -774,10 +832,63 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO){
   syncControlsHeight();
   window.addEventListener('resize', syncControlsHeight);
 
+  // ---------- calendario: archivo .ics real + link directo a Google Calendar ----------
+  function icsDate(y, m, d){ return `${y}${String(m).padStart(2,'0')}${String(d).padStart(2,'0')}`; }
+  function escapeICS(s){ return String(s).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n'); }
+
+  function buildICS(e){
+    const start = icsDate(e.year, e.m, e.d);
+    const endObj = eventEndDate(e);
+    endObj.setDate(endObj.getDate() + 1); // DTEND exclusivo en eventos de día completo
+    const end = icsDate(endObj.getFullYear(), endObj.getMonth()+1, endObj.getDate());
+    const stamp = icsDate(TODAY.getFullYear(), TODAY.getMonth()+1, TODAY.getDate());
+    const uid = `${start}-${e.title.replace(/[^a-zA-Z0-9]+/g,'').slice(0,24)}@agenda-internacional-uasm`;
+    return [
+      'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//ORI Uniandes//Agenda Internacional//ES','CALSCALE:GREGORIAN',
+      'BEGIN:VEVENT',
+      `UID:${uid}`,
+      `DTSTAMP:${stamp}T000000Z`,
+      `DTSTART;VALUE=DATE:${start}`,
+      `DTEND;VALUE=DATE:${end}`,
+      `SUMMARY:${escapeICS(e.title)}`,
+      `DESCRIPTION:${escapeICS(e.long || e.desc)}`,
+      'END:VEVENT','END:VCALENDAR',
+    ].join('\r\n');
+  }
+
+  function downloadICS(e){
+    const blob = new Blob([buildICS(e)], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = (e.title.replace(/[\\/:*?"<>|]+/g,'').trim().slice(0,60) || 'evento') + '.ics';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+
+  function gcalLink(e){
+    const start = icsDate(e.year, e.m, e.d);
+    const endObj = eventEndDate(e);
+    endObj.setDate(endObj.getDate() + 1);
+    const end = icsDate(endObj.getFullYear(), endObj.getMonth()+1, endObj.getDate());
+    const params = new URLSearchParams({
+      action: 'TEMPLATE',
+      text: e.title,
+      dates: `${start}/${end}`,
+      details: e.long || e.desc,
+    });
+    return 'https://calendar.google.com/calendar/render?' + params.toString();
+  }
+
   // ---------- modal ----------
   const overlay = document.getElementById('overlay');
+  let currentModalEvent = null;
   function openModal(e, scrollTo){
+    currentModalEvent = e;
     const c = CATS[e.cat];
+    const past = isPast(e);
     document.getElementById('modalTop').style.background = `var(${c.tint})`;
     document.getElementById('modalCat').style.color = `var(${c.col})`;
     document.getElementById('modalCat').textContent = c.icon + ' ' + c.label + (e.estado === 'Por confirmar' ? ' · Por confirmar' : '');
@@ -785,6 +896,26 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO){
     document.getElementById('modalDate').textContent = fmtLong(e);
     document.getElementById('modalTitle').textContent = e.title;
     document.getElementById('modalDesc').textContent = e.long;
+
+    const sessionEl = document.getElementById('modalSessionLink');
+    if (e.sessionLink && !past) { sessionEl.href = e.sessionLink; sessionEl.style.display = 'flex'; }
+    else { sessionEl.removeAttribute('href'); sessionEl.style.display = 'none'; }
+
+    const ctaEl = document.getElementById('modalCta');
+    const gcalEl = document.getElementById('modalGcalLink');
+    if (!past) {
+      ctaEl.style.display = 'block';
+      gcalEl.style.display = 'block';
+      gcalEl.href = gcalLink(e);
+    } else {
+      ctaEl.style.display = 'none';
+      gcalEl.style.display = 'none';
+    }
+
+    const recEl = document.getElementById('modalRecordingLink');
+    if (e.recording && past) { recEl.href = e.recording; recEl.style.display = 'flex'; }
+    else { recEl.removeAttribute('href'); recEl.style.display = 'none'; }
+
     const linkEl = document.getElementById('modalLink');
     if (e.link) { linkEl.href = e.link; linkEl.style.display = 'inline-flex'; }
     else { linkEl.removeAttribute('href'); linkEl.style.display = 'none'; }
@@ -801,9 +932,10 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO){
 
   const toast = document.getElementById('toast');
   document.getElementById('modalCta').addEventListener('click', () => {
+    if (!currentModalEvent) return;
+    downloadICS(currentModalEvent);
     toast.dataset.show = 'true';
-    setTimeout(() => toast.dataset.show = 'false', 2400);
-    overlay.dataset.open = 'false';
+    setTimeout(() => toast.dataset.show = 'false', 2600);
   });
 }
 </script>
