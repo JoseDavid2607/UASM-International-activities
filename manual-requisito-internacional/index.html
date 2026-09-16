@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual del Requisito Internacional — Facultad de Administración, Uniandes</title>
+<meta name="description" content="Guía interactiva y actualizada (agosto 2026) para cumplir el requisito internacional de la Facultad de Administración de la Universidad de los Andes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --ink:#101A24;
+  --ink-soft:#3B4956;
+  --uniandes:#0B2E59;
+  --route:#1B4F8C;
+  --route-light:#EAF1F9;
+  --paper:#F1F4F6;
+  --paper-raised:#FFFFFF;
+  --brass:#9C7A2E;
+  --brass-soft:#F4ECD8;
+  --verified:#1F6E4A;
+  --verified-soft:#E7F3EC;
+  --line:rgba(16,26,36,.14);
+  --line-soft:rgba(16,26,36,.08);
+  --shadow:0 1px 2px rgba(16,26,36,.06), 0 8px 24px rgba(16,26,36,.06);
+  --radius:2px;
+  --serif:'Source Serif 4', Georgia, serif;
+  --sans:'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono:'IBM Plex Mono', monospace;
+  --maxw:1180px;
+}
+@media (prefers-color-scheme: dark){ /* keep light: institutional document reads best on paper */ }
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} *{animation-duration:.001ms!important;transition-duration:.001ms!important} }
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-size:16px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+a{color:var(--route)}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:600;color:var(--ink);margin:0;letter-spacing:-.01em}
+p{margin:0 0 1em;max-width:64ch;color:var(--ink-soft)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+button{font-family:var(--sans)}
+
+/* perforated / route divider motif, echoes the manual's original dotted rule */
+.perf{
+  display:flex;align-items:center;gap:8px;height:1px;
+  background-image:radial-gradient(circle, var(--line) 1.6px, transparent 1.6px);
+  background-size:10px 1px;background-repeat:repeat-x;
+  margin:0;
+}
+.perf-v{width:1px;background-image:radial-gradient(circle, var(--line) 1.6px, transparent 1.6px);background-size:1px 10px;background-repeat:repeat-y;}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+header.site{
+  position:sticky;top:0;z-index:50;background:rgba(241,244,246,.92);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;max-width:var(--maxw);margin:0 auto;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand img{height:30px;width:auto}
+.brand-name{font-family:var(--serif);font-weight:600;font-size:16px;line-height:1.15}
+.brand-name small{display:block;font-family:var(--sans);font-weight:500;font-size:11px;color:var(--ink-soft)}
+.nav-links{display:flex;gap:26px;align-items:center}
+.nav-links a{color:var(--ink);text-decoration:none;font-size:14.5px;font-weight:500;padding:6px 0;border-bottom:2px solid transparent}
+.nav-links a:hover{border-bottom-color:var(--brass)}
+.nav-progress{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink-soft);font-family:var(--mono)}
+.nav-progress .bar{width:64px;height:6px;background:var(--line-soft);border-radius:3px;overflow:hidden}
+.nav-progress .bar > span{display:block;height:100%;background:var(--verified);width:0%;transition:width .4s ease}
+.nav-toggle{display:none;background:none;border:1px solid var(--line);border-radius:var(--radius);padding:8px 10px;cursor:pointer}
+.nav-toggle span,.nav-toggle span::before,.nav-toggle span::after{content:"";display:block;width:18px;height:2px;background:var(--ink);position:relative;transition:.2s}
+.nav-toggle span::before{position:absolute;top:-6px}
+.nav-toggle span::after{position:absolute;top:6px}
+
+@media (max-width:880px){
+  .nav-links{position:fixed;inset:60px 0 auto 0;background:var(--paper-raised);flex-direction:column;align-items:flex-start;padding:18px 28px;border-bottom:1px solid var(--line);box-shadow:var(--shadow);transform:translateY(-8px);opacity:0;pointer-events:none;transition:.18s ease;gap:14px}
+  .nav-links.open{transform:translateY(0);opacity:1;pointer-events:auto}
+  .nav-toggle{display:block}
+  .nav-progress{display:none}
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{position:relative;overflow:hidden;background:var(--uniandes);color:#fff;padding:86px 0 0}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:end;padding-bottom:64px}
+.hero-eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.02em;color:#BFD3EA;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.hero-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:#7FB2E8}
+.hero h1{font-size:clamp(34px,5vw,58px);line-height:1.06;color:#fff;max-width:14ch}
+.hero .sub{color:#D6E2EE;font-size:18px;max-width:46ch;margin-top:20px}
+.hero-actions{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:var(--radius);
+  font-weight:600;font-size:14.5px;text-decoration:none;cursor:pointer;border:1px solid transparent;
+  transition:transform .12s ease, background .15s ease, border-color .15s ease;
+}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:#fff;color:var(--uniandes)}
+.btn-primary:hover{background:#EAF1F9}
+.btn-ghost{border-color:rgba(255,255,255,.4);color:#fff}
+.btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+.btn-brass{background:var(--brass);color:#fff}
+.btn-brass:hover{background:#8a6a26}
+.btn-outline{border-color:var(--line);color:var(--ink)}
+.btn-outline:hover{border-color:var(--route)}
+.btn-small{padding:9px 14px;font-size:13px}
+
+.hero-pass{
+  background:#fff;color:var(--ink);border-radius:6px;box-shadow:0 24px 48px rgba(0,0,0,.28);
+  overflow:hidden;position:relative;transform:rotate(1.4deg);
+}
+.hero-pass .strip{background:var(--uniandes);color:#fff;padding:12px 18px;font-family:var(--mono);font-size:11.5px;display:flex;justify-content:space-between}
+.hero-pass .photo{height:150px;background:linear-gradient(180deg, rgba(11,46,89,0) 30%, rgba(11,46,89,.55)) , url('../assets/img/GLOBAL_VILLAGE_2023.jpg') center 20%/cover}
+.hero-pass .body{padding:18px}
+.hero-pass .row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:var(--ink-soft);padding:7px 0;border-top:1px dashed var(--line)}
+.hero-pass .row:first-child{border-top:none}
+.hero-pass .flags{display:flex;gap:8px;padding:0 18px 18px}
+.hero-pass .flags img{height:16px;width:auto;border:1px solid var(--line-soft)}
+
+@media (max-width:880px){
+  .hero .wrap{grid-template-columns:1fr;padding-bottom:44px}
+  .hero-pass{transform:none;justify-self:start;max-width:340px}
+}
+
+/* ============================================================
+   SECTION SCAFFOLDING
+   ============================================================ */
+section{padding:76px 0}
+.section-head{max-width:640px;margin-bottom:40px}
+.eyebrow{font-family:var(--mono);font-size:12.5px;color:var(--route);display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.eyebrow .num{width:20px;height:20px;border-radius:50%;background:var(--route-light);color:var(--route);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+h2.h-section{font-size:clamp(26px,3.4vw,36px)}
+.section-head p{margin-top:14px;font-size:16.5px}
+.band{background:var(--paper-raised);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.band-ink{background:var(--uniandes);color:#fff}
+.band-ink h2,.band-ink h3{color:#fff}
+.band-ink p{color:#CBD9E8}
+
+/* ============================================================
+   HOW IT WORKS
+   ============================================================ */
+.how-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--paper-raised)}
+.how-col{padding:34px}
+.how-col + .how-col{border-left:1px solid var(--line)}
+.how-tag{font-family:var(--mono);font-size:12px;color:var(--brass);margin-bottom:10px}
+.how-col h3{font-size:22px;margin-bottom:12px}
+.how-col ul{margin:14px 0 0;padding:0;list-style:none}
+.how-col li{position:relative;padding-left:22px;margin-bottom:10px;color:var(--ink-soft);font-size:15px}
+.how-col li::before{content:"";position:absolute;left:0;top:9px;width:9px;height:9px;border:2px solid var(--brass);border-radius:50%}
+@media (max-width:760px){.how-grid{grid-template-columns:1fr}.how-col + .how-col{border-left:none;border-top:1px solid var(--line)}}
+
+.how-note{margin-top:22px;padding:16px 18px;background:var(--route-light);border-radius:6px;font-size:14.5px;color:var(--uniandes)}
+.how-note strong{color:var(--uniandes)}
+
+/* ============================================================
+   STEP 1 CARD (mandatory)
+   ============================================================ */
+.step1{border:1px solid var(--line);border-radius:8px;background:var(--paper-raised);display:grid;grid-template-columns:1fr 320px;overflow:hidden;box-shadow:var(--shadow)}
+.step1-main{padding:36px}
+.step1-badge{display:inline-flex;align-items:center;gap:8px;background:var(--brass-soft);color:var(--brass);font-family:var(--mono);font-size:12px;padding:6px 12px;border-radius:20px;margin-bottom:16px}
+.step1 h3{font-size:26px;margin-bottom:10px}
+.step1-side{background:var(--route-light);padding:30px;border-left:1px solid var(--line)}
+.step1-side h4{font-size:14px;color:var(--uniandes);margin-bottom:12px;font-family:var(--sans);font-weight:700}
+@media (max-width:760px){.step1{grid-template-columns:1fr}.step1-side{border-left:none;border-top:1px solid var(--line)}}
+
+.tracker-field{margin-bottom:12px}
+.tracker-field label{display:block;font-size:12.5px;color:var(--ink-soft);margin-bottom:5px;font-weight:500}
+.tracker-field input[type=text],.tracker-field select,.tracker-field textarea{
+  width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:5px;background:#fff;
+  font-family:var(--sans);font-size:14px;color:var(--ink);
+}
+.tracker-field textarea{resize:vertical;min-height:64px}
+.check-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:14px;color:var(--ink)}
+.check-row input[type=checkbox]{width:17px;height:17px;accent-color:var(--verified);flex-shrink:0}
+.save-hint{font-size:12px;color:var(--ink-soft);display:flex;align-items:center;gap:6px;margin-top:14px}
+.save-hint .dot{width:6px;height:6px;border-radius:50%;background:var(--verified)}
+
+/* ============================================================
+   DASHBOARD CARDS
+   ============================================================ */
+.dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.dash-grid-single{grid-template-columns:minmax(260px,420px)}
+@media (max-width:960px){.dash-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:640px){.dash-grid{grid-template-columns:1fr}}
+
+.opt-card{
+  background:var(--paper-raised);border:1px solid var(--line);border-radius:8px;overflow:hidden;position:relative;
+  display:flex;flex-direction:column;cursor:pointer;
+  transition:border-color .15s ease, transform .15s ease, box-shadow .15s ease, background .2s ease;
+}
+.opt-card:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+.opt-card.state-progress{background:#FFF9E0;border-color:#E4C232}
+.opt-card.state-progress .icon-wrap{background:#FBEFC0}
+.opt-card.state-done{background:#E9F6EE;border-color:var(--verified)}
+.opt-card.state-done .icon-wrap{background:#D3EEDE}
+.opt-check{
+  position:absolute;top:12px;right:12px;z-index:6;width:28px;height:28px;border-radius:50%;
+  background:#fff;border:1.5px solid var(--line);color:transparent;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:.15s ease;box-shadow:0 2px 6px rgba(0,0,0,.08);
+}
+.opt-check svg{width:15px;height:15px}
+.opt-check:hover{border-color:var(--verified)}
+.opt-card.state-done .opt-check{background:var(--verified);border-color:var(--verified);color:#fff}
+.opt-card.state-progress .opt-check{border-color:#C9A227;color:transparent}
+.opt-card:hover{border-color:var(--route);box-shadow:var(--shadow);transform:translateY(-2px)}
+.opt-card .icon-wrap{height:104px;background:var(--route-light);display:flex;align-items:center;justify-content:center;position:relative}
+.opt-card .icon-wrap svg{width:40px;height:40px;color:var(--uniandes)}
+.opt-card .stub{
+  position:absolute;bottom:0;left:0;right:0;height:1px;
+  background-image:radial-gradient(circle, rgba(255,255,255,.9) 1.6px, transparent 1.6px);
+  background-size:9px 1px;background-repeat:repeat-x;
+}
+.opt-card .body{padding:20px 20px 22px;display:flex;flex-direction:column;flex:1}
+.opt-card h4{font-size:18px;margin-bottom:8px}
+.opt-card p{font-size:14.5px;margin-bottom:16px}
+.opt-meta{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-family:var(--mono);padding:5px 10px;border-radius:20px;border:1px solid var(--line)}
+.pill-level-esencial{color:var(--verified);border-color:var(--verified-soft);background:var(--verified-soft)}
+.pill-level-moderada{color:var(--brass);border-color:var(--brass-soft);background:var(--brass-soft)}
+.pill-level-alta{color:#9C3B2E;border-color:#F6E4E0;background:#F6E4E0}
+.opt-card .goto{margin-top:auto;display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;color:var(--route);text-decoration:none;background:none;border:none;padding:0;cursor:pointer;font-family:var(--sans)}
+.opt-card .goto svg{width:14px;height:14px}
+
+/* ============================================================
+   OPTION MODAL (ficha emergente)
+   ============================================================ */
+body.modal-open{overflow:hidden}
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(12,20,28,.68);backdrop-filter:blur(3px);
+  display:flex;align-items:center;justify-content:center;padding:5vh 18px;
+  z-index:100;opacity:0;pointer-events:none;transition:opacity .18s ease;
+}
+.modal-overlay.open{opacity:1;pointer-events:auto}
+.modal-shell{
+  position:relative;background:var(--paper-raised);width:100%;max-width:760px;max-height:88vh;
+  border-radius:10px;box-shadow:0 30px 80px rgba(0,0,0,.4);overflow:hidden;
+  display:flex;flex-direction:column;transform:translateY(14px) scale(.985);transition:transform .18s ease;
+}
+.modal-overlay.open .modal-shell{transform:translateY(0) scale(1)}
+.modal-topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:14px 18px;border-bottom:1px solid var(--line);background:var(--paper);flex-shrink:0;
+}
+.modal-count{font-family:var(--mono);font-size:12px;color:var(--ink-soft)}
+.modal-dots{display:flex;gap:6px}
+.modal-dots button{width:7px;height:7px;border-radius:50%;background:var(--line);border:none;padding:0;cursor:pointer}
+.modal-dots button[aria-current="true"]{background:var(--uniandes);width:16px;border-radius:4px;transition:.15s ease}
+.modal-close{
+  background:none;border:1px solid var(--line);border-radius:6px;width:32px;height:32px;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink);flex-shrink:0;
+}
+.modal-close:hover{border-color:var(--route);color:var(--route)}
+.modal-close svg{width:16px;height:16px}
+.modal-scroll{overflow-y:auto;padding:30px 34px 38px}
+.modal-arrow{
+  position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;
+  background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;
+  cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.18);color:var(--uniandes);z-index:5;
+}
+.modal-arrow:hover{border-color:var(--route)}
+.modal-arrow svg{width:18px;height:18px}
+.modal-arrow.prev{left:-58px}
+.modal-arrow.next{right:-58px}
+@media (max-width:900px){
+  .modal-arrow.prev{left:6px}
+  .modal-arrow.next{right:6px}
+  .modal-arrow{background:rgba(255,255,255,.92)}
+}
+@media (max-width:560px){
+  .modal-overlay{padding:0}
+  .modal-shell{max-width:100%;max-height:100%;height:100%;border-radius:0}
+  .modal-arrow{top:auto;bottom:14px;transform:none}
+  .modal-arrow.prev{left:14px}
+  .modal-arrow.next{right:14px}
+}
+.modal-panel{display:none}
+.modal-panel.active{display:block}
+.modal-panel .detail-title .kicker{font-family:var(--mono);font-size:12px;color:var(--route);margin-bottom:8px}
+.modal-panel h3{font-size:clamp(22px,3vw,28px);margin-bottom:8px}
+.modal-panel .detail-badges{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 6px}
+.modal-panel .modal-grid{display:block}
+.panel-photo-head{
+  position:relative;margin:-30px -34px 26px;min-height:230px;display:flex;align-items:flex-end;
+  background-size:cover;background-position:center;
+}
+.panel-photo-head::before{
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(180deg, rgba(8,16,22,0) 42%, rgba(8,16,22,.55) 75%, rgba(8,16,22,.86) 100%),
+    rgba(255,255,255,.42);
+}
+.panel-photo-head{background-blend-mode:normal}
+.panel-photo-head .photo-head-inner{position:relative;padding:26px 34px 22px;color:#fff}
+.panel-photo-head .kicker{color:#BFD3EA}
+.panel-photo-head h3{color:#fff;font-size:clamp(22px,3vw,28px);margin-bottom:8px}
+.panel-photo-head p{color:#E6ECF1;max-width:60ch;margin:0}
+.panel-photo-head .detail-badges{margin-top:14px}
+.panel-photo-head .pill{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.35);color:#fff}
+@media (max-width:560px){.panel-photo-head{margin:-20px -20px 22px;min-height:190px}}
+.modal-panel .aside-docs{
+  margin-top:8px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:16px 18px 6px;
+}
+.modal-panel .aside-docs .doc-link:first-child{border-top:none}
+
+/* ============================================================
+   DETAIL SECTIONS
+   ============================================================ */
+.detail{padding:70px 0;border-top:1px solid var(--line)}
+.detail:nth-child(odd){background:var(--paper-raised)}
+.detail-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:flex-start;margin-bottom:34px}
+.detail-title{max-width:640px}
+.detail-title .kicker{font-family:var(--mono);font-size:12.5px;color:var(--route);margin-bottom:8px}
+.detail-title h3{font-size:clamp(24px,3vw,32px)}
+.detail-title p{font-size:16px;margin-top:12px}
+.detail-badges{display:flex;gap:10px;flex-wrap:wrap}
+
+.detail-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:40px;align-items:start}
+@media (max-width:880px){.detail-grid{grid-template-columns:1fr}}
+
+.block{margin-bottom:28px}
+.block h4{font-size:14px;text-transform:none;color:var(--uniandes);margin-bottom:12px;font-family:var(--sans);font-weight:700;display:flex;align-items:center;gap:8px}
+.block h4::before{content:"";width:14px;height:2px;background:var(--brass)}
+.block ul{margin:0;padding:0;list-style:none}
+.block li{position:relative;padding-left:24px;margin-bottom:9px;font-size:15px;color:var(--ink-soft)}
+.block li::before{content:"✓";position:absolute;left:0;top:0;color:var(--verified);font-weight:700;font-size:13px}
+.block.rec li::before{content:"–";color:var(--brass)}
+.block li a{color:var(--route)}
+
+.card-side{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:24px;position:sticky;top:96px}
+.card-side h4{font-size:13px;color:var(--uniandes);margin-bottom:14px;font-family:var(--sans);font-weight:700}
+.doc-link{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px dashed var(--line);text-decoration:none;color:var(--ink);font-size:14px}
+.doc-link:first-of-type{border-top:none}
+.doc-link svg{width:17px;height:17px;color:var(--brass);flex-shrink:0}
+.doc-link .fname{font-weight:600}
+.doc-link .fsub{display:block;font-size:12px;color:var(--ink-soft);font-weight:400}
+
+.uni-table{width:100%;border-collapse:collapse;margin-top:6px}
+.uni-table td{padding:10px 0;border-top:1px dashed var(--line);font-size:14.5px;vertical-align:middle}
+.uni-table tr:first-child td{border-top:none}
+.uni-table .flag{height:15px;width:auto;margin-right:8px;vertical-align:middle;border:1px solid var(--line-soft)}
+.uni-table .amt{color:var(--brass);font-family:var(--mono);font-size:13px}
+
+.accordion-item{border-top:1px solid var(--line)}
+.accordion-item:last-child{border-bottom:1px solid var(--line)}
+.accordion-item button.acc-trigger{
+  width:100%;display:flex;justify-content:space-between;gap:20px;align-items:center;
+  background:none;border:none;text-align:left;padding:16px 2px;cursor:pointer;font-size:15.5px;font-weight:600;color:var(--ink);
+}
+.accordion-item button.acc-trigger .plus{font-family:var(--mono);font-size:18px;color:var(--brass);transition:transform .2s ease;flex-shrink:0}
+.accordion-item[data-open="true"] .plus{transform:rotate(45deg)}
+.acc-panel{max-height:0;overflow:hidden;transition:max-height .25s ease}
+.acc-panel p, .acc-panel div{padding:0 2px 18px;font-size:15px;color:var(--ink-soft);margin:0}
+
+.select-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.select-grid{grid-template-columns:1fr}}
+
+/* ============================================================
+   DOCUMENTS LIBRARY
+   ============================================================ */
+.doc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media (max-width:880px){.doc-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.doc-grid{grid-template-columns:1fr}}
+.doc-card{border:1px solid var(--line);border-radius:8px;background:var(--paper-raised);padding:20px;display:flex;flex-direction:column;gap:10px}
+.doc-card .cat{font-family:var(--mono);font-size:11px;color:var(--route);}
+.doc-card h5{font-family:var(--sans);font-size:15px;font-weight:700;margin:0}
+.doc-card p{font-size:13.5px;margin:0}
+.doc-card .dl{margin-top:auto;display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:600;color:var(--brass);text-decoration:none}
+.doc-card .dl svg{width:14px;height:14px}
+
+/* ============================================================
+   LINKS / CONTACT
+   ============================================================ */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+@media (max-width:760px){.contact-grid{grid-template-columns:1fr}}
+.contact-list{list-style:none;margin:0;padding:0}
+.contact-list li{padding:14px 0;border-top:1px dashed var(--line);display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap}
+.contact-list li:first-child{border-top:none}
+.contact-list .label{font-weight:600;font-size:14.5px}
+.contact-list .sub{font-size:13px;color:var(--ink-soft)}
+.contact-list a{font-size:14px;text-decoration:none;font-weight:600}
+
+/* footer */
+footer{background:var(--uniandes);color:#CBD9E8;padding:44px 0 30px}
+footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-start}
+footer h5{color:#fff;font-family:var(--sans);font-size:14px;margin-bottom:10px}
+footer p{color:#AFC3D8;font-size:13px;max-width:46ch}
+footer .cols{display:flex;gap:56px;flex-wrap:wrap}
+footer a{color:#D6E2EE}
+
+/* toast for save confirmation */
+#toast{
+  position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);background:var(--ink);color:#fff;
+  padding:12px 18px;border-radius:6px;font-size:14px;opacity:0;pointer-events:none;transition:.2s ease;z-index:80;
+  display:flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,.25);
+}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+#toast .dot{width:7px;height:7px;border-radius:50%;background:var(--verified)}
+
+.skip-link{position:absolute;left:-999px;top:0;background:#fff;padding:10px 16px;z-index:200}
+.skip-link:focus{left:16px;top:16px}
+
+/* ============================================================
+   NEW: callouts, logo rows, region lists, warnings, cta strip
+   ============================================================ */
+.callout{border-radius:6px;padding:16px 18px;font-size:14.5px;margin:18px 0}
+.callout.warn{background:#FBEAEA;color:#8C2F22;border:1px solid #F2CFC8}
+.callout.warn strong{color:#7A2318}
+.callout.info{background:var(--route-light);color:var(--uniandes)}
+.callout.info strong{color:var(--uniandes)}
+.source-note{font-size:12.5px;color:var(--ink-soft);font-style:italic;border-left:2px solid var(--brass);padding-left:10px;margin:10px 0}
+
+.logo-row{display:flex;flex-wrap:wrap;gap:14px;margin:14px 0 20px}
+.logo-card{
+  background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 18px;
+  display:flex;align-items:center;justify-content:center;flex:1 1 150px;min-height:64px;position:relative;
+}
+.logo-card img{max-height:34px;max-width:130px;width:auto}
+.logo-card .tag-warn{
+  position:absolute;top:-9px;right:8px;background:#B23A2C;color:#fff;font-size:10px;font-family:var(--mono);
+  padding:3px 7px;border-radius:10px;
+}
+.uni-detail{border-top:1px dashed var(--line);padding:14px 0}
+.uni-detail:first-of-type{border-top:none}
+.uni-detail h5{font-family:var(--sans);font-size:14.5px;font-weight:700;margin:0 0 6px;display:flex;align-items:center;gap:8px}
+.uni-detail ul{margin:0;padding:0;list-style:none}
+.uni-detail li{position:relative;padding-left:18px;margin-bottom:5px;font-size:13.5px;color:var(--ink-soft)}
+.uni-detail li::before{content:"•";position:absolute;left:0;color:var(--brass)}
+.uni-detail li.warn-line{color:#8C2F22}
+.uni-detail li.warn-line::before{color:#B23A2C}
+
+.region-cols{columns:3 160px;column-gap:22px;font-size:13.5px;color:var(--ink-soft);margin:14px 0}
+@media (max-width:640px){.region-cols{columns:2 140px}}
+.region-cols .region{break-inside:avoid;margin-bottom:14px}
+.region-cols .region h6{font-family:var(--sans);font-size:12.5px;font-weight:700;color:var(--ink);margin:0 0 4px}
+.region-cols .region ul{margin:0;padding:0;list-style:none}
+.region-cols .region li{margin-bottom:2px}
+.region-cols .region li .dbl{color:var(--brass);font-weight:700}
+
+.cta-strip{
+  background:var(--paper-raised);border:1px solid var(--line);border-radius:8px;padding:20px 24px;
+  display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin-top:36px;
+}
+.cta-strip p{margin:0;font-size:14.5px}
+.cta-strip .btns{display:flex;gap:10px;flex-wrap:wrap}
+
+.opt-card .icon-wrap img.mascot-icon{width:44px;height:44px;object-fit:contain}
+</style>
+</head>
+<body>
+<a href="#contenido" class="skip-link">Saltar al contenido</a>
+<div id="toast"><span class="dot"></span><span id="toast-text">Guardado</span></div>
+
+<!-- ============================================================
+     NAV
+     ============================================================ -->
+<header class="site">
+  <nav class="nav">
+    <a href="#inicio" class="brand">
+      <img src="../assets/img/logo_uniandes_admon_negro.png" alt="Universidad de los Andes — Facultad de Administración" style="height:34px">
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false"><span></span></button>
+    <div class="nav-links" id="navLinks">
+      <a href="#que-es">Qué es</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#opciones">Opciones</a>
+      <a href="#preguntas">Preguntas frecuentes</a>
+    </div>
+    <div class="nav-progress" aria-live="polite">
+      <span id="progressLabel">Componente 0 de 2</span>
+      <span class="bar"><span id="progressBar"></span></span>
+    </div>
+  </nav>
+</header>
+
+<main id="contenido">
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="hero" id="inicio">
+  <div class="wrap">
+    <div>
+      <div class="hero-eyebrow"><span class="dot"></span>Facultad de Administración · Universidad de los Andes · Actualizado agosto 2026</div>
+      <h1>Manual del Requisito Internacional</h1>
+      <p class="sub">Tu guía interactiva y siempre vigente para planear, aplicar y hacer seguimiento a cada camino posible para cumplir el requisito internacional del pregrado en Administración: 11 modalidades de experiencia internacional, más los cursos disciplinares en inglés.</p>
+      <div class="hero-actions">
+        <a href="#opciones" class="btn btn-primary">Explorar opciones
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#que-es" class="btn btn-ghost">Qué es el requisito</a>
+      </div>
+    </div>
+    <div class="hero-pass">
+      <div class="strip"><span>REQUISITO INTERNACIONAL</span><span>UNIANDES</span></div>
+      <div class="photo" style="position:relative;height:180px;background:linear-gradient(180deg, rgba(11,46,89,0) 20%, rgba(11,46,89,.7)), url('../assets/img/estudiantes_pantallas.jpg') center 35%/cover">
+        <img src="../assets/img/mascota_uniandino.png" alt="Mascota Uniandino" style="position:absolute;right:10px;bottom:0;height:165px;width:auto;filter:drop-shadow(0 8px 14px rgba(0,0,0,.35))">
+      </div>
+      <div class="body">
+        <div class="row"><span>Componentes</span><span>2 independientes</span></div>
+        <div class="row"><span>Componente 1</span><span>2 cursos ADMI en inglés</span></div>
+        <div class="row"><span>Componente 2</span><span>1 de 11 experiencias internacionales</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="perf"></div>
+</section>
+
+<!-- ============================================================
+     QUÉ ES EL REQUISITO
+     ============================================================ -->
+<section id="que-es">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Antes de empezar</div>
+      <h2 class="h-section">¿Qué es el Requisito Internacional?</h2>
+      <p>Para obtener el título de Administrador debes cumplir con el Requisito Internacional de la Facultad de Administración, vigente desde 2016 para todos los estudiantes que iniciaron sus estudios a partir de ese año. Está diseñado para complementar tu formación académica y desarrollar una perspectiva global frente a los mercados y entornos dinámicos actuales.</p>
+    </div>
+
+    <div class="how-grid">
+      <div class="how-col">
+        <div class="how-tag">Objetivo general</div>
+        <h3>Una perspectiva global adicional</h3>
+        <p>Asegurar que el estudiante que cursa el pregrado en Administración de empresas adquiera una perspectiva global adicional al curso y aprobación del plan de estudios general.</p>
+      </div>
+      <div class="how-col">
+        <div class="how-tag">Objetivos específicos</div>
+        <ul>
+          <li>Desarrollar competencias interculturales dentro y fuera del aula de clase.</li>
+          <li>Fortalecer conocimientos en una segunda o tercera lengua.</li>
+          <li>Aumentar la capacidad de respuesta a las demandas del entorno laboral.</li>
+          <li>Aumentar la exposición del estudiante a nuevos métodos de aprendizaje.</li>
+        </ul>
+      </div>
+    </div>
+
+
+    <div class="callout info">
+      <strong>Un principio fundamental:</strong> este requisito busca ser accesible para todos los estudiantes, independientemente de su situación financiera o de sus capacidades físicas y/o intelectuales. Es un modelo inclusivo y equitativo.
+    </div>
+
+    <div class="callout warn">
+      <strong>Importante — no lo confundas con otros requisitos:</strong> el Requisito Internacional es independiente de los requisitos institucionales de lectura en inglés y de dominio de segunda lengua de Uniandes. Cumplir uno de estos requisitos no exime del cumplimiento de los otros.
+    </div>
+  </div>
+</section>
+
+<div class="perf"></div>
+
+<!-- ============================================================
+     CÓMO FUNCIONA
+     ============================================================ -->
+<section class="band" id="como-funciona">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Estructura del requisito</div>
+      <h2 class="h-section">Dos componentes independientes</h2>
+      <p>El requisito implica cumplir con los siguientes dos componentes, que no se sustituyen entre sí.</p>
+    </div>
+
+    <div class="how-grid">
+      <a class="how-col" href="#seccion-componente-1" style="text-decoration:none;color:inherit;display:block;cursor:pointer">
+        <div class="how-tag">Componente 1</div>
+        <h3>2 cursos código ADMI en inglés</h3>
+        <p>Cursar y aprobar <strong>dos cursos código ADMI</strong> vistos en inglés, del plan de estudios actual del pregrado en Administración, inscritos y aprobados directamente en la Facultad de Administración de Uniandes.</p>
+      </a>
+      <a class="how-col" href="#seccion-componente-2" style="text-decoration:none;color:inherit;display:block;cursor:pointer">
+        <div class="how-tag">Componente 2</div>
+        <h3>Experiencia internacional</h3>
+        <p>Inscribir, cursar en su totalidad y aprobar <strong>al menos una</strong> de las 11 modalidades del portafolio de experiencia internacional que encontrarás en el panel de opciones.</p>
+      </a>
+    </div>
+
+    <div class="how-note">
+      <strong>Cómo usar este manual:</strong> en cada modalidad encontrarás requisitos, validación, documentos y espacios interactivos para ir registrando tu avance, guardado automáticamente en tu navegador.
+      <br><br>
+      <strong>Colores de las tarjetas:</strong> una tarjeta se pone <strong style="color:#8a6a1a">amarilla</strong> apenas empiezas a diligenciarla, y se pone <strong style="color:var(--verified)">verde</strong> cuando presionas el check de su esquina para marcarla como completada. Cuando marques como completadas tanto la tarjeta de Cursos Disciplinares en Inglés como al menos una tarjeta de Experiencia Internacional, la barra de progreso de la parte superior se pondrá en verde: eso indica que cumpliste el Requisito Internacional.
+    </div>
+  </div>
+</section>
+
+<div class="perf"></div>
+
+<!-- ============================================================
+     DASHBOARD DE OPCIONES
+     ============================================================ -->
+<section id="opciones">
+  <div class="wrap">
+    <div class="section-head" id="seccion-componente-1">
+      <div class="eyebrow">Componente 1 · Obligatorio</div>
+      <h2 class="h-section">Cursos Disciplinares en Inglés</h2>
+      <p>Este componente es completamente independiente de la Experiencia Internacional — debes cumplir los dos. Da clic en la tarjeta para diligenciarlo.</p>
+    </div>
+
+    <div class="dash-grid dash-grid-single">
+
+      <article class="opt-card" data-card="cursos-ingles">
+        <button type="button" class="opt-check" data-complete="cursos-ingles" aria-label="Marcar Cursos disciplinares en inglés como completada">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg>
+        </button>
+        <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><path d="M9 7h7M9 11h5"/></svg><div class="stub"></div></div>
+        <div class="body">
+          <h4>Cursos Disciplinares en Inglés</h4>
+          <p>Cursa y aprueba 2 asignaturas código ADMI dictadas en inglés, directamente en la Facultad de Administración de Uniandes.</p>
+          <div class="opt-meta"><span class="pill">2 cursos ADMI · en Uniandes</span></div>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="section-head" id="seccion-componente-2" style="margin-top:56px">
+      <div class="eyebrow">Componente 2 · Elige una experiencia</div>
+      <h2 class="h-section">Experiencia Internacional</h2>
+      <p>Cumple con mínimo una de estas once modalidades. Da clic en cualquier tarjeta para ver el detalle completo y diligenciarla; marca el check cuando la hayas cumplido.</p>
+    </div>
+
+    <div class="dash-grid">
+
+      <article class="opt-card" data-card="intercambio">
+        <button type="button" class="opt-check" data-complete="intercambio" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
+        <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 17l6-11 6 11M7 12h6M14 6h6M17 6v11M14 17h6"/></svg><div class="stub"></div></div>
+        <div class="body">
+          <h4>Intercambio Académico</h4>
+          <p>Cursa un semestre en una universidad aliada a través de la convocatoria oficial. Más de 50 convenios específicos y 100+ generales.</p>
+          <div class="opt-meta"><span class="pill">1 semestre + preparación</span></div>
+        </div>
+      </article>
+
+
+      <article class="opt-card" data-card="doble-titulacion">
+        <button type="button" class="opt-check" data-complete="doble-titulacion" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
+        <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l8 4-8 4-8-4 8-4z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg><div class="stub"></div></div>
+        <div class="body">
+          <h4>Doble Titulación</h4>
+          <p>Obtén tu título de Uniandes y un título simultáneo en NEOMA, Toulouse Business School, FGV, Tulane o Tilburg.</p>
+          <div class="opt-meta"><span class="pill">4–6 semestres</span></div>
+        </div>
+      </article>
+
+      <article class="opt-card" data-card="eiv-uniandes">
+        <button type="button" class="opt-check" data-complete="eiv-uniandes" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
+        <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M6 21v-2a6 6 0 0112 0v2"/></svg><div class="stub"></div></div>
+        <div class="body">
+          <h4>Escuela Internacional de Verano (Uniandes)</h4>
+          <p>Aprueba 2 cursos de la EIV de la Facultad de Administración o de otras facultades de Uniandes, uno 100% presencial.</p>
+          <div class="opt-meta"><span class="pill">2 cursos · vacaciones</span></div>
+        </div>
+      </article>
+
+      <article class="opt-card" data-card="socios-internacionales">
+        <button type="button" class="opt-check" data-complete="socios-internacionales" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
+        <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="5" width="16" height="15" rx="1.5"/><path d="M4 9h16M8 3v4M16 3v4"/></svg><div class="stub"></div></div>
+        <div class="body">
+          <h4>Escuelas de Verano o Invierno Externas</h4>
+          <p>Aprueba el equivalente a 2 cursos de la EIV en una universidad externa aliada o, con autorización previa, en un programa externo.</p>
+          <div class="opt-meta"><span class="pill">Variable · vacaciones</span></div>
+        </div>
+      </article>
+
+      <article class="opt-card" data-card="practica-internacional">
+        <button type="button" class="opt-check" data-complete="practica-internacional" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
+        <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="7" width="18" height="13" rx="1.5"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg><div class="stub"></div></div>
+        <div class="body">
+          <h4>Práctica Internacional</h4>
+          <p>Realiza una práctica profesional 100% presencial en el exterior, relacionada con Administración y validada por el CTP.</p>
+          <div class="opt-meta"><span class="pill">1 semestre o verano</span></div>
+        </div>
+      </article>
+
+      <article class="opt-card" data-card="opcion-lengua-cultura">
+        <button type="button" class="opt-check" data-complete="opcion-lengua-cultura" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
+        <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 4 6 4 9s-1.5 6.4-4 9c-2.5-2.6-4-6-4-9s1.5-6.4 4-9z"/></svg><div class="stub"></div></div>
+        <div class="body">
+          <h4>Opción Académica en Lengua y Cultura</h4>
+          <p>Cursa y aprueba en su totalidad alguna de las 9 opciones de lengua y cultura de la Universidad de los Andes.</p>
+          <div class="opt-meta"><span class="pill">Programa completo</span></div>
+        </div>
+      </article>
+
+      <article class="opt-card" data-card="cinco-cursos-idioma">
+        <button type="button" class="opt-check" data-complete="cinco-cursos-idioma" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
+        <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg><div class="stub"></div></div>
+        <div class="body">
+          <h4>5 Cursos de un Idioma Diferente al Inglés</h4>
+          <p>Inscribe, cursa y aprueba 5 cursos de idiomas del Departamento de Lenguas y Cultura, en máximo 2 idiomas distintos.</p>
+          <div class="opt-meta"><span class="pill">2–3 semestres</span></div>
+        </div>
+      </article>
+
+      <article class="opt-card" data-card="competencias-internacionales">
+        <button type="button" class="opt-check" data-complete="competencias-internacionales" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
+        <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 01-10 0V4z"/><path d="M7 5H4a3 3 0 003 3M17 5h3a3 3 0 01-3 3"/></svg><div class="stub"></div></div>
+        <div class="body">
+          <h4>Competencias Internacionales</h4>
+          <p>Representa a la Facultad en un evento donde estudiantes de distintos países compiten aplicando conocimientos de Administración.</p>
+          <div class="opt-meta"><span class="pill">Proceso de selección</span></div>
+        </div>
+      </article>
+
+      <article class="opt-card" data-card="pasantias-investigacion">
+        <button type="button" class="opt-check" data-complete="pasantias-investigacion" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
+        <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 3h6M10 3v5l-5.5 9.5A2 2 0 006.2 21h11.6a2 2 0 001.7-3.5L14 8V3"/><path d="M8.5 14h7"/></svg><div class="stub"></div></div>
+        <div class="body">
+          <h4>Pasantías de Investigación</h4>
+          <p>Vive una experiencia de inmersión en investigación en una universidad en el exterior, junto a nuestros socios internacionales.</p>
+          <div class="opt-meta"><span class="pill">Periodo de verano</span></div>
+        </div>
+      </article>
+
+      <article class="opt-card" data-card="programas-verano">
+        <button type="button" class="opt-check" data-complete="programas-verano" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
+        <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12h18M3 6h18M3 18h18"/></svg><div class="stub"></div></div>
+        <div class="body">
+          <h4>Programas Internacionales de Verano</h4>
+          <p>Participa y obtén certificado oficial de asistencia de programas como Babson, Global Village o HUWIB.</p>
+          <div class="opt-meta"><span class="pill">1–2 semanas</span></div>
+        </div>
+      </article>
+
+      <article class="opt-card" data-card="freemover">
+        <button type="button" class="opt-check" data-complete="freemover" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
+        <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M15 9l-2 6-6 2 2-6z"/></svg><div class="stub"></div></div>
+        <div class="body">
+          <h4>Freemover</h4>
+          <p>Realiza una movilidad académica internacional postulando tú mismo, con o sin convenio vigente con Uniandes.</p>
+          <div class="opt-meta"><span class="pill">1 semestre autogestionado</span></div>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="cta-strip">
+      <p>¿Ya elegiste tu opción? Revisa las fechas de convocatorias, sesiones informativas y demás actividades del año.</p>
+      <div class="btns">
+        <a class="btn btn-brass" href="../index.html#section-gantt">Volver al cronograma de actividades</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="perf"></div>
+
+<!-- ============================================================
+     MODAL: COMPONENTE 1 — CURSOS DISCIPLINARES EN INGLÉS
+     ============================================================ -->
+<div class="modal-overlay" id="component1Modal" aria-hidden="true">
+  <div class="modal-shell" role="dialog" aria-modal="true" aria-labelledby="c1Heading" style="max-width:680px">
+    <div class="modal-topbar" style="justify-content:flex-end">
+      <button class="modal-close" id="c1Close" aria-label="Cerrar" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="modal-scroll">
+
+<div class="modal-panel active" id="panel-cursos-ingles" role="tabpanel">
+  <div class="detail-head">
+    <div class="detail-title">
+      <div class="kicker">Componente 1 de 2 · Obligatorio</div>
+      <h3>Cursos Disciplinares en Inglés</h3>
+      <p>Todo estudiante debe cursar y aprobar 2 asignaturas en inglés de código ADMI, ofrecidas directamente por la Facultad de Administración de Uniandes. Los cursos deben ser vistos y aprobados en Uniandes para cumplir este componente.</p>
+    </div>
+    <div class="detail-badges">
+      <span class="pill">2 cursos ADMI · en inglés · en Uniandes</span>
+    </div>
+  </div>
+
+  <div class="detail-grid modal-grid">
+    <div>
+      <div class="block rec">
+        <h4>Reglas importantes</h4>
+        <ul>
+          <li>No se validan cursos homologados de otras instituciones.</li>
+          <li>No aplican los cursos de inglés ofrecidos por el Departamento de Lenguas y Cultura.</li>
+          <li>No aplican cursos cursados durante un intercambio y posteriormente homologados como cursos de la Facultad — deben verse en Uniandes, sin excepción.</li>
+          <li>Los cursos de la Escuela Internacional de Verano (EIV) de la Facultad de Administración <strong>sí pueden usarse</strong> para este componente, siempre que sean cursos ADMI en inglés y no sean los mismos cursos utilizados para cumplir la Experiencia Internacional.</li>
+          <li>Puedes tomar más de dos cursos en inglés — solo necesitas dos para cumplir este componente.</li>
+        </ul>
+      </div>
+      <div class="source-note">Nota: si planeas cumplir este componente combinándolo con la EIV de la Facultad, el anexo formal indica un mínimo de 3 cursos en total para el componente, mientras que la presentación de la Oficina Internacional indica que tomando 4 cursos en total (2 para experiencia internacional + 2 adicionales) se cumplen ambos componentes a la vez. Te recomendamos confirmar el número exacto con la Oficina de Internacionalización antes de matricular.</div>
+      <div class="block">
+        <h4>Registra tus cursos</h4>
+        <div class="tracker-field">
+          <label for="curso1-codigo">Curso 1 — código y nombre (ADMI)</label>
+          <input type="text" id="curso1-codigo" data-track="curso1" placeholder="Ej. ADMI 3210 — Negocios Internacionales">
+        </div>
+        <div class="check-row">
+          <input type="checkbox" id="curso1-check" data-track="curso1-check">
+          <label for="curso1-check">Curso 1 aprobado</label>
+        </div>
+        <div class="tracker-field">
+          <label for="curso2-codigo">Curso 2 — código y nombre (ADMI)</label>
+          <input type="text" id="curso2-codigo" data-track="curso2" placeholder="Ej. ADMI 2400 — Finanzas Corporativas">
+        </div>
+        <div class="check-row">
+          <input type="checkbox" id="curso2-check" data-track="curso2-check">
+          <label for="curso2-check">Curso 2 aprobado</label>
+        </div>
+        <p class="save-hint"><span class="dot"></span>Tu avance se guarda automáticamente en este navegador</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: FICHAS DE LAS 11 OPCIONES DE EXPERIENCIA INTERNACIONAL
+     ============================================================ -->
+<div class="modal-overlay" id="optionModal" aria-hidden="true">
+  <div class="modal-shell" role="dialog" aria-modal="true" aria-labelledby="modalHeading">
+    <button class="modal-arrow prev" id="modalPrev" aria-label="Opción anterior" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg>
+    </button>
+    <button class="modal-arrow next" id="modalNext" aria-label="Opción siguiente" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg>
+    </button>
+    <div class="modal-topbar">
+      <span class="modal-count" id="modalCount">Opción 1 de 11</span>
+      <div class="modal-dots" id="modalDots"></div>
+      <button class="modal-close" id="modalClose" aria-label="Cerrar" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="modal-scroll" id="modalScroll">
+
+<div class="modal-panel" id="panel-intercambio" data-index="0" role="tabpanel">
+  <div class="panel-photo-head" style="background-image:url('../assets/img/intercambios_balcon.jpg')">
+    <div class="photo-head-inner">
+      <div class="kicker">Opción 1 de 11 · Movilidad académica</div>
+      <h3>Intercambio Académico</h3>
+      <p>Realiza un intercambio académico a través de la convocatoria oficial de Uniandes: cursa un semestre en una universidad aliada, con la posibilidad de homologar asignaturas del programa de Administración.</p>
+      <div class="detail-badges">
+        <span class="pill">+50 convenios específicos · +100 generales</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-grid modal-grid">
+    <div>
+      <div class="block">
+        <h4>Validación</h4>
+        <ul>
+          <li>Inscripción y aprobación del curso <strong>INTL2201 Intercambio Académico de Pregrado</strong>.</li>
+          <li>Inscripción y aprobación de al menos <strong>2 cursos</strong> en la universidad destino durante la movilidad, uno de los cuales debe ser de componente de Administración.</li>
+          <li>Homologación: se debe realizar el proceso formal a través de la plataforma de homologaciones, sin excepción. No se garantiza la aprobación según el historial compartido a otros estudiantes.</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h4>Requisitos</h4>
+        <ul>
+          <li>Estar matriculado en Uniandes durante todo el proceso (postulación, semestre previo y semestre de intercambio).</li>
+          <li>Estar mínimo en tercer semestre, según créditos, para aplicar.</li>
+          <li>Tener promedio ponderado mínimo de 3.25 (algunos convenios pueden exigir un promedio mayor).</li>
+          <li>Tener materias pendientes por cursar y homologar al regreso.</li>
+          <li>No tener sanciones disciplinarias vigentes.</li>
+          <li>Completar la postulación y cargar documentos en MoveOn dentro de las fechas establecidas.</li>
+          <li>2 recomendaciones de profesores vinculados a la Facultad desde hace un año mínimo (al menos uno de planta).</li>
+          <li>Video de motivación.</li>
+          <li>Los semestres de intercambio deben ser presenciales; el track elegido (si la universidad destino lo ofrece) también debe ser presencial.</li>
+        </ul>
+      </div>
+      <div class="block rec">
+        <h4>Recomendaciones</h4>
+        <ul>
+          <li>Selecciona las tres opciones permitidas en la convocatoria para aumentar tus probabilidades de selección en la primera ronda.</li>
+          <li>Elige estratégicamente los convenios dentro de tus 3 opciones — considera convenios y países poco saturados.</li>
+          <li>Revisa atentamente los requisitos de idioma, vigencia y tipo de examen de las universidades que te interesan.</li>
+          <li>Revisa el listado de convenios específicos de <strong>cada convocatoria</strong>: pueden abrir o cerrarse cada semestre.</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h4>Registra tus universidades candidatas</h4>
+        <p style="font-size:14px;margin-bottom:14px">Registra hasta 3 universidades que estés considerando.</p>
+        <div class="select-grid" style="margin-bottom:10px">
+          <input type="text" data-track="int-uni1" placeholder="Universidad 1" style="padding:10px 12px;border:1px solid var(--line);border-radius:5px;font-size:14px">
+          <select data-track="int-conv1" style="padding:10px 12px;border:1px solid var(--line);border-radius:5px;font-size:14px;background:#fff">
+            <option value="">Tipo de convenio</option><option>General</option><option>Específico</option>
+          </select>
+        </div>
+        <div class="select-grid" style="margin-bottom:10px">
+          <input type="text" data-track="int-uni2" placeholder="Universidad 2" style="padding:10px 12px;border:1px solid var(--line);border-radius:5px;font-size:14px">
+          <select data-track="int-conv2" style="padding:10px 12px;border:1px solid var(--line);border-radius:5px;font-size:14px;background:#fff">
+            <option value="">Tipo de convenio</option><option>General</option><option>Específico</option>
+          </select>
+        </div>
+        <div class="select-grid">
+          <input type="text" data-track="int-uni3" placeholder="Universidad 3" style="padding:10px 12px;border:1px solid var(--line);border-radius:5px;font-size:14px">
+          <select data-track="int-conv3" style="padding:10px 12px;border:1px solid var(--line);border-radius:5px;font-size:14px;background:#fff">
+            <option value="">Tipo de convenio</option><option>General</option><option>Específico</option>
+          </select>
+        </div>
+      </div>
+      <div class="block">
+        <h4>Convenios específicos de la Facultad (+50)</h4>
+        <p style="font-size:13.5px;margin-bottom:6px">La oferta es sujeta a cada convocatoria — planea tu aplicación revisando el portal de MoveOn. Las universidades marcadas con <span class="dbl" style="color:var(--brass);font-weight:700">**</span> también ofrecen doble titulación.</p>
+        <div class="region-cols">
+          <div class="region"><h6>United Kingdom</h6><ul><li>Aston Business School</li><li>University of Exeter</li><li>University of Nottingham</li></ul></div>
+          <div class="region"><h6>Belgium</h6><ul><li>Solvay Brussels School of Economics and Management</li></ul></div>
+          <div class="region"><h6>Denmark</h6><ul><li>Copenhagen School of Business</li></ul></div>
+          <div class="region"><h6>Finland</h6><ul><li>Aalto University</li></ul></div>
+          <div class="region"><h6>Slovenia</h6><ul><li>Ljubljana University</li></ul></div>
+          <div class="region"><h6>France</h6><ul><li>Audencia École de Management</li><li>EDHEC Business School</li><li>Université de Strasbourg</li><li>NEOMA Business School <span class="dbl">**</span></li><li>ESCP Europe</li><li>ESSEC</li><li>Grenoble École de Management</li><li>HEC Paris</li><li>ICN Business School</li><li>Toulouse Business School <span class="dbl">**</span></li></ul></div>
+          <div class="region"><h6>Switzerland</h6><ul><li>HEC Lausanne</li><li>University of Saint Gallen</li></ul></div>
+          <div class="region"><h6>Spain</h6><ul><li>ESADE</li></ul></div>
+          <div class="region"><h6>Germany</h6><ul><li>KLU Kühne Logistics University</li><li>University of Cologne</li><li>University of Kaiserslautern</li><li>University of Mannheim</li></ul></div>
+          <div class="region"><h6>Netherlands</h6><ul><li>Radboud University</li><li>Tilburg University <span class="dbl">**</span></li><li>Maastricht University</li></ul></div>
+          <div class="region"><h6>Norway</h6><ul><li>BI Norwegian Business School</li><li>Norwegian School of Economics</li></ul></div>
+          <div class="region"><h6>Turkey</h6><ul><li>Koc University</li></ul></div>
+          <div class="region"><h6>Poland</h6><ul><li>Warsaw School of Economics</li><li>Kozminski University</li></ul></div>
+          <div class="region"><h6>Italy</h6><ul><li>Politecnico di Milano</li><li>Università Commerciale Luigi Bocconi</li></ul></div>
+          <div class="region"><h6>Portugal</h6><ul><li>Católica Lisbon Business & Economics</li><li>Nova School of Business and Economics</li></ul></div>
+          <div class="region"><h6>Sweden</h6><ul><li>Lunds Universitet</li><li>Jönköping International Business School</li></ul></div>
+          <div class="region"><h6>United States</h6><ul><li>Tulane University <span class="dbl">**</span></li></ul></div>
+          <div class="region"><h6>Canada</h6><ul><li>FSA Laval</li><li>HEC Montreal</li><li>McGill University</li><li>Queens University School of Business</li></ul></div>
+          <div class="region"><h6>Mexico</h6><ul><li>ITAM</li><li>ITESM-EGADE</li></ul></div>
+          <div class="region"><h6>Brazil</h6><ul><li>Fundação Dom Cabral</li><li>Fundação Getulio Vargas <span class="dbl">**</span></li></ul></div>
+          <div class="region"><h6>Chile</h6><ul><li>Universidad de Chile</li></ul></div>
+          <div class="region"><h6>Peru</h6><ul><li>Universidad del Pacífico</li></ul></div>
+          <div class="region"><h6>Hong Kong</h6><ul><li>City University of Hong Kong</li></ul></div>
+          <div class="region"><h6>Japan</h6><ul><li>Nagoya University of Commerce and Business</li></ul></div>
+          <div class="region"><h6>Taiwan</h6><ul><li>National Chengchi University</li></ul></div>
+        </div>
+      </div>
+    </div>
+    <div class="aside-docs" style="align-self:start">
+      <img src="../assets/img/mapa_convenios.png" alt="Mapa de países con convenio" style="border-radius:6px;border:1px solid var(--line)">
+    </div>
+  </div>
+</div>
+
+<div class="modal-panel" id="panel-doble-titulacion" data-index="1" role="tabpanel">
+  <div class="detail-head">
+    <div class="detail-title">
+      <div class="kicker">Opción 2 de 11 · Doble título</div>
+      <h3>Doble Titulación</h3>
+      <p>Obtén el título de pregrado en la Universidad de los Andes y, de forma simultánea, un título otorgado por una universidad aliada acreditada triple corona.</p>
+    </div>
+    <div class="detail-badges">
+      <span class="pill">5 convenios activos</span>
+    </div>
+  </div>
+
+  <div class="detail-grid modal-grid">
+    <div>
+      <div class="block">
+        <h4>Cómo funciona / Validación</h4>
+        <ul>
+          <li>Ser aceptado en el programa a través de la convocatoria oficial de Uniandes, y cumplir satisfactoriamente con todos los requisitos de grado de ambas instituciones del convenio.</li>
+          <li>El estudiante debe primero oficializar el grado y obtención de título en la universidad anfitriona, antes de recibir su título en Uniandes.</li>
+          <li>Inscripción y aprobación del curso de Doble Titulación (el código varía según el convenio) para cada semestre de movilidad.</li>
+          <li>Inscripción y aprobación de todos los cursos del plan de estudios del convenio.</li>
+          <li>Práctica: en los convenios que la incluyen como requisito de su plan de estudios, debe cumplir con todas las condiciones establecidas por el convenio — y debe ser presencial.</li>
+          <li>Homologación: proceso formal obligatorio vía plataforma, sin excepción. No garantizada según historial de otros estudiantes.</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h4>Requisitos generales</h4>
+        <ul>
+          <li>Estar matriculado en Uniandes en el pregrado en Administración durante todo el proceso.</li>
+          <li>No es posible aspirar a un intercambio o doble titulación, ni hacerlo, si ya se han terminado materias.</li>
+          <li>No encontrarse sancionado disciplinariamente en ninguna etapa del proceso de postulación.</li>
+          <li>Tener la autorización de la Coordinación del programa.</li>
+          <li>Cumplir el requisito de idioma de cada convenio (verifica el idioma de instrucción de tu interés).</li>
+          <li>Subir a MoveOn la documentación requerida dentro de las fechas de la convocatoria.</li>
+          <li>Las prácticas académicas deben ser presenciales.</li>
+          <li>Deben cumplirse los requisitos de la universidad de doble titulación (práctica y aprobación de cursos) antes de recibir el grado en Uniandes.</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h4>Convenios activos</h4>
+        <div class="logo-row">
+          <div class="logo-card"><img src="../assets/img/logos/tilburg.png" alt="Tilburg University"></div>
+          <div class="logo-card"><img src="../assets/img/logos/fgv.png" alt="Fundação Getulio Vargas"></div>
+          <div class="logo-card"><img src="../assets/img/logos/neoma.png" alt="NEOMA Business School"></div>
+          <div class="logo-card"><img src="../assets/img/logos/tulane.png" alt="Tulane University"><span class="tag-warn">En revisión</span></div>
+          <div class="logo-card"><img src="../assets/img/logos/tbs.png" alt="Toulouse Business School"></div>
+        </div>
+
+        <div class="uni-detail">
+          <h5>Tilburg University — Tilburg, Países Bajos</h5>
+          <ul>
+            <li>Cupos publicados en la convocatoria correspondiente.</li>
+            <li>2 + 2: dos años en Uniandes y dos años en Tilburg.</li>
+            <li>Aprox. 10.000 EUR de fee por año, más pago del 10% de la matrícula en Uniandes cada semestre.</li>
+            <li>Requisito de idioma establecido en cada convocatoria.</li>
+            <li>2 becas ERASMUS+ — solo una plaza disponible con esta beca.</li>
+          </ul>
+        </div>
+        <div class="uni-detail">
+          <h5>Fundação Getulio Vargas (FGV) — São Paulo, Brasil</h5>
+          <ul>
+            <li>Cupos publicados en la convocatoria correspondiente.</li>
+            <li>2 + 2: dos años en Uniandes y dos años en FGV.</li>
+            <li>Pago del 100% de la matrícula en Uniandes cada semestre.</li>
+            <li>Práctica y tesis son obligatorias.</li>
+            <li>Requisito de idioma establecido en cada convocatoria.</li>
+            <li>Limitado al campus de São Paulo.</li>
+          </ul>
+        </div>
+        <div class="uni-detail">
+          <h5>NEOMA Business School — Reims, Francia</h5>
+          <ul>
+            <li>Cupos publicados en la convocatoria correspondiente.</li>
+            <li>2 + 2: dos años en Uniandes y dos años en NEOMA.</li>
+            <li>Pago del 100% de la matrícula en Uniandes cada semestre.</li>
+            <li>Requisito de idioma establecido en cada convocatoria.</li>
+            <li>Práctica y tesis son obligatorias.</li>
+          </ul>
+        </div>
+        <div class="uni-detail">
+          <h5>Tulane University — Nueva Orleans, Estados Unidos</h5>
+          <ul>
+            <li class="warn-line"><strong>Convenio de doble titulación actualmente en revisión</strong> — confirma su vigencia con la Oficina de Internacionalización antes de aplicar.</li>
+            <li>Cupos publicados en la convocatoria correspondiente.</li>
+            <li>3 semestres en Tulane.</li>
+            <li>Todos los estudiantes deben escoger un minor: Finance, Legal Studies, Management o Marketing.</li>
+            <li>50% del valor de la matrícula anual en Tulane, más 10% de matrícula en Uniandes por semestre.</li>
+            <li>Requisito de idioma establecido en cada convocatoria.</li>
+            <li>Asesoría en OPT por parte de la universidad anfitriona.</li>
+          </ul>
+        </div>
+        <div class="uni-detail">
+          <h5>Toulouse Business School (TBS) — Toulouse/París, Francia</h5>
+          <ul>
+            <li>Cupos publicados en la convocatoria correspondiente.</li>
+            <li>3 semestres en TBS.</li>
+            <li>Pago del 10% de la matrícula en Uniandes cada semestre.</li>
+            <li>Cada estudiante obtiene un MSc en alguna de las especializaciones disponibles — revisa bien las modalidades de especialización.</li>
+            <li>Requisito de idioma establecido en cada convocatoria.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="aside-docs">
+      <a class="doc-link" href="../assets/docs/Tilburg_University.pdf" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+        <span><span class="fname">Tilburg University</span><span class="fsub">Documento de convenio (referencia) · PDF</span></span>
+      </a>
+      <a class="doc-link" href="../assets/docs/Toulouse_Business_School.pdf" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+        <span><span class="fname">Toulouse Business School</span><span class="fsub">Documento de convenio (referencia) · PDF</span></span>
+      </a>
+      <a class="doc-link" href="../assets/docs/Tulane_University.pdf" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+        <span><span class="fname">Tulane University</span><span class="fsub">Documento de convenio (referencia) · PDF</span></span>
+      </a>
+      <p class="source-note" style="margin-top:10px">Estos PDF son documentos de convenio de referencia de una versión anterior del manual. Como el convenio con Tulane está en revisión y NEOMA/FGV son convenios nuevos sin documento cargado aún, confirma las condiciones vigentes con la Oficina de Internacionalización.</p>
+    </div>
+  </div>
+</div>
+
+<div class="modal-panel" id="panel-eiv-uniandes" data-index="2" role="tabpanel">
+  <div class="panel-photo-head" style="background-image:url('../assets/img/escuela_verano_china.jpg')">
+    <div class="photo-head-inner">
+      <div class="kicker">Opción 3 de 11 · Periodo intersemestral</div>
+      <h3>Escuela Internacional de Verano (Uniandes)</h3>
+      <p>Aprueba 2 cursos de la Escuela Internacional de Verano (EIV) de la Facultad de Administración, o de otras facultades de la Universidad de los Andes, uno de ellos 100% presencial.</p>
+      <div class="detail-badges">
+        <span class="pill">2 cursos · vacaciones junio-julio</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-grid modal-grid">
+    <div>
+      <div class="block">
+        <h4>EIV Facultad de Administración</h4>
+        <ul>
+          <li>2 cursos en período intersemestral, de nivel maestría.</li>
+          <li>2 semanas cada uno.</li>
+          <li>En inglés, con profesores internacionales.</li>
+          <li>Cada curso cuenta como una electiva (homologación directa).</li>
+          <li>Costo de referencia: <strong>$4.367.000 COP por curso (2026)</strong>.</li>
+          <li>Al menos uno de los cursos debe tomarse de manera presencial.</li>
+        </ul>
+      </div>
+      <div class="callout warn">
+        <strong>Si quieres cumplir ambos componentes con la EIV:</strong> una presentación de la Oficina Internacional indica que tomando <strong>4 cursos en total</strong> (2 para Experiencia Internacional + 2 adicionales) se cumplen a la vez el componente de cursos disciplinares y el de experiencia internacional — pero las Preguntas Frecuentes oficiales afirman que <strong>NO</strong> es posible cumplir ambas partes a través de la EIV de un aliado o de Uniandes. Estas dos fuentes oficiales no coinciden: confirma con la Oficina de Internacionalización antes de planear tu semestre asumiendo que 4 cursos cubren ambos componentes.
+      </div>
+      <div class="block">
+        <h4>Cursos de otras facultades de Uniandes</h4>
+        <p style="font-size:14px">Están sujetos a aprobación del Comité Administrativo de la Facultad de Administración, y deben cumplir:</p>
+        <ul>
+          <li>Ser dictados en inglés.</li>
+          <li>Cada curso debe tener equivalencia de 3 o 4 créditos Uniandes.</li>
+        </ul>
+      </div>
+      <div class="callout info">
+        <strong>Nota sobre Bootcamp de Emprendimiento:</strong> este curso, que actualmente tiene cuatro créditos, solo vale por un curso de la Escuela de Verano. El estudiante deberá tomar otro curso adicional para cumplir con el requisito de experiencia internacional.
+      </div>
+    </div>
+    <aside class="card-side">
+      <h4>Recuerda</h4>
+      <p style="font-size:14px">No se validarán cursos homologados en instituciones diferentes a Uniandes, ni cursos de la Escuela Internacional de Verano de otras facultades para el componente de cursos disciplinares en inglés.</p>
+    </aside>
+  </div>
+</div>
+
+<div class="modal-panel" id="panel-socios-internacionales" data-index="3" role="tabpanel">
+  <div class="detail-head">
+    <div class="detail-title">
+      <div class="kicker">Opción 4 de 11 · Homologación externa</div>
+      <h3>Escuelas de Verano o Invierno Externas</h3>
+      <p>Aprueba el equivalente a dos cursos de la Escuela Internacional de Verano de la Facultad en una universidad externa: mínimo 12 ECTS en total, con el fin de tener una equivalencia de 6 créditos Uniandes.</p>
+    </div>
+    <div class="detail-badges">
+      <span class="pill">Variable · periodo vacacional</span>
+    </div>
+  </div>
+
+  <div class="detail-grid modal-grid">
+    <div>
+      <div class="block">
+        <h4>Requisitos generales</h4>
+        <ul>
+          <li>El proceso debe ser completamente autogestionado por el estudiante.</li>
+          <li>En caso de deserción, se debe informar a la universidad de destino de la movilidad.</li>
+          <li>Para su validación es necesario presentar el certificado de cursos inscritos y aprobados.</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h4>Aliados / partners de la Facultad</h4>
+        <ul>
+          <li>Inscribirse y aprobar los cursos de las Escuelas Internacionales de Verano o Invierno de universidades con las que la Facultad tenga convenio vigente.</li>
+          <li>Estas universidades deben tener mínimo acreditación EQUIS o AMBA.</li>
+          <li>Presentar el certificado de cursos inscritos y aprobados.</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h4>Programas de verano externos (sin convenio)</h4>
+        <ul>
+          <li>Solicitar con anterioridad autorización al Comité Administrativo del Pregrado.</li>
+          <li>Aprobar los cursos de las Escuelas Internacionales de Verano o Invierno.</li>
+          <li>Presentar el certificado de cursos inscritos y aprobados.</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h4>Homologación</h4>
+        <p style="font-size:14px">Se debe realizar el proceso formal a través de la plataforma de homologaciones, sin excepción. No se garantiza la aprobación de homologaciones según el historial compartido a otros estudiantes. La homologación depende de los créditos y el curso (se requieren créditos y nota).</p>
+      </div>
+      <div class="block">
+        <h4>Registra tu avance</h4>
+        <div class="select-grid">
+          <div class="tracker-field">
+            <label>Tipo de convenio</label>
+            <select data-track="soc-convenio"><option value="">Seleccionar</option><option>Aliado / partner de la Facultad</option><option>Programa externo sin convenio</option></select>
+          </div>
+          <div class="tracker-field">
+            <label>¿Autorización del Comité solicitada?</label>
+            <select data-track="soc-autorizacion"><option value="">Seleccionar</option><option>Sí</option><option>No</option></select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="card-side">
+      <h4>Enlace útil</h4>
+      <a class="doc-link" href="https://homologaciones.uniandes.edu.co/Homologaciones/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 4 6 4 9s-1.5 6.4-4 9c-2.5-2.6-4-6-4-9s1.5-6.4 4-9z"/></svg>
+        <span><span class="fname">Portal de Homologaciones</span><span class="fsub">homologaciones.uniandes.edu.co</span></span>
+      </a>
+    </aside>
+  </div>
+</div>
+
+<div class="modal-panel" id="panel-practica-internacional" data-index="4" role="tabpanel">
+  <div class="detail-head">
+    <div class="detail-title">
+      <div class="kicker">Opción 5 de 11 · Práctica profesional</div>
+      <h3>Práctica Internacional</h3>
+      <p>Inscribe, cursa y aprueba una práctica internacional en Administración. Debe realizarse de manera 100% presencial en el exterior.</p>
+    </div>
+    <div class="detail-badges">
+      <span class="pill">1 semestre o periodo de verano (jun–jul)</span>
+    </div>
+  </div>
+
+  <div class="detail-grid modal-grid">
+    <div>
+      <div class="block">
+        <h4>Validación</h4>
+        <ul>
+          <li>Debe contar, previo a su inicio, con la validación del CTP y la aprobación de la Coordinación del Pregrado.</li>
+          <li>Puede desarrollarse durante un semestre académico o en el periodo de verano (junio-julio).</li>
+          <li>La búsqueda y consecución de la práctica es responsabilidad del estudiante.</li>
+          <li>Curso de prácticas inscrito y aprobado.</li>
+          <li>Homologación: proceso formal obligatorio vía plataforma, sin excepción. No garantizada según historial de otros estudiantes.</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h4>Proceso — Práctica avalada por el CTP</h4>
+        <ul>
+          <li>Pedir la autorización del programa para hacer la práctica.</li>
+          <li>Gestionar por la página del CTP o de forma autogestionada (si es autogestionada, el programa debe revisar las funciones y autorizarla).</li>
+          <li>Se paga el 30% de la matrícula, bajo el curso "Práctica tiempo completo", y no se pueden inscribir cursos adicionales.</li>
+          <li>En caso de tomar una práctica de verano, se paga lo correspondiente a los créditos del curso de práctica.</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h4>Registra tu avance</h4>
+        <div class="tracker-field" style="max-width:280px">
+          <label>¿Validada por el CTP?</label>
+          <select data-track="practica-validada"><option value="">Seleccionar</option><option>Sí</option><option>No</option></select>
+        </div>
+      </div>
+    </div>
+    <aside class="card-side">
+      <h4>Documento</h4>
+      <a class="doc-link" href="../assets/docs/Reglamento_Practicas_Academicas.pdf" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+        <span><span class="fname">Reglamento de Prácticas Académicas</span><span class="fsub">Documento de referencia · PDF</span></span>
+      </a>
+      <p class="source-note" style="margin-top:10px">Este reglamento es de una versión anterior del manual. Verifica con el CTP si el porcentaje de matrícula y las condiciones descritas arriba están reflejadas en su versión más reciente.</p>
+    </aside>
+  </div>
+</div>
+
+<div class="modal-panel" id="panel-opcion-lengua-cultura" data-index="5" role="tabpanel">
+  <div class="panel-photo-head" style="background-image:url('../assets/img/lengua_cultura_clase.jpg')">
+    <div class="photo-head-inner">
+      <div class="kicker">Opción 6 de 11 · Programa académico institucional</div>
+      <h3>Opción Académica en Lengua y Cultura</h3>
+      <p>Cursa y aprueba en su totalidad alguna de las 9 opciones de lengua y cultura de la Universidad de los Andes.</p>
+      <div class="detail-badges">
+        <span class="pill">Programa completo</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-grid modal-grid">
+    <div>
+      <div class="block">
+        <h4>Cómo funciona</h4>
+        <ul>
+          <li>Cursa y aprueba en su totalidad alguna de las 9 opciones de lengua y cultura de la Universidad de los Andes.</li>
+          <li>Una vez finalizada, debes legalizar la opción académica ante el Departamento de Lenguas y Cultura y ante tu Facultad de Administración.</li>
+          <li>Debes entregar al CSA el formato de finalización de tu opción, firmado por el Departamento de Lenguas y Cultura.</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h4>Opciones confirmadas en la fuente oficial</h4>
+        <ul>
+          <li>Lengua y Cultura China</li>
+          <li>Lengua y Cultura Francesa</li>
+          <li>Lengua y Cultura Italiana</li>
+          <li>Lengua y Cultura Japonesa</li>
+          <li>Lengua y Cultura Alemana</li>
+          <li>Lengua y Cultura Portuguesa</li>
+        </ul>
+      </div>
+      <div class="source-note">La presentación menciona 9 opciones de lengua y cultura en total, pero solo detalla 6 por nombre. Faltan por confirmar las 3 restantes — te recomendamos consultar con el Departamento de Lenguas y Cultura o el CSA el listado completo.</div>
+      <div class="block">
+        <h4>Registra tu avance</h4>
+        <div class="tracker-field" style="max-width:320px">
+          <label>Opción académica elegida</label>
+          <select data-track="opcion-lengua-cultura-select">
+            <option value="">Seleccionar</option>
+            <option>Lengua y Cultura China</option>
+            <option>Lengua y Cultura Francesa</option>
+            <option>Lengua y Cultura Italiana</option>
+            <option>Lengua y Cultura Japonesa</option>
+            <option>Lengua y Cultura Alemana</option>
+            <option>Lengua y Cultura Portuguesa</option>
+            <option>Otra (confirmar con Depto. de Lenguas)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-panel" id="panel-cinco-cursos-idioma" data-index="6" role="tabpanel">
+  <div class="detail-head">
+    <div class="detail-title">
+      <div class="kicker">Opción 7 de 11 · Departamento de Lenguas y Cultura</div>
+      <h3>5 Cursos de un Idioma Diferente al Inglés</h3>
+      <p>Inscribe, cursa y aprueba cinco cursos de un idioma diferente al inglés del Departamento de Lenguas y Cultura de la Universidad, en máximo dos idiomas distintos.</p>
+    </div>
+    <div class="detail-badges">
+      <span class="pill">2–3 semestres · 5 cursos</span>
+    </div>
+  </div>
+
+  <div class="detail-grid modal-grid">
+    <div>
+      <div class="block">
+        <h4>Cómo funciona</h4>
+        <p>Debes inscribir, cursar y aprobar 5 cursos de idiomas del Departamento de Lenguas y Cultura, concentrados en un solo idioma o distribuidos en máximo dos idiomas distintos al inglés. La validación se hace por revisión de tu historia académica y la aprobación de los cursos — a diferencia de la Opción Académica en Lengua y Cultura, esta modalidad no requiere legalización formal ante el Departamento.</p>
+      </div>
+      <div class="block">
+        <h4>Registra tu avance</h4>
+        <div class="select-grid">
+          <div class="tracker-field">
+            <label>Idioma 1</label>
+            <select data-track="idi-idioma1">
+              <option value="">Seleccionar</option>
+              <option>Francés</option><option>Alemán</option><option>Italiano</option>
+              <option>Portugués</option><option>Chino</option><option>Japonés</option><option>Otro</option>
+            </select>
+          </div>
+          <div class="tracker-field">
+            <label>Cursos aprobados en idioma 1</label>
+            <select data-track="idi-cursos1">
+              <option value="">Seleccionar</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+            </select>
+          </div>
+          <div class="tracker-field">
+            <label>Idioma 2 (opcional)</label>
+            <select data-track="idi-idioma2">
+              <option value="">Seleccionar</option>
+              <option>Francés</option><option>Alemán</option><option>Italiano</option>
+              <option>Portugués</option><option>Chino</option><option>Japonés</option><option>Otro</option>
+            </select>
+          </div>
+          <div class="tracker-field">
+            <label>Cursos aprobados en idioma 2</label>
+            <select data-track="idi-cursos2">
+              <option value="">Seleccionar</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-panel" id="panel-competencias-internacionales" data-index="7" role="tabpanel">
+  <div class="detail-head">
+    <div class="detail-title">
+      <div class="kicker">Opción 8 de 11 · Representación institucional</div>
+      <h3>Competencias Internacionales</h3>
+      <p>Sé seleccionado y representa a la Facultad de Administración en un evento académico o profesional donde estudiantes compiten con pares de diferentes países, aplicando conocimientos en alguna de las áreas de la Administración.</p>
+    </div>
+    <div class="detail-badges">
+      <span class="pill">Proceso de selección</span>
+    </div>
+  </div>
+
+  <div class="detail-grid modal-grid">
+    <div>
+      <div class="block">
+        <h4>Ejemplos</h4>
+        <ul>
+          <li><strong>Cornell-EMI Case Competition</strong> — acompañada por el Centro de Emprendimiento de la Facultad de Administración.</li>
+          <li><strong>Global Family Enterprise Case Competition (SG-FECC)</strong>.</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h4>Validación</h4>
+        <ul>
+          <li>El estudiante debe contar con autorización previa del programa.</li>
+          <li>Debe adjuntar los correos de autorización al formulario de Requisito Internacional.</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h4>Registra tu avance</h4>
+        <div class="tracker-field" style="max-width:320px">
+          <label>Competencia en la que participas</label>
+          <input type="text" data-track="comp-nombre" placeholder="Ej. Cornell-EMI Case Competition">
+        </div>
+        <div class="check-row" style="margin-top:10px">
+          <input type="checkbox" data-track="comp-autorizacion">
+          <label>Autorización del programa obtenida</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-panel" id="panel-pasantias-investigacion" data-index="8" role="tabpanel">
+  <div class="detail-head">
+    <div class="detail-title">
+      <div class="kicker">Opción 9 de 11 · Inmersión en investigación</div>
+      <h3>Pasantías de Investigación</h3>
+      <p>Sé seleccionado y representa a la Facultad de Administración en una experiencia de inmersión en investigación en una universidad en el exterior, generando un espacio de colaboración con nuestros socios internacionales.</p>
+    </div>
+    <div class="detail-badges">
+      <span class="pill">Periodo de verano</span>
+    </div>
+  </div>
+
+  <div class="detail-grid modal-grid">
+    <div>
+      <div class="block">
+        <h4>Ejemplo</h4>
+        <ul><li><strong>Summer Undergraduate Research Fellowship (SURF)</strong>.</li></ul>
+      </div>
+      <div class="block">
+        <h4>Validación</h4>
+        <ul><li>El estudiante debe inscribir y aprobar el curso código <strong>INTL-2207 Pasantía de Investigación de Pregrado en el Exterior</strong>.</li></ul>
+      </div>
+      <div class="block">
+        <h4>Registra tu avance</h4>
+        <div class="check-row">
+          <input type="checkbox" data-track="pasinv-inscrito">
+          <label>Curso INTL-2207 inscrito</label>
+        </div>
+        <div class="check-row">
+          <input type="checkbox" data-track="pasinv-aprobado">
+          <label>Curso INTL-2207 aprobado</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-panel" id="panel-programas-verano" data-index="9" role="tabpanel">
+  <div class="detail-head">
+    <div class="detail-title">
+      <div class="kicker">Opción 10 de 11 · Programas cortos</div>
+      <h3>Programas Internacionales de Verano</h3>
+      <p>Participa y obtén el certificado oficial de asistencia de un programa internacional de verano ofertado por la Facultad o la Universidad.</p>
+    </div>
+    <div class="detail-badges">
+      <span class="pill">1–2 semanas · vacaciones</span>
+    </div>
+  </div>
+
+  <div class="detail-grid modal-grid">
+    <div>
+      <div class="callout warn">
+        <strong>Importante:</strong> la oferta de programas internacionales de verano cambia cada año. Los ejemplos de esta ficha (Babson, Global Village, HUWIB) corresponden a convocatorias anteriores — valida siempre la disponibilidad y las condiciones vigentes con la Oficina de Internacionalización antes de aplicar.
+      </div>
+      <div class="block">
+        <h4>Ejemplos</h4>
+        <ul>
+          <li><strong>Babson Entrepreneurship Program</strong></li>
+          <li><strong>Global Village</strong></li>
+          <li><strong>Harvard Undergraduate Women in Business (HUWIB)</strong></li>
+        </ul>
+      </div>
+      <div class="block">
+        <h4>Validación</h4>
+        <ul><li>Se debe adjuntar el certificado oficial de asistencia de la universidad donde se realizó el programa, al formulario de validación del requisito.</li></ul>
+      </div>
+      <div class="block">
+        <h4>Registra tu avance</h4>
+        <div class="tracker-field" style="max-width:320px">
+          <label>Programa</label>
+          <select data-track="prog-verano-nombre">
+            <option value="">Seleccionar</option>
+            <option>Babson Entrepreneurship Program</option>
+            <option>Global Village</option>
+            <option>Harvard Undergraduate Women in Business (HUWIB)</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="check-row" style="margin-top:10px">
+          <input type="checkbox" data-track="prog-verano-certificado">
+          <label>Certificado oficial de asistencia obtenido</label>
+        </div>
+      </div>
+    </div>
+    <div class="aside-docs">
+      <a class="doc-link" href="../assets/docs/BABSON_PREGRADO.pdf" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+        <span><span class="fname">Babson Entrepreneurship — Pregrado</span><span class="fsub">Volante informativo (referencia) · PDF</span></span>
+      </a>
+      <a class="doc-link" href="../assets/img/GLOBAL_VILLAGE_2023.jpg" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="15" rx="1.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5-4 4-2-2-5 5"/></svg>
+        <span><span class="fname">Global Village 2023</span><span class="fsub">Registro fotográfico · JPG</span></span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="modal-panel" id="panel-freemover" data-index="10" role="tabpanel">
+  <div class="detail-head">
+    <div class="detail-title">
+      <div class="kicker">Opción 11 de 11 · Movilidad autogestionada</div>
+      <h3>Freemover</h3>
+      <p>Realiza una movilidad académica internacional bajo la modalidad Freemover: una postulación individual del estudiante ante la universidad de destino, con o sin convenio vigente con Uniandes.</p>
+    </div>
+    <div class="detail-badges">
+      <span class="pill">1 semestre · proceso autogestionado</span>
+    </div>
+  </div>
+
+  <div class="detail-grid modal-grid">
+    <div>
+      <div class="block">
+        <h4>Proceso</h4>
+        <ul>
+          <li>Solicitar la aprobación del Comité de Pregrado para realizar una movilidad bajo la modalidad Freemover — un proceso de postulación autogestionado por el estudiante.</li>
+          <li>Una vez obtenida esa aprobación, postular directamente ante la universidad de destino. Si esta cuenta con un convenio de intercambio vigente con la Universidad, también será necesario obtener la aprobación de la Dirección de Internacionalización de Uniandes, sin hacer uso de los cupos establecidos en dicho convenio.</li>
+          <li>En caso de solicitar homologaciones al finalizar la movilidad, presentar los programas oficiales de los cursos cursados y el certificado oficial de notas de la universidad de destino.</li>
+        </ul>
+      </div>
+      <div class="block rec">
+        <h4>Condiciones obligatorias</h4>
+        <ul>
+          <li>La universidad anfitriona debe tener al menos una acreditación internacional (EQUIS o AACSB).</li>
+          <li>Si el estudiante opta por una universidad con la que la Facultad ya tiene un convenio de intercambio, la solicitud no debe afectar los cupos establecidos para el intercambio por convenio.</li>
+          <li>El estudiante debe realizar el proceso de prehomologación de materias por medio de la plataforma de homologaciones (homologaciones.uniandes.edu.co); esto determinará el reconocimiento por cursos Uniandes.</li>
+        </ul>
+      </div>
+      <div class="callout warn">
+        <strong>Aspectos financieros y administrativos:</strong> esta modalidad implica el pago del 100% de la matrícula en la universidad anfitriona (no en Uniandes), cumpliendo todos los requisitos académicos y financieros de esa institución. Representa además el retiro voluntario de Uniandes — en pregrado no existe la posibilidad de aplazar, por lo que se hace como retiro voluntario y posteriormente el reintegro.
+      </div>
+      <div class="block">
+        <h4>Homologación</h4>
+        <p style="font-size:14px">No se garantiza la aprobación de homologaciones según el historial compartido a otros estudiantes. Se debe realizar el proceso formal a través de la plataforma de homologaciones, sin excepción.</p>
+      </div>
+      <div class="block">
+        <h4>Registra tu avance</h4>
+        <div class="check-row">
+          <input type="checkbox" data-track="free-comite">
+          <label>Aprobación del Comité de Pregrado obtenida</label>
+        </div>
+        <div class="check-row">
+          <input type="checkbox" data-track="free-convenio">
+          <label>Universidad destino tiene convenio de intercambio vigente</label>
+        </div>
+        <div class="check-row">
+          <input type="checkbox" data-track="free-prehomologacion">
+          <label>Prehomologación realizada en la plataforma</label>
+        </div>
+      </div>
+    </div>
+    <aside class="card-side">
+      <h4>Enlace útil</h4>
+      <a class="doc-link" href="https://homologaciones.uniandes.edu.co/Homologaciones/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 4 6 4 9s-1.5 6.4-4 9c-2.5-2.6-4-6-4-9s1.5-6.4 4-9z"/></svg>
+        <span><span class="fname">Portal de Homologaciones</span><span class="fsub">homologaciones.uniandes.edu.co</span></span>
+      </a>
+    </aside>
+  </div>
+</div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: FELICITACIÓN AL COMPLETAR AMBOS COMPONENTES
+     ============================================================ -->
+<div class="modal-overlay" id="congratsModal" aria-hidden="true">
+  <div class="modal-shell" role="dialog" aria-modal="true" aria-labelledby="congratsHeading" style="max-width:520px">
+    <div class="modal-topbar" style="justify-content:flex-end">
+      <button class="modal-close" id="congratsClose" aria-label="Cerrar" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="modal-scroll" style="text-align:center;padding-top:6px">
+      <div style="width:56px;height:56px;border-radius:50%;background:var(--verified-soft);color:var(--verified);display:flex;align-items:center;justify-content:center;margin:0 auto 18px">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg>
+      </div>
+      <h3 id="congratsHeading" style="margin-bottom:12px">¡Muy bien!</h3>
+      <p style="max-width:40ch;margin:0 auto 20px">Cumpliendo estos dos componentes, cumplirías con el Requisito Internacional. Debes tomar una consejería con Sophie Fernández Leal o Juan Pablo Izquierdo Camacho para continuar con tu proceso de validación del Requisito Internacional.</p>
+      <div class="btns" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+        <a class="btn btn-outline btn-small" href="https://consejeriascoordinaciones.bookeau.com/#/login" target="_blank" rel="noopener">Agendar con Sophie Fernández Leal</a>
+        <a class="btn btn-outline btn-small" href="https://outlook.office365.com/book/ConsejerasInternacionales@uniandes.onmicrosoft.com/?ismsaljsauthenabled=true" target="_blank" rel="noopener">Agendar con Juan Pablo Izquierdo</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     FAQ
+     ============================================================ -->
+<section id="preguntas">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Dudas comunes</div>
+      <h2 class="h-section">Preguntas frecuentes</h2>
+      <p>Actualizadas a partir de las preguntas frecuentes oficiales de la Oficina Internacional, agosto de 2026.</p>
+    </div>
+
+    <div class="accordion" id="accordion">
+      <div class="accordion-item" data-open="false">
+        <button class="acc-trigger" aria-expanded="false">¿Qué cursos cuentan para el componente de cursos disciplinares en inglés?<span class="plus">+</span></button>
+        <div class="acc-panel"><p>Únicamente los cursos código ADMI en inglés ofrecidos directamente por la Facultad de Administración. Revisa la oferta de cada semestre en el catálogo académico.</p></div>
+      </div>
+      <div class="accordion-item" data-open="false">
+        <button class="acc-trigger" aria-expanded="false">¿Puedo tomar más de dos cursos ADMI en inglés?<span class="plus">+</span></button>
+        <div class="acc-panel"><p>Sí. Solo necesitas dos para cumplir con este componente, pero puedes ver más si quieres.</p></div>
+      </div>
+      <div class="accordion-item" data-open="false">
+        <button class="acc-trigger" aria-expanded="false">¿Cuentan los cursos del Departamento de Lenguas y Cultura, o cursos vistos en un intercambio y luego homologados?<span class="plus">+</span></button>
+        <div class="acc-panel"><p>No, en ninguno de los dos casos. Los cursos código ADMI en inglés deben ser vistos y aprobados en Uniandes, sin excepción.</p></div>
+      </div>
+      <div class="accordion-item" data-open="false">
+        <button class="acc-trigger" aria-expanded="false">¿Puedo usar los mismos cursos para ambas partes del requisito?<span class="plus">+</span></button>
+        <div class="acc-panel"><p>No. Los cursos que usas para el componente de cursos disciplinares en inglés no pueden ser los mismos que uses para cumplir la Experiencia Internacional.</p></div>
+      </div>
+      <div class="accordion-item" data-open="false">
+        <button class="acc-trigger" aria-expanded="false">¿Puedo cumplir ambas partes del requisito a través de la Escuela Internacional de Verano?<span class="plus">+</span></button>
+        <div class="acc-panel"><p>Las Preguntas Frecuentes oficiales indican que <strong>no</strong> es posible cumplir ambas partes a través de la EIV de un aliado o de Uniandes. Sin embargo, otra diapositiva de la misma presentación describe un escenario de 4 cursos en la EIV de la Facultad que cubriría ambos componentes — te recomendamos confirmar directamente con la Oficina de Internacionalización antes de planear tu semestre con base en ese escenario.</p></div>
+      </div>
+      <div class="accordion-item" data-open="false">
+        <button class="acc-trigger" aria-expanded="false">Si elijo la Escuela de Verano de los Andes para mi Experiencia Internacional, ¿hay alguna condición?<span class="plus">+</span></button>
+        <div class="acc-panel"><p>Sí. Debes ver al menos uno de los dos cursos necesarios de manera presencial.</p></div>
+      </div>
+      <div class="accordion-item" data-open="false">
+        <button class="acc-trigger" aria-expanded="false">¿Cuándo debo cumplir este requisito?<span class="plus">+</span></button>
+        <div class="acc-panel"><p>Se recomienda ver los cursos en inglés lo antes posible, y planear tu experiencia internacional con tiempo.</p></div>
+      </div>
+      <div class="accordion-item" data-open="false">
+        <button class="acc-trigger" aria-expanded="false">¿Puedo graduarme si terminé solo una parte del requisito?<span class="plus">+</span></button>
+        <div class="acc-panel"><p>No. Debes cumplir con ambas partes: los cursos disciplinares en inglés y la experiencia internacional.</p></div>
+      </div>
+      <div class="accordion-item" data-open="false">
+        <button class="acc-trigger" aria-expanded="false">¿Qué hago si no puedo salir del país?<span class="plus">+</span></button>
+        <div class="acc-panel"><p>Puedes cumplir el componente de Experiencia Internacional con opciones que no requieren salir de Colombia, como la Escuela Internacional de Verano de Uniandes, la Opción Académica en Lengua y Cultura, o los 5 cursos de idioma del Departamento de Lenguas y Cultura.</p></div>
+      </div>
+      <div class="accordion-item" data-open="false">
+        <button class="acc-trigger" aria-expanded="false">¿El Requisito Internacional reemplaza el requisito de inglés o de segunda lengua de Uniandes?<span class="plus">+</span></button>
+        <div class="acc-panel"><p>No. El Requisito Internacional es independiente de los requisitos institucionales de lectura en inglés y de dominio de segunda lengua de la Universidad. Cumplir uno no exime del cumplimiento de los otros.</p></div>
+      </div>
+      <div class="accordion-item" data-open="false">
+        <button class="acc-trigger" aria-expanded="false">Mi información, ¿se guarda en algún servidor?<span class="plus">+</span></button>
+        <div class="acc-panel"><p>No. Todo lo que registres en los campos interactivos de este manual se guarda únicamente en el almacenamiento local de tu navegador, en tu propio computador.</p></div>
+      </div>
+    </div>
+
+    <div class="cta-strip">
+      <p><strong>¿Tienes más dudas?</strong> Agenda tu cita de consejería internacional.</p>
+      <div class="btns">
+        <a class="btn btn-outline btn-small" href="https://consejeriascoordinaciones.bookeau.com/#/login" target="_blank" rel="noopener">Sophie Fernández Leal — Profesional Internacional Pregrado</a>
+        <a class="btn btn-outline btn-small" href="https://outlook.office365.com/book/ConsejerasInternacionales@uniandes.onmicrosoft.com/?ismsaljsauthenabled=true" target="_blank" rel="noopener">Juan Pablo Izquierdo — Soluciones a Estudiantes CSA</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <img src="../assets/img/logo_uniandes_admon_blanco.png" alt="Universidad de los Andes — Facultad de Administración" style="height:32px;margin-bottom:12px">
+      <p>Manual del Requisito Internacional. Facultad de Administración, Universidad de los Andes. Contenido actualizado a partir del anexo formal y la presentación oficial de la Oficina Internacional (agosto 2026).</p>
+    </div>
+    <div class="cols">
+      <div>
+        <h5>Navegación</h5>
+        <p><a href="#que-es">Qué es</a><br><a href="#como-funciona">Cómo funciona</a><br><a href="#opciones">Opciones</a><br><a href="#preguntas">Preguntas frecuentes</a></p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- storage helper (memory fallback if localStorage unavailable) ---------- */
+  var memoryStore = {};
+  var storageOK = true;
+  try{ localStorage.setItem('__test__','1'); localStorage.removeItem('__test__'); }catch(e){ storageOK = false; }
+  function getItem(k){ return storageOK ? localStorage.getItem(k) : (memoryStore[k]||null); }
+  function setItem(k,v){ if(storageOK){ try{ localStorage.setItem(k,v); }catch(e){ memoryStore[k]=v; } } else { memoryStore[k]=v; } }
+
+  var PREFIX = 'reqint_';
+  var toast = document.getElementById('toast');
+  var toastText = document.getElementById('toast-text');
+  var toastTimer = null;
+  function showToast(msg){
+    toastText.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toast.classList.remove('show'); }, 1600);
+  }
+
+  /* ---------- restore + bind all tracked fields ---------- */
+  var trackedEls = document.querySelectorAll('[data-track]');
+  trackedEls.forEach(function(el){
+    var key = PREFIX + el.getAttribute('data-track');
+    var saved = getItem(key);
+    if(saved !== null){
+      if(el.type === 'checkbox'){ el.checked = saved === '1'; }
+      else { el.value = saved; }
+    }
+    var evt = (el.tagName === 'SELECT' || el.type === 'checkbox') ? 'change' : 'input';
+    el.addEventListener(evt, function(){
+      var val = el.type === 'checkbox' ? (el.checked ? '1' : '0') : el.value;
+      setItem(key, val);
+      showToast('Guardado en tu navegador');
+      refreshCardStates();
+    });
+  });
+
+  /* ---------- card state: amarillo = en progreso, verde = completada ---------- */
+  var cardEls = Array.prototype.slice.call(document.querySelectorAll('.opt-card[data-card]'));
+
+  function panelTrackKeys(slug){
+    var panel = document.getElementById('panel-' + slug);
+    if(!panel) return [];
+    return Array.prototype.slice.call(panel.querySelectorAll('[data-track]')).map(function(el){
+      return el.getAttribute('data-track');
+    });
+  }
+
+  function isComplete(slug){ return getItem(PREFIX + 'complete_' + slug) === '1'; }
+
+  function hasProgress(slug){
+    return panelTrackKeys(slug).some(function(k){
+      var v = getItem(PREFIX + k);
+      return v !== null && v !== '' && v !== '0';
+    });
+  }
+
+  var prevCompletedCount = null;
+
+  function updateProgress(){
+    var step1Done = isComplete('cursos-ingles');
+    var step2Done = cardEls.some(function(card){
+      var slug = card.getAttribute('data-card');
+      return slug !== 'cursos-ingles' && isComplete(slug);
+    });
+    var count = (step1Done?1:0) + (step2Done?1:0);
+    document.getElementById('progressLabel').textContent = 'Componente ' + count + ' de 2';
+    document.getElementById('progressBar').style.width = (count/2*100) + '%';
+    if(prevCompletedCount !== null && prevCompletedCount < 2 && count === 2){
+      openCongratsModal();
+    }
+    prevCompletedCount = count;
+  }
+
+  function refreshCardStates(){
+    cardEls.forEach(function(card){
+      var slug = card.getAttribute('data-card');
+      card.classList.remove('state-progress','state-done');
+      if(isComplete(slug)){ card.classList.add('state-done'); }
+      else if(hasProgress(slug)){ card.classList.add('state-progress'); }
+    });
+    updateProgress();
+  }
+
+  document.querySelectorAll('.opt-check').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var slug = btn.getAttribute('data-complete');
+      var key = PREFIX + 'complete_' + slug;
+      var nowComplete = getItem(key) !== '1';
+      setItem(key, nowComplete ? '1' : '0');
+      showToast(nowComplete ? 'Marcada como completada' : 'Marca de completada retirada');
+      refreshCardStates();
+    });
+  });
+
+  refreshCardStates();
+
+  /* ---------- mobile nav ---------- */
+  var toggle = document.getElementById('navToggle');
+  var links = document.getElementById('navLinks');
+  toggle.addEventListener('click', function(){
+    var open = links.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open ? 'true':'false');
+  });
+  links.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){ links.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); });
+  });
+
+  /* ---------- accordion ---------- */
+  document.querySelectorAll('.accordion-item').forEach(function(item){
+    var btn = item.querySelector('.acc-trigger');
+    var panel = item.querySelector('.acc-panel');
+    btn.addEventListener('click', function(){
+      var isOpen = item.getAttribute('data-open') === 'true';
+      document.querySelectorAll('.accordion-item').forEach(function(i){
+        i.setAttribute('data-open','false');
+        i.querySelector('.acc-trigger').setAttribute('aria-expanded','false');
+        i.querySelector('.acc-panel').style.maxHeight = null;
+      });
+      if(!isOpen){
+        item.setAttribute('data-open','true');
+        btn.setAttribute('aria-expanded','true');
+        panel.style.maxHeight = panel.scrollHeight + 40 + 'px';
+      }
+    });
+  });
+
+  /* ---------- option modal (ficha emergente) — solo las 11 de Experiencia Internacional ---------- */
+  var panelsList = Array.prototype.slice.call(document.querySelectorAll('#modalScroll .modal-panel'));
+  var overlay = document.getElementById('optionModal');
+  var scrollEl = document.getElementById('modalScroll');
+  var countEl = document.getElementById('modalCount');
+  var dotsEl = document.getElementById('modalDots');
+  var btnPrev = document.getElementById('modalPrev');
+  var btnNext = document.getElementById('modalNext');
+  var btnClose = document.getElementById('modalClose');
+  var currentIndex = 0;
+  var lastFocused = null;
+
+  panelsList.forEach(function(p, i){
+    if(i === 0) p.classList.add('active');
+    var d = document.createElement('button');
+    d.type = 'button';
+    d.setAttribute('aria-label', 'Ir a la opción ' + (i+1));
+    d.addEventListener('click', function(){ showPanel(i); });
+    dotsEl.appendChild(d);
+  });
+  var dotEls = Array.prototype.slice.call(dotsEl.children);
+
+  function showPanel(i){
+    if(i < 0) i = panelsList.length - 1;
+    if(i >= panelsList.length) i = 0;
+    currentIndex = i;
+    panelsList.forEach(function(p, idx){ p.classList.toggle('active', idx === i); });
+    dotEls.forEach(function(d, idx){ d.setAttribute('aria-current', idx === i ? 'true' : 'false'); });
+    countEl.textContent = 'Opción ' + (i+1) + ' de ' + panelsList.length;
+    scrollEl.scrollTop = 0;
+  }
+
+  function openModal(slug){
+    var i = panelsList.findIndex(function(p){ return p.id === 'panel-' + slug; });
+    if(i === -1) i = 0;
+    lastFocused = document.activeElement;
+    showPanel(i);
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden','false');
+    document.body.classList.add('modal-open');
+    btnClose.focus();
+  }
+
+  function closeModal(){
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden','true');
+    document.body.classList.remove('modal-open');
+    if(lastFocused && lastFocused.focus){ lastFocused.focus(); }
+  }
+
+  btnPrev.addEventListener('click', function(){ showPanel(currentIndex - 1); });
+  btnNext.addEventListener('click', function(){ showPanel(currentIndex + 1); });
+  btnClose.addEventListener('click', closeModal);
+  overlay.addEventListener('click', function(e){ if(e.target === overlay) closeModal(); });
+
+  document.addEventListener('keydown', function(e){
+    if(!overlay.classList.contains('open')) return;
+    if(e.key === 'Escape') closeModal();
+    else if(e.key === 'ArrowLeft') showPanel(currentIndex - 1);
+    else if(e.key === 'ArrowRight') showPanel(currentIndex + 1);
+    else if(e.key === 'Tab'){
+      var focusable = overlay.querySelectorAll('button, a[href], select, input, textarea, [tabindex]:not([tabindex="-1"])');
+      if(!focusable.length) return;
+      var first = focusable[0], last = focusable[focusable.length-1];
+      if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    }
+  });
+
+  /* ---------- modal de Componente 1 (sin flechas, un solo panel) ---------- */
+  var comp1Overlay = document.getElementById('component1Modal');
+  var comp1Close = document.getElementById('c1Close');
+
+  function openComponent1(){
+    lastFocused = document.activeElement;
+    comp1Overlay.classList.add('open');
+    comp1Overlay.setAttribute('aria-hidden','false');
+    document.body.classList.add('modal-open');
+    comp1Close.focus();
+  }
+  function closeComponent1(){
+    comp1Overlay.classList.remove('open');
+    comp1Overlay.setAttribute('aria-hidden','true');
+    document.body.classList.remove('modal-open');
+    if(lastFocused && lastFocused.focus){ lastFocused.focus(); }
+  }
+  comp1Close.addEventListener('click', closeComponent1);
+  comp1Overlay.addEventListener('click', function(e){ if(e.target === comp1Overlay) closeComponent1(); });
+  document.addEventListener('keydown', function(e){
+    if(comp1Overlay.classList.contains('open') && e.key === 'Escape') closeComponent1();
+  });
+
+  /* ---------- modal de felicitación al completar ambos componentes ---------- */
+  var congratsOverlay = document.getElementById('congratsModal');
+  var congratsClose = document.getElementById('congratsClose');
+  function openCongratsModal(){
+    congratsOverlay.classList.add('open');
+    congratsOverlay.setAttribute('aria-hidden','false');
+    document.body.classList.add('modal-open');
+    congratsClose.focus();
+  }
+  function closeCongratsModal(){
+    congratsOverlay.classList.remove('open');
+    congratsOverlay.setAttribute('aria-hidden','true');
+    document.body.classList.remove('modal-open');
+  }
+  congratsClose.addEventListener('click', closeCongratsModal);
+  congratsOverlay.addEventListener('click', function(e){ if(e.target === congratsOverlay) closeCongratsModal(); });
+  document.addEventListener('keydown', function(e){
+    if(congratsOverlay.classList.contains('open') && e.key === 'Escape') closeCongratsModal();
+  });
+
+  /* ---------- toda la tarjeta es clicable para abrir su ficha ---------- */
+  document.querySelectorAll('.opt-card[data-card]').forEach(function(card){
+    var slug = card.getAttribute('data-card');
+    card.setAttribute('tabindex','0');
+    card.setAttribute('role','button');
+    function trigger(){
+      if(slug === 'cursos-ingles'){ openComponent1(); }
+      else { openModal(slug); }
+    }
+    card.addEventListener('click', function(e){
+      if(e.target.closest('.opt-check')) return;
+      trigger();
+    });
+    card.addEventListener('keydown', function(e){
+      if(e.target !== card) return;
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); trigger(); }
+    });
+  });
+
+})();
+</script>
+</body>
+</html>
