@@ -563,8 +563,18 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
   padding-bottom:9px;border-bottom:1px solid var(--line-soft);font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);white-space:nowrap;overflow:hidden
 }
 .page-head .rh-sec{color:var(--route);overflow:hidden;text-overflow:ellipsis}
-.page-body{flex:1;min-height:0;padding:22px var(--pad) 12px;overflow:hidden;container-type:inline-size;display:flow-root}
-.page-body.scrolls{overflow-y:auto}
+.page-body{flex:1;min-height:0;padding:22px var(--pad) 18px;overflow-y:auto;overflow-x:hidden;container-type:inline-size;display:flow-root;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:rgba(16,26,36,.22) transparent}
+.page-body::-webkit-scrollbar{width:6px}
+.page-body::-webkit-scrollbar-thumb{background:rgba(16,26,36,.22);border-radius:3px}
+/* aviso de que la hoja tiene más contenido abajo */
+.more-hint{
+  position:absolute;left:0;right:0;bottom:44px;height:58px;z-index:3;pointer-events:none;
+  display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;
+  background:linear-gradient(180deg,rgba(255,255,255,0),#fff 78%);opacity:0;transition:opacity .2s ease
+}
+.more-hint span{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--route);background:var(--route-light);padding:4px 10px;border-radius:12px}
+.more-hint svg{width:12px;height:12px}
+.page.has-more .more-hint{opacity:1}
 .page-body > :last-child{margin-bottom:0 !important}
 .page-foot{flex-shrink:0;height:44px;padding:0 var(--pad);display:flex;flex-direction:column;justify-content:center;gap:9px}
 .foot-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:10.5px;color:var(--ink-soft)}
@@ -581,7 +591,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
 .page--bleed .page-body{padding-top:0}
 .page--nohead .page-body{padding-top:calc(var(--pad) * 1.2)}
 
-#measure{position:fixed;left:-20000px;top:0;visibility:hidden;pointer-events:none}
 
 /* ---------- apertura de capítulo ---------- */
 .chapter-head{margin:0 calc(var(--pad) * -1) 26px}
@@ -732,15 +741,65 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
 .toc-compact-2 .toc-row.l1{font-size:13.5px;padding-top:4px}
 .toc-compact-2 .toc-row.l2{font-size:11.5px;padding:0 0 0 30px;line-height:1.4}
 
+/* ---------- botón del cronograma en la barra superior ---------- */
+.nav-links .nav-crono{color:#fff;border-bottom:none;padding:8px 14px;font-size:13px}
+.nav-links .nav-crono:hover{border-bottom-color:transparent;color:#fff}
+@media (max-width:1180px){ .nav-links{gap:18px} .nav-progress .bar{width:44px} }
+@media (max-width:1040px){ .nav-progress{display:none} }
+
+/* ---------- tablero de las 11 experiencias (compacto) ---------- */
+.page-body .board{grid-template-columns:1fr 1fr;gap:12px}
+.page-body .board .opt-card .icon-wrap{height:50px}
+.page-body .board .opt-card .icon-wrap svg{width:24px;height:24px}
+.page-body .board .opt-card .body{padding:12px 12px 14px}
+.page-body .board .opt-card h4{font-size:14.5px;line-height:1.25}
+.page-body .board .opt-card p{font-size:12.5px;margin-bottom:10px}
+.page-body .board .pill{font-size:10.5px;padding:4px 8px}
+@container (max-width:340px){.page-body .board{grid-template-columns:1fr}}
+
+/* ---------- fichas ---------- */
+.page--ficha .page-head{font-family:var(--sans);font-size:12px}
+.ph-back{display:inline-flex;align-items:center;gap:6px;font-weight:600;color:var(--route);text-decoration:none;font-size:12.5px}
+.ph-back svg{width:13px;height:13px}
+.ph-back:hover{text-decoration:underline}
+.ph-count{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft)}
+.ph-title{font-family:var(--serif);font-weight:600;font-size:13px;color:var(--ink);overflow:hidden;text-overflow:ellipsis}
+.book.spread .page--ficha .rh-sec,.book.spread .page--ficha .rh-book{display:inline}
+.book.spread .page--ficha.page--recto .page-head{justify-content:space-between}
+.page--ficha .page-body{padding-top:18px}
+.page--ficha .panel-photo-head{margin-top:-18px}
+.ficha-inline .ficha-actions{margin-top:0}
+.page-body .ficha-actions{margin:0 0 20px}
+
+/* ---------- consejería ---------- */
+.consejeria{display:flex;flex-direction:column;gap:14px}
+.cons-title{font-size:clamp(24px, 7cqw, 32px)}
+.cons-lead{margin:0 0 6px;font-size:15.5px}
+.advisor{display:flex;flex-direction:column;gap:3px;padding:18px 20px;border:1px solid var(--line);border-radius:8px;background:var(--paper);text-decoration:none;color:var(--ink);transition:border-color .15s ease}
+.advisor:hover{border-color:var(--route)}
+.adv-name{font-family:var(--serif);font-weight:600;font-size:18px}
+.adv-role{font-size:13.5px;color:var(--ink-soft)}
+.adv-cta{margin-top:10px;display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:13.5px;color:var(--brass)}
+.consejeria .callout{margin:6px 0 0}
+.back-bottom .btn-ghost{background:transparent}
+.back-bottom{gap:10px}
+
+.src-page{padding:0 !important}
+.src-page[data-kind="cover"]{padding:calc(var(--pad) * 1.05) var(--pad) calc(var(--pad) * .9) calc(var(--pad) + 14px) !important}
+.src-page[data-kind="back"]{padding:calc(var(--pad) * 1.2) calc(var(--pad) + 14px) var(--pad) var(--pad) !important}
+
+.page-body .detail-grid{grid-template-columns:1fr;gap:0}
+.page-body .detail-head{display:block}
+.page-body .detail-head .detail-badges{margin-top:14px}
+@keyframes flashField{0%{box-shadow:0 0 0 0 rgba(156,122,46,.0)}30%{box-shadow:0 0 0 4px rgba(156,122,46,.35)}100%{box-shadow:0 0 0 0 rgba(156,122,46,0)}}
+.flash{animation:flashField 1.4s ease}
+
 </style>
 </head>
 <body class="reader-app">
 <a href="#contenido" class="skip-link">Saltar al contenido</a>
 <div id="toast"><span class="dot"></span><span id="toast-text">Guardado</span></div>
 
-<!-- ============================================================
-     BARRA SUPERIOR
-     ============================================================ -->
 <header class="site">
   <nav class="nav">
     <a href="#inicio" class="brand">
@@ -748,11 +807,11 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
     </a>
     <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false"><span></span></button>
     <div class="nav-links" id="navLinks">
-      <a href="#indice">Contenido</a>
       <a href="#que-es">Qué es</a>
       <a href="#como-funciona">Cómo funciona</a>
       <a href="#opciones">Opciones</a>
       <a href="#preguntas">Preguntas frecuentes</a>
+      <a class="btn btn-brass btn-small nav-crono" href="../index.html#section-gantt">Volver al cronograma de actividades</a>
     </div>
     <div class="nav-progress" aria-live="polite">
       <span id="progressLabel">Componente 0 de 2</span>
@@ -761,15 +820,12 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
   </nav>
 </header>
 
-<!-- ============================================================
-     LECTOR (el libro)
-     ============================================================ -->
 <main id="contenido" class="reader">
   <div class="stage" id="stage">
     <button class="turn prev" id="turnPrev" type="button" aria-label="Página anterior">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg>
     </button>
-    <div class="book" id="book" aria-live="off">
+    <div class="book" id="book">
       <div class="slot slot-l" id="slotL"></div>
       <div class="slot slot-r" id="slotR"></div>
       <button class="corner l" id="cornerL" type="button" aria-label="Página anterior" tabindex="-1"></button>
@@ -791,17 +847,15 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
   </div>
 </main>
 
-<div id="measure" aria-hidden="true"></div>
-
 <!-- ============================================================
-     CONTENIDO FUENTE DEL MANUAL
-     El lector lo reparte automáticamente en páginas según el
-     tamaño de la pantalla. Cada bloque va en el orden de lectura.
+     CONTENIDO DEL MANUAL
+     Cada <section class="src-page"> es una hoja, en orden de lectura
+     (izquierda, derecha, izquierda, derecha…). Las fichas de las 11
+     experiencias se reparten solas: información a la izquierda y
+     diligenciamiento a la derecha.
      ============================================================ -->
 <div id="bookSource" class="book-source">
-
-<!-- ===== PORTADA ===== -->
-<div class="src-page" data-kind="cover" id="inicio">
+<section class="src-page" data-kind="cover" id="inicio">
   <div class="cover-spine" aria-hidden="true"></div>
   <div class="cover-top">
     <img class="cover-logo" src="../assets/img/logo_uniandes_admon_blanco.png" alt="Universidad de los Andes — Facultad de Administración">
@@ -824,32 +878,26 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
       </div>
     </div>
   </div>
-</div>
-
-<!-- ===== PRESENTACIÓN ===== -->
-<div class="src-page" data-kind="intro" id="presentacion">
+</section>
+<section class="src-page" data-kind="intro" id="presentacion" data-running="">
   <h2 class="intro-title">Presentación</h2>
   <p class="intro-lead">Tu guía interactiva y siempre vigente para planear, aplicar y hacer seguimiento a cada camino posible para cumplir el requisito internacional del pregrado en Administración: 11 modalidades de experiencia internacional, más los cursos disciplinares en inglés.</p>
   <div class="hero-actions">
-    <a href="#opciones" class="btn btn-brass">Explorar opciones
+    <a href="#seccion-componente-2" class="btn btn-brass">Explorar opciones
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
     </a>
     <a href="#que-es" class="btn btn-outline">Qué es el requisito</a>
   </div>
   <div class="intro-howto">
     <div class="perf"></div>
-    <p>Pasa las páginas con las flechas, el teclado (← →), las esquinas inferiores de cada hoja o deslizando en tu celular. Usa <strong>Contenido</strong> para saltar directo a cualquier capítulo.</p>
+    <p>Pasa las páginas con las flechas, el teclado (← →), las esquinas inferiores de cada hoja o deslizando en tu celular. Si una hoja tiene más contenido, desliza hacia abajo dentro de ella. Usa <strong>Contenido</strong> para saltar directo a cualquier capítulo.</p>
   </div>
-</div>
-
-<!-- ===== CONTENIDO (ÍNDICE) ===== -->
-<div class="src-page" data-kind="toc" id="indice">
+</section>
+<section class="src-page" data-kind="toc" id="indice" data-running="">
   <h2 class="toc-title">Contenido</h2>
   <nav class="toc-list" id="tocList" aria-label="Contenido del manual"></nav>
-</div>
-
-<!-- ===== CAPÍTULO 1 · QUÉ ES ===== -->
-<div class="src-flow" id="que-es" data-running="Qué es el requisito" data-toc="¿Qué es el Requisito Internacional?" data-toc-level="1">
+</section>
+<section class="src-page" data-kind="content" id="que-es" data-running="Qué es el requisito" data-toc="¿Qué es el Requisito Internacional?" data-toc-level="1">
 <header class="chapter-head">
   <div class="ch-band">
     <span class="ch-num" aria-hidden="true">1</span>
@@ -858,6 +906,11 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
   </div>
   <p class="ch-lead">Para obtener el título de Administrador debes cumplir con el Requisito Internacional de la Facultad de Administración, vigente desde 2016 para todos los estudiantes que iniciaron sus estudios a partir de ese año. Está diseñado para complementar tu formación académica y desarrollar una perspectiva global frente a los mercados y entornos dinámicos actuales.</p>
 </header>
+    <div class="callout info">
+      <strong>Un principio fundamental:</strong> este requisito busca ser accesible para todos los estudiantes, independientemente de su situación financiera o de sus capacidades físicas y/o intelectuales. Es un modelo inclusivo y equitativo.
+    </div>
+</section>
+<section class="src-page" data-kind="content" data-running="Qué es el requisito">
     <div class="how-grid">
       <div class="how-col">
         <div class="how-tag">Objetivo general</div>
@@ -874,19 +927,11 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
         </ul>
       </div>
     </div>
-
-
-    <div class="callout info">
-      <strong>Un principio fundamental:</strong> este requisito busca ser accesible para todos los estudiantes, independientemente de su situación financiera o de sus capacidades físicas y/o intelectuales. Es un modelo inclusivo y equitativo.
-    </div>
-
     <div class="callout warn">
       <strong>Importante — no lo confundas con otros requisitos:</strong> el Requisito Internacional es independiente de los requisitos institucionales de lectura en inglés y de dominio de segunda lengua de Uniandes. Cumplir uno de estos requisitos no exime del cumplimiento de los otros.
     </div>
-</div>
-
-<!-- ===== CAPÍTULO 2 · CÓMO FUNCIONA ===== -->
-<div class="src-flow" id="como-funciona" data-running="Cómo funciona" data-toc="Dos componentes independientes" data-toc-level="1">
+</section>
+<section class="src-page" data-kind="content" id="como-funciona" data-running="Cómo funciona" data-toc="Dos componentes independientes" data-toc-level="1">
 <header class="chapter-head">
   <div class="ch-band">
     <span class="ch-num" aria-hidden="true">2</span>
@@ -895,6 +940,13 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
   </div>
   <p class="ch-lead">El requisito implica cumplir con los siguientes dos componentes, que no se sustituyen entre sí.</p>
 </header>
+    <div class="how-note">
+      <strong>Cómo usar este manual:</strong> en cada modalidad encontrarás requisitos, validación, documentos y espacios interactivos para ir registrando tu avance, guardado automáticamente en tu navegador.
+      <br><br>
+      <strong>Colores de las tarjetas:</strong> una tarjeta se pone <strong style="color:#8a6a1a">amarilla</strong> apenas empiezas a diligenciarla, y se pone <strong style="color:var(--verified)">verde</strong> cuando presionas el check de su esquina para marcarla como completada. Cuando marques como completadas tanto la tarjeta de Cursos Disciplinares en Inglés como al menos una tarjeta de Experiencia Internacional, la barra de progreso de la parte superior se pondrá en verde: eso indica que cumpliste el Requisito Internacional.
+    </div>
+</section>
+<section class="src-page" data-kind="content" data-running="Cómo funciona">
     <div class="how-grid">
       <a class="how-col" href="#seccion-componente-1" style="text-decoration:none;color:inherit;display:block;cursor:pointer">
         <div class="how-tag">Componente 1</div>
@@ -907,16 +959,8 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
         <p>Inscribir, cursar en su totalidad y aprobar <strong>al menos una</strong> de las 11 modalidades del portafolio de experiencia internacional que encontrarás en el panel de opciones.</p>
       </a>
     </div>
-
-    <div class="how-note">
-      <strong>Cómo usar este manual:</strong> en cada modalidad encontrarás requisitos, validación, documentos y espacios interactivos para ir registrando tu avance, guardado automáticamente en tu navegador.
-      <br><br>
-      <strong>Colores de las tarjetas:</strong> una tarjeta se pone <strong style="color:#8a6a1a">amarilla</strong> apenas empiezas a diligenciarla, y se pone <strong style="color:var(--verified)">verde</strong> cuando presionas el check de su esquina para marcarla como completada. Cuando marques como completadas tanto la tarjeta de Cursos Disciplinares en Inglés como al menos una tarjeta de Experiencia Internacional, la barra de progreso de la parte superior se pondrá en verde: eso indica que cumpliste el Requisito Internacional.
-    </div>
-</div>
-
-<!-- ===== CAPÍTULO 3 · COMPONENTE 1 ===== -->
-<div class="src-flow" id="opciones" data-running="Componente 1 · Cursos en inglés" data-toc="Componente 1 · Cursos Disciplinares en Inglés" data-toc-level="1">
+</section>
+<section class="src-page" data-kind="content" id="opciones" data-running="Componente 1 · Cursos en inglés" data-toc="Componente 1 · Cursos Disciplinares en Inglés" data-toc-level="1">
 <header class="chapter-head" id="seccion-componente-1">
   <div class="ch-band">
     <span class="ch-num" aria-hidden="true">3</span>
@@ -926,7 +970,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
   <p class="ch-lead">Este componente es completamente independiente de la Experiencia Internacional — debes cumplir los dos. Da clic en la tarjeta para diligenciarlo.</p>
 </header>
     <div class="dash-grid dash-grid-single">
-
       <article class="opt-card" data-card="cursos-ingles">
         <button type="button" class="opt-check" data-complete="cursos-ingles" aria-label="Marcar Cursos disciplinares en inglés como completada">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg>
@@ -938,11 +981,10 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
           <div class="opt-meta"><span class="pill">2 cursos ADMI · en Uniandes</span></div>
         </div>
       </article>
-
     </div>
-</div>
-
-<div class="src-flow ficha" id="panel-cursos-ingles" data-running="Componente 1 · Cursos en inglés" data-continue>
+</section>
+<section class="src-page" data-kind="content" data-running="Componente 1 · Cursos en inglés">
+<div class="ficha-inline" id="panel-cursos-ingles">
   <div class="detail-head">
     <div class="detail-title">
       <div class="kicker">Componente 1 de 2 · Obligatorio</div>
@@ -959,7 +1001,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
       <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
       <span class="fc-label">Marcar como completada</span>
     </button>
-    <a class="fc-back" href="#seccion-componente-1">Volver a las tarjetas</a>
   </div>
 
   <div class="detail-grid modal-grid">
@@ -998,9 +1039,8 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
     </div>
   </div>
 </div>
-
-<!-- ===== CAPÍTULO 4 · COMPONENTE 2 ===== -->
-<div class="src-flow" id="experiencia" data-running="Componente 2 · Experiencia internacional" data-toc="Componente 2 · Experiencia Internacional" data-toc-level="1">
+</section>
+<section class="src-page" data-kind="content" id="experiencia" data-running="Componente 2 · Experiencia internacional" data-toc="Componente 2 · Experiencia Internacional" data-toc-level="1">
 <header class="chapter-head" id="seccion-componente-2">
   <div class="ch-band">
     <span class="ch-num" aria-hidden="true">4</span>
@@ -1009,8 +1049,7 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
   </div>
   <p class="ch-lead">Cumple con mínimo una de estas once modalidades. Da clic en cualquier tarjeta para ver el detalle completo y diligenciarla; marca el check cuando la hayas cumplido.</p>
 </header>
-    <div class="dash-grid">
-
+    <div class="dash-grid board">
       <article class="opt-card" data-card="intercambio">
         <button type="button" class="opt-check" data-complete="intercambio" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
         <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 17l6-11 6 11M7 12h6M14 6h6M17 6v11M14 17h6"/></svg><div class="stub"></div></div>
@@ -1020,8 +1059,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
           <div class="opt-meta"><span class="pill">1 semestre + preparación</span></div>
         </div>
       </article>
-
-
       <article class="opt-card" data-card="doble-titulacion">
         <button type="button" class="opt-check" data-complete="doble-titulacion" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
         <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l8 4-8 4-8-4 8-4z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg><div class="stub"></div></div>
@@ -1031,7 +1068,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
           <div class="opt-meta"><span class="pill">4–6 semestres</span></div>
         </div>
       </article>
-
       <article class="opt-card" data-card="eiv-uniandes">
         <button type="button" class="opt-check" data-complete="eiv-uniandes" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
         <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M6 21v-2a6 6 0 0112 0v2"/></svg><div class="stub"></div></div>
@@ -1041,7 +1077,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
           <div class="opt-meta"><span class="pill">2 cursos · vacaciones</span></div>
         </div>
       </article>
-
       <article class="opt-card" data-card="socios-internacionales">
         <button type="button" class="opt-check" data-complete="socios-internacionales" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
         <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="5" width="16" height="15" rx="1.5"/><path d="M4 9h16M8 3v4M16 3v4"/></svg><div class="stub"></div></div>
@@ -1051,7 +1086,10 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
           <div class="opt-meta"><span class="pill">Variable · vacaciones</span></div>
         </div>
       </article>
-
+    </div>
+</section>
+<section class="src-page" data-kind="content" data-running="Componente 2 · Experiencia internacional">
+    <div class="dash-grid board">
       <article class="opt-card" data-card="practica-internacional">
         <button type="button" class="opt-check" data-complete="practica-internacional" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
         <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="7" width="18" height="13" rx="1.5"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg><div class="stub"></div></div>
@@ -1061,7 +1099,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
           <div class="opt-meta"><span class="pill">1 semestre o verano</span></div>
         </div>
       </article>
-
       <article class="opt-card" data-card="opcion-lengua-cultura">
         <button type="button" class="opt-check" data-complete="opcion-lengua-cultura" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
         <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 4 6 4 9s-1.5 6.4-4 9c-2.5-2.6-4-6-4-9s1.5-6.4 4-9z"/></svg><div class="stub"></div></div>
@@ -1071,7 +1108,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
           <div class="opt-meta"><span class="pill">Programa completo</span></div>
         </div>
       </article>
-
       <article class="opt-card" data-card="cinco-cursos-idioma">
         <button type="button" class="opt-check" data-complete="cinco-cursos-idioma" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
         <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg><div class="stub"></div></div>
@@ -1081,7 +1117,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
           <div class="opt-meta"><span class="pill">2–3 semestres</span></div>
         </div>
       </article>
-
       <article class="opt-card" data-card="competencias-internacionales">
         <button type="button" class="opt-check" data-complete="competencias-internacionales" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
         <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 01-10 0V4z"/><path d="M7 5H4a3 3 0 003 3M17 5h3a3 3 0 01-3 3"/></svg><div class="stub"></div></div>
@@ -1091,7 +1126,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
           <div class="opt-meta"><span class="pill">Proceso de selección</span></div>
         </div>
       </article>
-
       <article class="opt-card" data-card="pasantias-investigacion">
         <button type="button" class="opt-check" data-complete="pasantias-investigacion" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
         <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 3h6M10 3v5l-5.5 9.5A2 2 0 006.2 21h11.6a2 2 0 001.7-3.5L14 8V3"/><path d="M8.5 14h7"/></svg><div class="stub"></div></div>
@@ -1101,7 +1135,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
           <div class="opt-meta"><span class="pill">Periodo de verano</span></div>
         </div>
       </article>
-
       <article class="opt-card" data-card="programas-verano">
         <button type="button" class="opt-check" data-complete="programas-verano" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
         <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12h18M3 6h18M3 18h18"/></svg><div class="stub"></div></div>
@@ -1111,7 +1144,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
           <div class="opt-meta"><span class="pill">1–2 semanas</span></div>
         </div>
       </article>
-
       <article class="opt-card" data-card="freemover">
         <button type="button" class="opt-check" data-complete="freemover" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
         <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M15 9l-2 6-6 2 2-6z"/></svg><div class="stub"></div></div>
@@ -1121,19 +1153,99 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
           <div class="opt-meta"><span class="pill">1 semestre autogestionado</span></div>
         </div>
       </article>
-
     </div>
-
-    <div class="cta-strip">
-      <p>¿Ya elegiste tu opción? Revisa las fechas de convocatorias, sesiones informativas y demás actividades del año.</p>
-      <div class="btns">
-        <a class="btn btn-brass" href="../index.html#section-gantt">Volver al cronograma de actividades</a>
+</section>
+<section class="src-page" data-kind="content" id="preguntas" data-running="Preguntas frecuentes" data-toc="Preguntas frecuentes" data-toc-level="1">
+<header class="chapter-head">
+  <div class="ch-band">
+    <span class="ch-num" aria-hidden="true">5</span>
+    <div class="eyebrow">Dudas comunes</div>
+    <h2 class="h-section">Preguntas frecuentes</h2>
+  </div>
+  <p class="ch-lead">Actualizadas a partir de las preguntas frecuentes oficiales de la Oficina Internacional, agosto de 2026.</p>
+</header>
+    <div class="accordion" id="accordion">
+      <div class="accordion-item" data-open="false">
+        <button class="acc-trigger" aria-expanded="false">¿Qué cursos cuentan para el componente de cursos disciplinares en inglés?<span class="plus">+</span></button>
+        <div class="acc-panel"><p>Únicamente los cursos código ADMI en inglés ofrecidos directamente por la Facultad de Administración. Revisa la oferta de cada semestre en el catálogo académico.</p></div>
+      </div>
+      <div class="accordion-item" data-open="false">
+        <button class="acc-trigger" aria-expanded="false">¿Puedo tomar más de dos cursos ADMI en inglés?<span class="plus">+</span></button>
+        <div class="acc-panel"><p>Sí. Solo necesitas dos para cumplir con este componente, pero puedes ver más si quieres.</p></div>
+      </div>
+      <div class="accordion-item" data-open="false">
+        <button class="acc-trigger" aria-expanded="false">¿Cuentan los cursos del Departamento de Lenguas y Cultura, o cursos vistos en un intercambio y luego homologados?<span class="plus">+</span></button>
+        <div class="acc-panel"><p>No, en ninguno de los dos casos. Los cursos código ADMI en inglés deben ser vistos y aprobados en Uniandes, sin excepción.</p></div>
+      </div>
+      <div class="accordion-item" data-open="false">
+        <button class="acc-trigger" aria-expanded="false">¿Puedo usar los mismos cursos para ambas partes del requisito?<span class="plus">+</span></button>
+        <div class="acc-panel"><p>No. Los cursos que usas para el componente de cursos disciplinares en inglés no pueden ser los mismos que uses para cumplir la Experiencia Internacional.</p></div>
+      </div>
+      <div class="accordion-item" data-open="false">
+        <button class="acc-trigger" aria-expanded="false">¿Puedo cumplir ambas partes del requisito a través de la Escuela Internacional de Verano?<span class="plus">+</span></button>
+        <div class="acc-panel"><p>Las Preguntas Frecuentes oficiales indican que <strong>no</strong> es posible cumplir ambas partes a través de la EIV de un aliado o de Uniandes. Sin embargo, otra diapositiva de la misma presentación describe un escenario de 4 cursos en la EIV de la Facultad que cubriría ambos componentes — te recomendamos confirmar directamente con la Oficina de Internacionalización antes de planear tu semestre con base en ese escenario.</p></div>
+      </div>
+      <div class="accordion-item" data-open="false">
+        <button class="acc-trigger" aria-expanded="false">Si elijo la Escuela de Verano de los Andes para mi Experiencia Internacional, ¿hay alguna condición?<span class="plus">+</span></button>
+        <div class="acc-panel"><p>Sí. Debes ver al menos uno de los dos cursos necesarios de manera presencial.</p></div>
+      </div>
+      <div class="accordion-item" data-open="false">
+        <button class="acc-trigger" aria-expanded="false">¿Cuándo debo cumplir este requisito?<span class="plus">+</span></button>
+        <div class="acc-panel"><p>Se recomienda ver los cursos en inglés lo antes posible, y planear tu experiencia internacional con tiempo.</p></div>
+      </div>
+      <div class="accordion-item" data-open="false">
+        <button class="acc-trigger" aria-expanded="false">¿Puedo graduarme si terminé solo una parte del requisito?<span class="plus">+</span></button>
+        <div class="acc-panel"><p>No. Debes cumplir con ambas partes: los cursos disciplinares en inglés y la experiencia internacional.</p></div>
+      </div>
+      <div class="accordion-item" data-open="false">
+        <button class="acc-trigger" aria-expanded="false">¿Qué hago si no puedo salir del país?<span class="plus">+</span></button>
+        <div class="acc-panel"><p>Puedes cumplir el componente de Experiencia Internacional con opciones que no requieren salir de Colombia, como la Escuela Internacional de Verano de Uniandes, la Opción Académica en Lengua y Cultura, o los 5 cursos de idioma del Departamento de Lenguas y Cultura.</p></div>
+      </div>
+      <div class="accordion-item" data-open="false">
+        <button class="acc-trigger" aria-expanded="false">¿El Requisito Internacional reemplaza el requisito de inglés o de segunda lengua de Uniandes?<span class="plus">+</span></button>
+        <div class="acc-panel"><p>No. El Requisito Internacional es independiente de los requisitos institucionales de lectura en inglés y de dominio de segunda lengua de la Universidad. Cumplir uno no exime del cumplimiento de los otros.</p></div>
+      </div>
+      <div class="accordion-item" data-open="false">
+        <button class="acc-trigger" aria-expanded="false">Mi información, ¿se guarda en algún servidor?<span class="plus">+</span></button>
+        <div class="acc-panel"><p>No. Todo lo que registres en los campos interactivos de este manual se guarda únicamente en el almacenamiento local de tu navegador, en tu propio computador.</p></div>
       </div>
     </div>
-</div>
+</section>
+<section class="src-page" data-kind="content" id="consejeria" data-running="Consejería internacional" data-toc="Consejería internacional" data-toc-level="2">
+  <div class="consejeria">
+    <h2 class="cons-title">¿Tienes más dudas?</h2>
+    <p class="cons-lead">Agenda tu cita de consejería internacional.</p>
+    <a class="advisor" href="https://consejeriascoordinaciones.bookeau.com/#/login" target="_blank" rel="noopener">
+      <span class="adv-name">Sophie Fernández Leal</span>
+      <span class="adv-role">Profesional Internacional Pregrado</span>
+      <span class="adv-cta">Agendar con Sophie Fernández Leal <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+    <a class="advisor" href="https://outlook.office365.com/book/ConsejerasInternacionales@uniandes.onmicrosoft.com/?ismsaljsauthenabled=true" target="_blank" rel="noopener">
+      <span class="adv-name">Juan Pablo Izquierdo</span>
+      <span class="adv-role">Soluciones a Estudiantes CSA</span>
+      <span class="adv-cta">Agendar con Juan Pablo Izquierdo <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+    <div class="callout info">Cumpliendo estos dos componentes, cumplirías con el Requisito Internacional. Debes tomar una consejería con Sophie Fernández Leal o Juan Pablo Izquierdo Camacho para continuar con tu proceso de validación del Requisito Internacional.</div>
+  </div>
+</section>
+<section class="src-page" data-kind="back" id="contraportada">
+  <div class="back-inner">
+    <img src="../assets/img/logo_uniandes_admon_blanco.png" alt="Universidad de los Andes — Facultad de Administración" class="back-logo">
+    <p>Manual del Requisito Internacional. Facultad de Administración, Universidad de los Andes. Contenido actualizado a partir del anexo formal y la presentación oficial de la Oficina Internacional (agosto 2026).</p>
+    <div class="back-nav">
+      <h5>Navegación</h5>
+      <p><a href="#indice">Contenido</a><br><a href="#que-es">Qué es</a><br><a href="#como-funciona">Cómo funciona</a><br><a href="#opciones">Opciones</a><br><a href="#preguntas">Preguntas frecuentes</a></p>
+    </div>
+  </div>
+  <div class="back-bottom">
+    <div class="perf perf-light"></div>
+    <a class="btn btn-ghost btn-small" href="../index.html#section-gantt">Volver al cronograma de actividades</a>
+    <button type="button" class="btn btn-ghost btn-small" data-goto="inicio">Volver a la portada</button>
+  </div>
+</section>
 
-<!-- Fichas de las 11 modalidades: cada una empieza en una hoja nueva -->
-<div class="src-flow ficha" id="panel-intercambio" data-running="Componente 2 · Experiencia internacional" data-toc="Intercambio Académico" data-toc-level="2">
+<!-- ===== FICHAS DE LAS 11 EXPERIENCIAS (se abren desde las tarjetas) ===== -->
+<div class="src-ficha" id="panel-intercambio" data-title="Intercambio Académico" data-n="1">
   <div class="panel-photo-head" style="background-image:url('../assets/img/intercambios_balcon.jpg')">
     <div class="photo-head-inner">
       <div class="kicker">Opción 1 de 11 · Movilidad académica</div>
@@ -1150,7 +1262,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
       <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
       <span class="fc-label">Marcar como completada</span>
     </button>
-    <a class="fc-back" href="#seccion-componente-2">Volver a las tarjetas</a>
   </div>
 
   <div class="detail-grid modal-grid">
@@ -1245,7 +1356,7 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
     </div>
   </div>
 </div>
-<div class="src-flow ficha" id="panel-doble-titulacion" data-running="Componente 2 · Experiencia internacional" data-toc="Doble Titulación" data-toc-level="2">
+<div class="src-ficha" id="panel-doble-titulacion" data-title="Doble Titulación" data-n="2">
   <div class="detail-head">
     <div class="detail-title">
       <div class="kicker">Opción 2 de 11 · Doble título</div>
@@ -1262,7 +1373,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
       <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
       <span class="fc-label">Marcar como completada</span>
     </button>
-    <a class="fc-back" href="#seccion-componente-2">Volver a las tarjetas</a>
   </div>
 
   <div class="detail-grid modal-grid">
@@ -1373,7 +1483,7 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
     </div>
   </div>
 </div>
-<div class="src-flow ficha" id="panel-eiv-uniandes" data-running="Componente 2 · Experiencia internacional" data-toc="Escuela Internacional de Verano (Uniandes)" data-toc-level="2">
+<div class="src-ficha" id="panel-eiv-uniandes" data-title="Escuela Internacional de Verano (Uniandes)" data-n="3">
   <div class="panel-photo-head" style="background-image:url('../assets/img/escuela_verano_china.jpg')">
     <div class="photo-head-inner">
       <div class="kicker">Opción 3 de 11 · Periodo intersemestral</div>
@@ -1390,7 +1500,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
       <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
       <span class="fc-label">Marcar como completada</span>
     </button>
-    <a class="fc-back" href="#seccion-componente-2">Volver a las tarjetas</a>
   </div>
 
   <div class="detail-grid modal-grid">
@@ -1427,7 +1536,7 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
     </aside>
   </div>
 </div>
-<div class="src-flow ficha" id="panel-socios-internacionales" data-running="Componente 2 · Experiencia internacional" data-toc="Escuelas de Verano o Invierno Externas" data-toc-level="2">
+<div class="src-ficha" id="panel-socios-internacionales" data-title="Escuelas de Verano o Invierno Externas" data-n="4">
   <div class="detail-head">
     <div class="detail-title">
       <div class="kicker">Opción 4 de 11 · Homologación externa</div>
@@ -1444,7 +1553,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
       <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
       <span class="fc-label">Marcar como completada</span>
     </button>
-    <a class="fc-back" href="#seccion-componente-2">Volver a las tarjetas</a>
   </div>
 
   <div class="detail-grid modal-grid">
@@ -1500,7 +1608,7 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
     </aside>
   </div>
 </div>
-<div class="src-flow ficha" id="panel-practica-internacional" data-running="Componente 2 · Experiencia internacional" data-toc="Práctica Internacional" data-toc-level="2">
+<div class="src-ficha" id="panel-practica-internacional" data-title="Práctica Internacional" data-n="5">
   <div class="detail-head">
     <div class="detail-title">
       <div class="kicker">Opción 5 de 11 · Práctica profesional</div>
@@ -1517,7 +1625,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
       <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
       <span class="fc-label">Marcar como completada</span>
     </button>
-    <a class="fc-back" href="#seccion-componente-2">Volver a las tarjetas</a>
   </div>
 
   <div class="detail-grid modal-grid">
@@ -1559,7 +1666,7 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
     </aside>
   </div>
 </div>
-<div class="src-flow ficha" id="panel-opcion-lengua-cultura" data-running="Componente 2 · Experiencia internacional" data-toc="Opción Académica en Lengua y Cultura" data-toc-level="2">
+<div class="src-ficha" id="panel-opcion-lengua-cultura" data-title="Opción Académica en Lengua y Cultura" data-n="6">
   <div class="panel-photo-head" style="background-image:url('../assets/img/lengua_cultura_clase.jpg')">
     <div class="photo-head-inner">
       <div class="kicker">Opción 6 de 11 · Programa académico institucional</div>
@@ -1576,7 +1683,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
       <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
       <span class="fc-label">Marcar como completada</span>
     </button>
-    <a class="fc-back" href="#seccion-componente-2">Volver a las tarjetas</a>
   </div>
 
   <div class="detail-grid modal-grid">
@@ -1620,7 +1726,7 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
     </div>
   </div>
 </div>
-<div class="src-flow ficha" id="panel-cinco-cursos-idioma" data-running="Componente 2 · Experiencia internacional" data-toc="5 Cursos de un Idioma Diferente al Inglés" data-toc-level="2">
+<div class="src-ficha" id="panel-cinco-cursos-idioma" data-title="5 Cursos de un Idioma Diferente al Inglés" data-n="7">
   <div class="detail-head">
     <div class="detail-title">
       <div class="kicker">Opción 7 de 11 · Departamento de Lenguas y Cultura</div>
@@ -1637,7 +1743,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
       <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
       <span class="fc-label">Marcar como completada</span>
     </button>
-    <a class="fc-back" href="#seccion-componente-2">Volver a las tarjetas</a>
   </div>
 
   <div class="detail-grid modal-grid">
@@ -1682,7 +1787,7 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
     </div>
   </div>
 </div>
-<div class="src-flow ficha" id="panel-competencias-internacionales" data-running="Componente 2 · Experiencia internacional" data-toc="Competencias Internacionales" data-toc-level="2">
+<div class="src-ficha" id="panel-competencias-internacionales" data-title="Competencias Internacionales" data-n="8">
   <div class="detail-head">
     <div class="detail-title">
       <div class="kicker">Opción 8 de 11 · Representación institucional</div>
@@ -1699,7 +1804,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
       <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
       <span class="fc-label">Marcar como completada</span>
     </button>
-    <a class="fc-back" href="#seccion-componente-2">Volver a las tarjetas</a>
   </div>
 
   <div class="detail-grid modal-grid">
@@ -1732,7 +1836,7 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
     </div>
   </div>
 </div>
-<div class="src-flow ficha" id="panel-pasantias-investigacion" data-running="Componente 2 · Experiencia internacional" data-toc="Pasantías de Investigación" data-toc-level="2">
+<div class="src-ficha" id="panel-pasantias-investigacion" data-title="Pasantías de Investigación" data-n="9">
   <div class="detail-head">
     <div class="detail-title">
       <div class="kicker">Opción 9 de 11 · Inmersión en investigación</div>
@@ -1749,7 +1853,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
       <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
       <span class="fc-label">Marcar como completada</span>
     </button>
-    <a class="fc-back" href="#seccion-componente-2">Volver a las tarjetas</a>
   </div>
 
   <div class="detail-grid modal-grid">
@@ -1776,7 +1879,7 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
     </div>
   </div>
 </div>
-<div class="src-flow ficha" id="panel-programas-verano" data-running="Componente 2 · Experiencia internacional" data-toc="Programas Internacionales de Verano" data-toc-level="2">
+<div class="src-ficha" id="panel-programas-verano" data-title="Programas Internacionales de Verano" data-n="10">
   <div class="detail-head">
     <div class="detail-title">
       <div class="kicker">Opción 10 de 11 · Programas cortos</div>
@@ -1793,7 +1896,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
       <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
       <span class="fc-label">Marcar como completada</span>
     </button>
-    <a class="fc-back" href="#seccion-componente-2">Volver a las tarjetas</a>
   </div>
 
   <div class="detail-grid modal-grid">
@@ -1843,7 +1945,7 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
     </div>
   </div>
 </div>
-<div class="src-flow ficha" id="panel-freemover" data-running="Componente 2 · Experiencia internacional" data-toc="Freemover" data-toc-level="2">
+<div class="src-ficha" id="panel-freemover" data-title="Freemover" data-n="11">
   <div class="detail-head">
     <div class="detail-title">
       <div class="kicker">Opción 11 de 11 · Movilidad autogestionada</div>
@@ -1860,7 +1962,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
       <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
       <span class="fc-label">Marcar como completada</span>
     </button>
-    <a class="fc-back" href="#seccion-componente-2">Volver a las tarjetas</a>
   </div>
 
   <div class="detail-grid modal-grid">
@@ -1913,90 +2014,7 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
     </aside>
   </div>
 </div>
-
-<!-- ===== CAPÍTULO 5 · PREGUNTAS FRECUENTES ===== -->
-<div class="src-flow" id="preguntas" data-running="Preguntas frecuentes" data-toc="Preguntas frecuentes" data-toc-level="1">
-<header class="chapter-head">
-  <div class="ch-band">
-    <span class="ch-num" aria-hidden="true">5</span>
-    <div class="eyebrow">Dudas comunes</div>
-    <h2 class="h-section">Preguntas frecuentes</h2>
-  </div>
-  <p class="ch-lead">Actualizadas a partir de las preguntas frecuentes oficiales de la Oficina Internacional, agosto de 2026.</p>
-</header>
-    <div class="accordion" id="accordion">
-      <div class="accordion-item" data-open="false">
-        <button class="acc-trigger" aria-expanded="false">¿Qué cursos cuentan para el componente de cursos disciplinares en inglés?<span class="plus">+</span></button>
-        <div class="acc-panel"><p>Únicamente los cursos código ADMI en inglés ofrecidos directamente por la Facultad de Administración. Revisa la oferta de cada semestre en el catálogo académico.</p></div>
-      </div>
-      <div class="accordion-item" data-open="false">
-        <button class="acc-trigger" aria-expanded="false">¿Puedo tomar más de dos cursos ADMI en inglés?<span class="plus">+</span></button>
-        <div class="acc-panel"><p>Sí. Solo necesitas dos para cumplir con este componente, pero puedes ver más si quieres.</p></div>
-      </div>
-      <div class="accordion-item" data-open="false">
-        <button class="acc-trigger" aria-expanded="false">¿Cuentan los cursos del Departamento de Lenguas y Cultura, o cursos vistos en un intercambio y luego homologados?<span class="plus">+</span></button>
-        <div class="acc-panel"><p>No, en ninguno de los dos casos. Los cursos código ADMI en inglés deben ser vistos y aprobados en Uniandes, sin excepción.</p></div>
-      </div>
-      <div class="accordion-item" data-open="false">
-        <button class="acc-trigger" aria-expanded="false">¿Puedo usar los mismos cursos para ambas partes del requisito?<span class="plus">+</span></button>
-        <div class="acc-panel"><p>No. Los cursos que usas para el componente de cursos disciplinares en inglés no pueden ser los mismos que uses para cumplir la Experiencia Internacional.</p></div>
-      </div>
-      <div class="accordion-item" data-open="false">
-        <button class="acc-trigger" aria-expanded="false">¿Puedo cumplir ambas partes del requisito a través de la Escuela Internacional de Verano?<span class="plus">+</span></button>
-        <div class="acc-panel"><p>Las Preguntas Frecuentes oficiales indican que <strong>no</strong> es posible cumplir ambas partes a través de la EIV de un aliado o de Uniandes. Sin embargo, otra diapositiva de la misma presentación describe un escenario de 4 cursos en la EIV de la Facultad que cubriría ambos componentes — te recomendamos confirmar directamente con la Oficina de Internacionalización antes de planear tu semestre con base en ese escenario.</p></div>
-      </div>
-      <div class="accordion-item" data-open="false">
-        <button class="acc-trigger" aria-expanded="false">Si elijo la Escuela de Verano de los Andes para mi Experiencia Internacional, ¿hay alguna condición?<span class="plus">+</span></button>
-        <div class="acc-panel"><p>Sí. Debes ver al menos uno de los dos cursos necesarios de manera presencial.</p></div>
-      </div>
-      <div class="accordion-item" data-open="false">
-        <button class="acc-trigger" aria-expanded="false">¿Cuándo debo cumplir este requisito?<span class="plus">+</span></button>
-        <div class="acc-panel"><p>Se recomienda ver los cursos en inglés lo antes posible, y planear tu experiencia internacional con tiempo.</p></div>
-      </div>
-      <div class="accordion-item" data-open="false">
-        <button class="acc-trigger" aria-expanded="false">¿Puedo graduarme si terminé solo una parte del requisito?<span class="plus">+</span></button>
-        <div class="acc-panel"><p>No. Debes cumplir con ambas partes: los cursos disciplinares en inglés y la experiencia internacional.</p></div>
-      </div>
-      <div class="accordion-item" data-open="false">
-        <button class="acc-trigger" aria-expanded="false">¿Qué hago si no puedo salir del país?<span class="plus">+</span></button>
-        <div class="acc-panel"><p>Puedes cumplir el componente de Experiencia Internacional con opciones que no requieren salir de Colombia, como la Escuela Internacional de Verano de Uniandes, la Opción Académica en Lengua y Cultura, o los 5 cursos de idioma del Departamento de Lenguas y Cultura.</p></div>
-      </div>
-      <div class="accordion-item" data-open="false">
-        <button class="acc-trigger" aria-expanded="false">¿El Requisito Internacional reemplaza el requisito de inglés o de segunda lengua de Uniandes?<span class="plus">+</span></button>
-        <div class="acc-panel"><p>No. El Requisito Internacional es independiente de los requisitos institucionales de lectura en inglés y de dominio de segunda lengua de la Universidad. Cumplir uno no exime del cumplimiento de los otros.</p></div>
-      </div>
-      <div class="accordion-item" data-open="false">
-        <button class="acc-trigger" aria-expanded="false">Mi información, ¿se guarda en algún servidor?<span class="plus">+</span></button>
-        <div class="acc-panel"><p>No. Todo lo que registres en los campos interactivos de este manual se guarda únicamente en el almacenamiento local de tu navegador, en tu propio computador.</p></div>
-      </div>
-    </div>
-
-    <div class="cta-strip">
-      <p><strong>¿Tienes más dudas?</strong> Agenda tu cita de consejería internacional.</p>
-      <div class="btns">
-        <a class="btn btn-outline btn-small" href="https://consejeriascoordinaciones.bookeau.com/#/login" target="_blank" rel="noopener">Sophie Fernández Leal — Profesional Internacional Pregrado</a>
-        <a class="btn btn-outline btn-small" href="https://outlook.office365.com/book/ConsejerasInternacionales@uniandes.onmicrosoft.com/?ismsaljsauthenabled=true" target="_blank" rel="noopener">Juan Pablo Izquierdo — Soluciones a Estudiantes CSA</a>
-      </div>
-    </div>
 </div>
-
-<!-- ===== CONTRAPORTADA ===== -->
-<div class="src-page" data-kind="back" id="contraportada">
-  <div class="back-inner">
-    <img src="../assets/img/logo_uniandes_admon_blanco.png" alt="Universidad de los Andes — Facultad de Administración" class="back-logo">
-    <p>Manual del Requisito Internacional. Facultad de Administración, Universidad de los Andes. Contenido actualizado a partir del anexo formal y la presentación oficial de la Oficina Internacional (agosto 2026).</p>
-    <div class="back-nav">
-      <h5>Navegación</h5>
-      <p><a href="#indice">Contenido</a><br><a href="#que-es">Qué es</a><br><a href="#como-funciona">Cómo funciona</a><br><a href="#opciones">Opciones</a><br><a href="#preguntas">Preguntas frecuentes</a></p>
-    </div>
-  </div>
-  <div class="back-bottom">
-    <div class="perf perf-light"></div>
-    <button type="button" class="btn btn-ghost btn-small" data-goto="inicio">Volver a la portada</button>
-  </div>
-</div>
-
-</div><!-- /bookSource -->
 
 <!-- ============================================================
      MODAL: FELICITACIÓN AL COMPLETAR AMBOS COMPONENTES
@@ -2065,8 +2083,7 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
   /* ---------- card state: amarillo = en progreso, verde = completada ---------- */
   var cardEls = Array.prototype.slice.call(document.querySelectorAll('.opt-card[data-card]'));
 
-  /* las fichas se reparten en varias páginas del libro, así que los campos de cada
-     ficha se leen una sola vez (antes de paginar) y se guardan en caché */
+  /* cada ficha se reparte en dos hojas del libro: sus campos se leen una vez y se guardan */
   var trackKeyCache = {};
   function panelTrackKeys(slug){
     if(trackKeyCache[slug]) return trackKeyCache[slug];
@@ -2114,7 +2131,7 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
       if(isComplete(slug)){ card.classList.add('state-done'); }
       else if(hasProgress(slug)){ card.classList.add('state-progress'); }
     });
-    /* botón de completada dentro de cada ficha del libro */
+    /* botón de completada dentro de cada ficha */
     fichaChecks.forEach(function(b){
       var done = isComplete(b.getAttribute('data-complete'));
       b.classList.toggle('is-done', done);
@@ -2195,7 +2212,7 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
     card.setAttribute('tabindex','0');
     card.setAttribute('role','button');
     function trigger(){
-      /* en el libro, cada tarjeta lleva a la página donde empieza su ficha */
+      /* en el libro, cada tarjeta abre su ficha (información a la izquierda, diligenciamiento a la derecha) */
       if(window.ManualBook){ window.ManualBook.goToId('panel-' + slug); }
     }
     card.addEventListener('click', function(e){
@@ -2213,9 +2230,10 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
 <script>
 /* ============================================================
    LECTOR TIPO LIBRO
-   - Reparte el contenido en hojas del tamaño de la pantalla
-   - Doble página (computador) o una página (celular)
-   - Paso de hoja animado, índice con números de página
+   - Recorrido principal: hojas fijas en orden (izquierda / derecha)
+   - Fichas de las 11 experiencias: pliego aparte (información a la
+     izquierda, diligenciamiento a la derecha) con regreso a las opciones
+   - Cada hoja tiene scroll propio cuando el contenido es largo
    ============================================================ */
 (function(){
   "use strict";
@@ -2224,7 +2242,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
   var book    = document.getElementById('book');
   var slotL   = document.getElementById('slotL');
   var slotR   = document.getElementById('slotR');
-  var measure = document.getElementById('measure');
   var source  = document.getElementById('bookSource');
   var range   = document.getElementById('pageRange');
   var label   = document.getElementById('pageLabel');
@@ -2235,26 +2252,60 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
   var cornerL = document.getElementById('cornerL');
   var cornerR = document.getElementById('cornerR');
   var root    = document.documentElement;
-
+  var tocList = document.getElementById('tocList');
+  var boardSrc = document.getElementById('experiencia');
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* bloques que nunca se parten entre dos hojas */
-  var NOSPLIT = '.panel-photo-head,.detail-head,.chapter-head,.callout,.how-note,.tracker-field,.select-grid,' +
-                '.check-row,.opt-card,.accordion-item,.source-note,.cta-strip,.logo-row,.region,' +
-                '.ficha-actions,.detail-badges,.opt-meta,.btns,.hero-pass,.save-hint,.how-col';
-  /* bloques que abren hoja a sangre (sin cabezote) */
-  var BLEED = '.chapter-head,.panel-photo-head';
+  var ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg>';
+  var ICON_DOWN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>';
 
-  /* ---------- fuentes: páginas fijas y flujos de contenido ---------- */
-  var items = Array.prototype.slice.call(source.children).filter(function(n){
-    return n.classList.contains('src-page') || n.classList.contains('src-flow');
+  /* ---------- marco de una hoja ---------- */
+  function frame(running){
+    var p = document.createElement('div');
+    p.className = 'page';
+    p.innerHTML =
+      '<div class="page-head"><span class="rh-book">Manual del Requisito Internacional</span><span class="rh-sec"></span></div>' +
+      '<div class="page-body"></div>' +
+      '<div class="more-hint" aria-hidden="true"><span>Desliza para ver más ' + ICON_DOWN + '</span></div>' +
+      '<div class="page-foot"><div class="perf"></div><div class="foot-row"><span>Facultad de Administración · Universidad de los Andes</span><span class="folio"></span></div></div>';
+    p.querySelector('.rh-sec').textContent = running || '';
+    p.querySelector('.page-body').addEventListener('scroll', function(){ updateHint(p); }, { passive: true });
+    return p;
+  }
+  function bodyOf(p){ return p.querySelector('.page-body'); }
+  function updateHint(p){
+    var b = p && bodyOf(p);
+    if(!b) return;
+    p.classList.toggle('has-more', b.scrollHeight - b.scrollTop - b.clientHeight > 10);
+  }
+
+  /* ---------- recorrido principal ---------- */
+  var main = [];
+  Array.prototype.slice.call(source.querySelectorAll(':scope > .src-page')).forEach(function(sp){
+    var kind = sp.getAttribute('data-kind');
+    var p;
+    if(kind === 'cover' || kind === 'back'){
+      p = document.createElement('div');
+      p.className = 'page page--' + kind;
+      p.appendChild(sp);
+    } else {
+      p = frame(sp.getAttribute('data-running'));
+      if(kind !== 'content') p.classList.add('page--nohead', 'page--' + kind);
+      bodyOf(p).appendChild(sp);
+      if(sp.firstElementChild && sp.firstElementChild.matches('.chapter-head')) p.classList.add('page--bleed');
+    }
+    p.__src = sp;
+    main.push(p);
   });
-  var backItem = items.filter(function(n){ return n.getAttribute('data-kind') === 'back'; })[0];
-  items = items.filter(function(n){ return n !== backItem; });
+  main.forEach(function(p, i){
+    p.classList.add(i % 2 ? 'page--verso' : 'page--recto');
+    var f = p.querySelector('.folio'); if(f) f.textContent = String(i);
+  });
 
-  function flatten(flow){
+  /* ---------- fichas: información a la izquierda, diligenciamiento a la derecha ---------- */
+  function flatten(panel){
     var out = [];
-    Array.prototype.slice.call(flow.children).forEach(function(c){
+    Array.prototype.slice.call(panel.children).forEach(function(c){
       if(c.classList.contains('detail-grid')){
         Array.prototype.slice.call(c.children).forEach(function(c2){
           if(c2.tagName === 'DIV' && !c2.className){ out.push.apply(out, Array.prototype.slice.call(c2.children)); }
@@ -2264,324 +2315,196 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
     });
     return out;
   }
-  var flowBlocks = new Map();
-  items.forEach(function(it){ if(it.classList.contains('src-flow')) flowBlocks.set(it, flatten(it)); });
+  function isDocs(b){ return b.matches('.aside-docs, .card-side') && !!b.querySelector('a.doc-link, img'); }
 
-  /* ---------- índice (se arma una vez; los números se llenan al paginar) ---------- */
-  var tocList = document.getElementById('tocList');
-  var chapterN = 0;
-  items.forEach(function(it){
-    if(!it.hasAttribute('data-toc')) return;
-    var lvl = it.getAttribute('data-toc-level') || '1';
-    var a = document.createElement('a');
-    a.className = 'toc-row l' + lvl;
-    a.href = '#' + it.id;
-    var n = (lvl === '1') ? String(++chapterN) : '';
-    a.innerHTML = (lvl === '1' ? '<span class="toc-n">' + n + '</span>' : '') +
-      '<span class="toc-t"></span><span class="toc-lead"></span><span class="toc-p" data-toc-for="' + it.id + '"></span>';
-    a.querySelector('.toc-t').textContent = it.getAttribute('data-toc');
-    tocList.appendChild(a);
+  var fichas = {}, order = [];
+  var srcFichas = Array.prototype.slice.call(source.querySelectorAll(':scope > .src-ficha'));
+  var total = srcFichas.length;
+  srcFichas.forEach(function(panel){
+    var slug = panel.id.replace('panel-', '');
+    var n = panel.getAttribute('data-n');
+    var title = panel.getAttribute('data-title');
+    var blocks = flatten(panel);
+    var head = blocks.shift();
+    var actions = null, left = [], right = [];
+    var seenTrack = false;
+    blocks.forEach(function(b){
+      if(b.matches('.ficha-actions')){ actions = b; return; }
+      if(b.querySelector('[data-track]')) seenTrack = true;
+      if(seenTrack || isDocs(b) || (b.querySelector('img') && !b.matches('.panel-photo-head'))) right.push(b);
+      else left.push(b);
+    });
+    /* fichas sin campos para diligenciar: se equilibra el contenido entre las dos hojas */
+    if(!right.length){
+      while(left.length > right.length + 1) right.unshift(left.pop());
+    }
+
+    var L = frame(''), R = frame('');
+    [L, R].forEach(function(p){ p.classList.add('page--ficha'); });
+    L.classList.add('page--verso'); R.classList.add('page--recto');
+    L.querySelector('.page-head').innerHTML =
+      '<a class="ph-back" href="#seccion-componente-2">' + ICON_BACK + 'Volver a las opciones</a>' +
+      '<span class="ph-count">Opción ' + n + ' de ' + total + '</span>';
+    R.querySelector('.page-head').innerHTML =
+      '<span class="ph-title"></span><span class="ph-count">Opción ' + n + ' de ' + total + '</span>';
+    R.querySelector('.ph-title').textContent = title;
+    L.querySelector('.folio').textContent = '';
+    R.querySelector('.folio').textContent = '';
+
+    var lb = bodyOf(L), rb = bodyOf(R);
+    lb.appendChild(head);
+    left.forEach(function(b){ lb.appendChild(b); });
+    if(actions) rb.appendChild(actions);
+    right.forEach(function(b){ rb.appendChild(b); });
+
+    fichas[slug] = { L: L, R: R, n: +n, title: title };
+    order.push(slug);
   });
 
-  /* ---------- estado ---------- */
-  var pages = [];          // elementos .page en orden
-  var flowStart = {};      // id de flujo/página fija -> índice de página
-  var splits = [];         // registro de cortes para poder deshacerlos
-  var mode = 'spread';     // 'spread' | 'single'
-  var pos = 0;             // doble página: índice de pliego; una página: índice de página
-  var busy = false;
-  var sizeKey = '';
-
-  /* ---------- utilidades de medida ---------- */
-  var bodyPadB = 12;
-  function overflows(body){
-    var last = body.lastElementChild;
-    if(!last) return false;
-    var br = body.getBoundingClientRect();
-    return last.getBoundingClientRect().bottom > br.bottom - bodyPadB + 0.5;
+  /* ---------- contenido (índice) ---------- */
+  var chapterN = 0;
+  function tocRow(href, text, lvl, num){
+    var a = document.createElement('a');
+    a.className = 'toc-row l' + lvl;
+    a.href = href;
+    a.innerHTML = (lvl === '1' ? '<span class="toc-n">' + (++chapterN) + '</span>' : '') +
+      '<span class="toc-t"></span>' + (num !== '' ? '<span class="toc-lead"></span><span class="toc-p">' + num + '</span>' : '');
+    a.querySelector('.toc-t').textContent = text;
+    tocList.appendChild(a);
   }
-  function space(body){
-    var last = body.lastElementChild;
-    var br = body.getBoundingClientRect();
-    return (br.bottom - bodyPadB) - (last ? last.getBoundingClientRect().bottom : br.top);
-  }
-  function hasText(el){
-    for(var i = 0; i < el.childNodes.length; i++){
-      var n = el.childNodes[i];
-      if(n.nodeType === 3 && /\S/.test(n.nodeValue)) return true;
+  main.forEach(function(p, i){
+    var sp = p.__src;
+    if(!sp.hasAttribute('data-toc')) return;
+    tocRow('#' + sp.id, sp.getAttribute('data-toc'), sp.getAttribute('data-toc-level') || '1', String(i));
+    if(sp.id === 'experiencia'){
+      order.forEach(function(slug){ tocRow('#panel-' + slug, fichas[slug].title, '2', ''); });
     }
-    return false;
-  }
-  function stripWS(el){
-    Array.prototype.slice.call(el.childNodes).forEach(function(n){
-      if(n.nodeType === 3 && !/\S/.test(n.nodeValue)) el.removeChild(n);
-      else if(n.nodeType === 8) el.removeChild(n);
-    });
-  }
-  function isSplittable(el){
-    return el && el.nodeType === 1 && /^(DIV|UL|OL|ASIDE|SECTION|NAV)$/.test(el.tagName) &&
-      !el.matches(NOSPLIT) && !hasText(el) && el.children.length > 0;
-  }
-  function isHeadingLike(el){
-    return el && (/^H[1-6]$/.test(el.tagName) || el.matches('.kicker,.eyebrow,.how-tag'));
-  }
+  });
 
-  /* corta `el` para que quepa en `body`; devuelve la continuación (o null si nada cabe) */
-  function splitToFit(el, body){
-    stripWS(el);
-    var tail = el.cloneNode(false);
-    tail.removeAttribute('id');
-    tail.classList.add('is-cont');
-    tail.__origin = el;
-    var h = el.firstElementChild;
-    if(h && /^H[1-6]$/.test(h.tagName)) tail.setAttribute('data-cont-title', h.textContent.trim());
-    var rec = { el: el, tail: tail };
-    splits.push(rec);
+  /* ---------- estado y posiciones ---------- */
+  var mode = 'spread';
+  var loc = { t: 'main', i: 0 };   // t: 'main' o el slug de una ficha; i: pliego (doble) o página (sencilla)
+  var busy = false, sizeKey = '';
+  var BOARD = main.indexOf(boardSrc.closest('.page'));
 
-    while(overflows(body) && el.children.length > 1){
-      tail.insertBefore(el.lastChild, tail.firstChild);
+  function trackPages(t){ return t === 'main' ? main : [fichas[t].L, fichas[t].R]; }
+  function spreadOfPage(i){ return i <= 0 ? 0 : Math.floor((i + 1) / 2); }
+  function lastMain(){ return mode === 'spread' ? Math.floor(main.length / 2) : main.length - 1; }
+  function boardLoc(){ return { t: 'main', i: mode === 'spread' ? spreadOfPage(BOARD) : BOARD }; }
+
+  function viewOf(l){
+    if(mode === 'spread'){
+      if(l.t === 'main') return { L: l.i > 0 ? main[2 * l.i - 1] || null : null, R: main[2 * l.i] || null };
+      return { L: fichas[l.t].L, R: fichas[l.t].R };
     }
-    if(overflows(body)){
-      var only = el.firstElementChild;
-      var sub = isSplittable(only) ? splitToFit(only, body) : null;
-      if(!sub){ restore(rec); return null; }
-      tail.insertBefore(sub, tail.firstChild);
-    } else {
-      var first = tail.firstElementChild;
-      if(first && isSplittable(first) && space(body) > 64){
-        el.appendChild(first);
-        var sub2 = splitToFit(first, body);
-        if(sub2) tail.insertBefore(sub2, tail.firstChild);
-        else tail.insertBefore(first, tail.firstChild);
-      }
-    }
-    /* no dejar un solo elemento suelto al comienzo de la hoja siguiente (viuda) */
-    if(tail.children.length === 1 && el.children.length > 2 && !isSplittable(tail.firstElementChild)){
-      tail.insertBefore(el.lastElementChild, tail.firstChild);
-    }
-    /* no dejar un título solo al final de la hoja */
-    while(el.lastElementChild && isHeadingLike(el.lastElementChild)){
-      tail.insertBefore(el.lastElementChild, tail.firstChild);
-    }
-    if(!el.firstElementChild || !tail.firstChild){ restore(rec); return null; }
-    return tail;
+    return { P: trackPages(l.t)[l.i] };
   }
-  function restore(rec){
-    while(rec.tail.firstChild) rec.el.appendChild(rec.tail.firstChild);
-    var i = splits.indexOf(rec);
-    if(i > -1) splits.splice(i, 1);
+  /* orden de lectura, para saber hacia qué lado gira la hoja */
+  function rank(l){
+    if(l.t === 'main') return mode === 'spread' ? l.i * 2 : l.i;
+    var base = mode === 'spread' ? spreadOfPage(BOARD) * 2 : BOARD + 1;
+    return base + 0.5 + order.indexOf(l.t) / 100 + l.i / 1000;
   }
-  function undoSplits(){
-    for(var i = splits.length - 1; i >= 0; i--){
-      var r = splits[i];
-      while(r.tail.firstChild) r.el.appendChild(r.tail.firstChild);
-      if(r.tail.parentNode) r.tail.parentNode.removeChild(r.tail);
-    }
-    splits = [];
+  function nextLoc(l){
+    if(l.t === 'main') return l.i < lastMain() ? { t: 'main', i: l.i + 1 } : null;
+    var k = order.indexOf(l.t);
+    if(mode === 'single' && l.i === 0) return { t: l.t, i: 1 };
+    return k < order.length - 1 ? { t: order[k + 1], i: 0 } : boardLoc();
+  }
+  function prevLoc(l){
+    if(l.t === 'main') return l.i > 0 ? { t: 'main', i: l.i - 1 } : null;
+    var k = order.indexOf(l.t);
+    if(mode === 'single' && l.i === 1) return { t: l.t, i: 0 };
+    return k > 0 ? { t: order[k - 1], i: mode === 'single' ? 1 : 0 } : boardLoc();
   }
 
-  /* ---------- construcción de hojas ---------- */
-  function makePage(running){
-    var p = document.createElement('div');
-    p.className = 'page';
-    p.innerHTML =
-      '<div class="page-head"><span class="rh-book">Manual del Requisito Internacional</span><span class="rh-sec"></span></div>' +
-      '<div class="page-body"></div>' +
-      '<div class="page-foot"><div class="perf"></div><div class="foot-row"><span>Facultad de Administración · Universidad de los Andes</span><span class="folio"></span></div></div>';
-    p.querySelector('.rh-sec').textContent = running || '';
-    p.setAttribute('data-running', running || '');
-    return p;
-  }
-  function addPage(p){ measure.appendChild(p); pages.push(p); return p; }
-
-  function placeBlock(block, state){
-    var body = state.cur.querySelector('.page-body');
-    if(!body.firstElementChild && block.matches(BLEED)) state.cur.classList.add('page--bleed');
-    body.appendChild(block);
-    if(!overflows(body)) return;
-    if(isSplittable(block)){
-      var tail = splitToFit(block, body);
-      if(tail){
-        state.cur = addPage(makePage(state.cur.getAttribute('data-running')));
-        placeBlock(tail, state);
-        return;
-      }
-    }
-    if(body.firstElementChild === block) return; // no cabe ni en hoja vacía: se queda (con scroll)
-    body.removeChild(block);
-    state.cur = addPage(makePage(state.cur.getAttribute('data-running')));
-    placeBlock(block, state);
-  }
-
-  function paginate(){
-    undoSplits();
-    /* devolver todo a la fuente antes de volver a repartir */
-    pages.forEach(function(p){ if(p.parentNode) p.parentNode.removeChild(p); });
-    pages = []; flowStart = {};
-    measure.innerHTML = '';
-    measure.className = 'book ' + mode;
-
-    var state = { cur: null };
-    items.forEach(function(it){
-      if(it.classList.contains('src-page')){
-        var kind = it.getAttribute('data-kind');
-        var p;
-        if(kind === 'cover'){
-          p = document.createElement('div'); p.className = 'page page--cover';
-          p.appendChild(it);
-        } else {
-          p = makePage(''); p.classList.add('page--nohead', 'page--' + kind);
-          p.querySelector('.page-body').appendChild(it);
-        }
-        addPage(p);
-        /* el índice se compacta si no cabe en una hoja */
-        if(kind === 'toc'){
-          var tb = p.querySelector('.page-body');
-          ['toc-compact', 'toc-compact-2'].forEach(function(c){ if(overflows(tb)) tb.classList.add(c); });
-        }
-        flowStart[it.id] = pages.length - 1;
-        state.cur = null;
-        return;
-      }
-      var running = it.getAttribute('data-running') || '';
-      if(!state.cur || !it.hasAttribute('data-continue')){
-        state.cur = addPage(makePage(running));
-      }
-      var blocks = flowBlocks.get(it);
-      blocks.forEach(function(b){ placeBlock(b, state); });
-      var firstPage = blocks.length ? blocks[0].closest('.page') : state.cur;
-      flowStart[it.id] = pages.indexOf(firstPage);
-    });
-
-    /* la contraportada va a la izquierda: se completa con una hoja en blanco si hace falta */
-    if(mode === 'spread' && pages.length % 2 === 0){
-      var blank = makePage(''); blank.classList.add('page--nohead', 'page--blank');
-      blank.querySelector('.page-body').innerHTML = '<div class="blank-note">Página en blanco</div>';
-      addPage(blank);
-    }
-    var back = document.createElement('div'); back.className = 'page page--back';
-    back.appendChild(backItem);
-    addPage(back);
-    flowStart[backItem.id] = pages.length - 1;
-
-    /* folios, lados, scroll de respaldo */
-    pages.forEach(function(p, i){
-      p.classList.toggle('page--verso', i % 2 === 1);
-      p.classList.toggle('page--recto', i % 2 === 0);
-      p.setAttribute('aria-label', 'Página ' + i);
-      var f = p.querySelector('.folio');
-      if(f) f.textContent = (p.classList.contains('page--blank')) ? '' : String(i);
-      var b = p.querySelector('.page-body');
-      if(b){ b.classList.toggle('scrolls', b.scrollHeight - b.clientHeight > 14); }
-    });
-    pages.forEach(function(p){ measure.removeChild(p); });
-    measure.className = '';
-
-    /* números del índice */
-    tocList.querySelectorAll('.toc-p[data-toc-for]').forEach(function(s){
-      var n = flowStart[s.getAttribute('data-toc-for')];
-      s.textContent = (n === undefined) ? '' : String(n);
-    });
-  }
-
-  /* ---------- tamaño y modo ---------- */
+  /* ---------- tamaño ---------- */
   function layout(){
     var W = stage.clientWidth, H = stage.clientHeight;
-    var gutter = W > 760 ? 80 : 10;
-    var vpad = W > 760 ? 26 : 10;
+    var gutter = W > 760 ? 80 : 10, vpad = W > 760 ? 26 : 10;
     var availW = W - gutter * 2, availH = H - vpad * 2;
     var ratio = 0.74;
-    var ph = Math.min(availH, (availW / 2) / ratio, 940);
-    var pw = ph * ratio;
+    var ph = Math.min(availH, (availW / 2) / ratio, 940), pw = ph * ratio;
     var m, w, h;
     if(pw >= 420){ m = 'spread'; w = pw; h = ph; }
-    else {
-      m = 'single';
-      w = Math.min(availW, 620);
-      h = Math.min(availH, 980);
-    }
+    else { m = 'single'; w = Math.min(availW, 620); h = Math.min(availH, 980); }
     w = Math.floor(w); h = Math.floor(h);
     return { mode: m, w: w, h: h, key: m + ':' + w + 'x' + h };
   }
-
-  function currentAnchor(){
-    var p = (mode === 'spread') ? (pages[2 * pos - 1] || pages[2 * pos]) : pages[pos];
-    if(!p) return null;
-    var body = p.querySelector('.page-body');
-    var a = body ? body.firstElementChild : p.firstElementChild;
-    while(a && a.__origin) a = a.__origin;
-    return a;
-  }
-  function pageIndexOf(el){
-    var p = el && el.closest ? el.closest('.page') : null;
-    return p ? pages.indexOf(p) : -1;
-  }
-  function posForPage(i){
-    if(mode === 'single') return i;
-    return i <= 0 ? 0 : Math.floor((i + 1) / 2);
-  }
-  function lastPos(){ return mode === 'single' ? pages.length - 1 : Math.floor(pages.length / 2); }
-
-  function relayout(force){
-    var L = layout();
-    if(!force && L.key === sizeKey) return;
-    var anchor = pages.length ? currentAnchor() : null;
-    sizeKey = L.key;
-    mode = L.mode;
-    root.style.setProperty('--pw', L.w + 'px');
-    root.style.setProperty('--ph', L.h + 'px');
+  function relayout(){
+    var Lo = layout();
+    if(Lo.key === sizeKey) return;
+    sizeKey = Lo.key;
+    if(Lo.mode !== mode){
+      /* conservar el lugar al pasar de doble a sencilla y viceversa */
+      if(loc.t === 'main') loc.i = (Lo.mode === 'single') ? (loc.i === 0 ? 0 : 2 * loc.i - 1) : spreadOfPage(loc.i);
+      else loc.i = 0;
+      mode = Lo.mode;
+    }
+    root.style.setProperty('--pw', Lo.w + 'px');
+    root.style.setProperty('--ph', Lo.h + 'px');
     book.classList.toggle('spread', mode === 'spread');
     book.classList.toggle('single', mode === 'single');
-    slotL.innerHTML = ''; slotR.innerHTML = '';
     var leftover = book.querySelector('.leaf'); if(leftover) leftover.remove();
     busy = false;
-    paginate();
-    var idx = anchor ? pageIndexOf(anchor) : 0;
-    pos = Math.max(0, Math.min(lastPos(), posForPage(idx < 0 ? 0 : idx)));
     render();
   }
 
-  /* ---------- pintar el pliego actual ---------- */
-  function spreadPages(s){ return { L: s > 0 ? pages[2 * s - 1] || null : null, R: pages[2 * s] || null }; }
-  function put(slot, p){ slot.innerHTML = ''; if(p) slot.appendChild(p); }
+  /* ---------- pintar ---------- */
+  function put(slot, p){ slot.innerHTML = ''; if(p){ slot.appendChild(p); } }
   function render(){
+    var v = viewOf(loc);
     if(mode === 'spread'){
-      var sp = spreadPages(pos);
-      put(slotL, sp.L); put(slotR, sp.R);
-      book.classList.toggle('at-front', pos === 0);
-      book.classList.toggle('at-back', !sp.R);
+      put(slotL, v.L); put(slotR, v.R);
+      book.classList.toggle('at-front', !v.L);
+      book.classList.toggle('at-back', !v.R);
     } else {
-      put(slotL, null); put(slotR, pages[pos]);
+      put(slotL, null); put(slotR, v.P);
       book.classList.remove('at-front', 'at-back');
     }
+    afterShow();
+  }
+  function fitToc(p){
+    if(!p.classList.contains('page--toc')) return;
+    var b = bodyOf(p);
+    b.classList.remove('toc-compact', 'toc-compact-2');
+    ['toc-compact', 'toc-compact-2'].forEach(function(c){ if(b.scrollHeight > b.clientHeight + 2) b.classList.add(c); });
+  }
+  function afterShow(){
+    [slotL.firstElementChild, slotR.firstElementChild].forEach(function(p){ if(p){ fitToc(p); updateHint(p); } });
     updateUI();
   }
-  function updateUI(){
-    var last = lastPos();
-    range.max = String(last);
-    range.value = String(pos);
-    label.textContent = labelFor(pos);
-    [btnPrev, barPrev].forEach(function(b){ b.disabled = pos <= 0; });
-    [btnNext, barNext].forEach(function(b){ b.disabled = pos >= last; });
-    cornerL.hidden = pos <= 0;
-    cornerR.hidden = pos >= last;
-    var total = pages.length - 1;
-    if(mode === 'spread'){
-      var seen = pos === 0 ? 0 : 2 * pos - 1;
-      root.style.setProperty('--lt', Math.round(Math.min(9, seen / total * 12)) + 'px');
-      root.style.setProperty('--rt', Math.round(Math.min(9, (total - seen - 1) / total * 12)) + 'px');
+  function labelFor(l){
+    if(l.t !== 'main'){
+      var f = fichas[l.t];
+      return 'Opción ' + f.n + ' de ' + total + (mode === 'single' ? ' · ' + (l.i + 1) + '/2' : '');
     }
+    var last = main.length - 1, numbered = main.length - 2;
+    if(mode === 'spread'){
+      if(l.i === 0) return 'Portada';
+      var a = 2 * l.i - 1, b = 2 * l.i;
+      if(!main[b]) return 'Contraportada';
+      return 'Págs. ' + a + '–' + b + ' de ' + numbered;
+    }
+    if(l.i === 0) return 'Portada';
+    if(l.i === last) return 'Contraportada';
+    return 'Pág. ' + l.i + ' de ' + numbered;
   }
-  function labelFor(p){
-    var total = pages.length - 2;
-    if(p === 0) return 'Portada';
+  function updateUI(){
+    var inMain = loc.t === 'main';
+    var shown = inMain ? loc.i : boardLoc().i;
+    range.max = String(lastMain());
+    range.value = String(shown);
+    label.textContent = labelFor(loc);
+    var noPrev = !prevLoc(loc), noNext = !nextLoc(loc);
+    [btnPrev, barPrev].forEach(function(b){ b.disabled = noPrev; });
+    [btnNext, barNext].forEach(function(b){ b.disabled = noNext; });
+    cornerL.hidden = noPrev; cornerR.hidden = noNext;
     if(mode === 'spread'){
-      var a = 2 * p - 1, b = 2 * p;
-      if(!pages[b]) return 'Contraportada';
-      return 'Págs. ' + a + '–' + b + ' de ' + total;
+      var tot = main.length - 1, seen = shown === 0 ? 0 : 2 * shown - 1;
+      root.style.setProperty('--lt', Math.round(Math.min(9, seen / tot * 12)) + 'px');
+      root.style.setProperty('--rt', Math.round(Math.min(9, (tot - seen - 1) / tot * 12)) + 'px');
     }
-    if(p === pages.length - 1) return 'Contraportada';
-    return 'Pág. ' + p + ' de ' + total;
   }
 
   /* ---------- paso de hoja ---------- */
@@ -2593,12 +2516,11 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
     return { el: leaf, f: leaf.children[0], b: leaf.children[1] };
   }
   function runLeaf(leaf, from, to, done){
-    var el = leaf.el;
+    var el = leaf.el, finished = false;
     el.style.transform = from;
     el.getBoundingClientRect();
     el.classList.add('turning');
     el.style.transform = to;
-    var finished = false;
     function end(e){
       if(e && (e.target !== el || e.propertyName !== 'transform')) return;
       if(finished) return; finished = true;
@@ -2606,86 +2528,76 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
       done();
       if(el.parentNode) el.parentNode.removeChild(el);
       busy = false;
-      updateUI();
+      afterShow();
     }
     el.addEventListener('transitionend', end);
     setTimeout(end, 950);
   }
 
   function goTo(target){
-    target = Math.max(0, Math.min(lastPos(), target));
-    if(busy || target === pos) return;
-    if(reduceMotion){ pos = target; render(); return; }
+    if(!target || busy) return;
+    if(target.t === loc.t && target.i === loc.i) return;
+    var fwd = rank(target) > rank(loc);
+    var from = viewOf(loc), to = viewOf(target);
+    loc = target;
+    if(reduceMotion){ render(); return; }
     busy = true;
-    var fwd = target > pos;
-    var from = pos;
-    pos = target;
-
     if(mode === 'spread'){
-      var c = spreadPages(from), t = spreadPages(target);
       if(fwd){
-        put(slotR, t.R);
+        put(slotR, to.R);
         var lf = makeLeaf('fwd');
-        if(c.R) lf.f.appendChild(c.R);
-        if(t.L) lf.b.appendChild(t.L);
+        if(from.R) lf.f.appendChild(from.R);
+        if(to.L) lf.b.appendChild(to.L);
         book.classList.remove('at-front');
-        book.classList.toggle('at-back', !t.R);
-        runLeaf(lf, 'rotateY(0deg)', 'rotateY(-180deg)', function(){ put(slotL, t.L); });
+        book.classList.toggle('at-back', !to.R);
+        runLeaf(lf, 'rotateY(0deg)', 'rotateY(-180deg)', function(){ put(slotL, to.L); });
       } else {
-        put(slotL, t.L);
+        put(slotL, to.L);
         var lb = makeLeaf('back');
-        if(c.L) lb.f.appendChild(c.L);
-        if(t.R) lb.b.appendChild(t.R);
-        book.classList.toggle('at-front', target === 0);
+        if(from.L) lb.f.appendChild(from.L);
+        if(to.R) lb.b.appendChild(to.R);
+        book.classList.toggle('at-front', !to.L);
         book.classList.remove('at-back');
-        runLeaf(lb, 'rotateY(0deg)', 'rotateY(180deg)', function(){ put(slotR, t.R); });
+        runLeaf(lb, 'rotateY(0deg)', 'rotateY(180deg)', function(){ put(slotR, to.R); });
       }
     } else {
-      var cp = pages[from], tp = pages[target];
       if(fwd){
-        put(slotR, tp);
+        put(slotR, to.P);
         var sf = makeLeaf('single-fwd');
-        sf.f.appendChild(cp);
-        sf.el.style.opacity = '1';
+        sf.f.appendChild(from.P);
         runLeaf(sf, 'rotateY(0deg)', 'rotateY(-180deg)', function(){});
         requestAnimationFrame(function(){ sf.el.style.opacity = '0'; });
       } else {
         var sb = makeLeaf('single-back');
-        sb.f.appendChild(tp);
+        sb.f.appendChild(to.P);
         sb.el.style.opacity = '0';
-        runLeaf(sb, 'rotateY(-180deg)', 'rotateY(0deg)', function(){ put(slotR, tp); });
+        runLeaf(sb, 'rotateY(-180deg)', 'rotateY(0deg)', function(){ put(slotR, to.P); });
         requestAnimationFrame(function(){ sb.el.style.opacity = '1'; });
       }
     }
-    label.textContent = labelFor(pos);
-    range.value = String(pos);
+    label.textContent = labelFor(loc);
   }
-  function next(){ goTo(pos + 1); }
-  function prev(){ goTo(pos - 1); }
+  function next(){ goTo(nextLoc(loc)); }
+  function prev(){ goTo(prevLoc(loc)); }
 
-  function goToPage(i){ goTo(posForPage(i)); }
+  function goToMainPage(i){ goTo({ t: 'main', i: mode === 'spread' ? spreadOfPage(i) : i }); }
   function goToId(id){
-    var i = flowStart[id];
-    if(i === undefined){
-      /* las hojas que no están a la vista no están en el documento: se buscan en el arreglo */
-      i = -1;
-      var sel = '#' + (window.CSS && CSS.escape ? CSS.escape(id) : id);
-      for(var k = 0; k < pages.length; k++){ if(pages[k].querySelector(sel)){ i = k; break; } }
-      if(i < 0) return false;
+    var m = /^panel-(.+)$/.exec(id);
+    if(m && fichas[m[1]]){ goTo({ t: m[1], i: 0 }); return true; }
+    var sel = '#' + (window.CSS && CSS.escape ? CSS.escape(id) : id);
+    for(var k = 0; k < main.length; k++){
+      var el = main[k].querySelector(sel);
+      if(el || (main[k].__src && main[k].__src.id === id)){
+        /* si ya está a la vista y tiene campos, lleva directo al primer campo para diligenciar */
+        if(el && main[k].parentNode && main[k].parentNode.classList.contains('slot')){
+          var field = el.querySelector('[data-track]');
+          if(field){ field.focus(); field.classList.add('flash'); setTimeout(function(){ field.classList.remove('flash'); }, 1500); return true; }
+        }
+        goToMainPage(k); return true;
+      }
     }
-    goToPage(i);
-    return true;
+    return false;
   }
-
-  /* si al abrir una pregunta frecuente la hoja se llena, la hoja permite scroll */
-  document.addEventListener('click', function(e){
-    var trig = e.target.closest('.acc-trigger');
-    if(!trig) return;
-    setTimeout(function(){
-      var b = trig.closest('.page-body');
-      if(b) b.classList.toggle('scrolls', b.scrollHeight - b.clientHeight > 4);
-    }, 300);
-  });
 
   /* ---------- eventos ---------- */
   btnPrev.addEventListener('click', prev);
@@ -2694,17 +2606,22 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
   barNext.addEventListener('click', next);
   cornerL.addEventListener('click', prev);
   cornerR.addEventListener('click', next);
+  range.addEventListener('input', function(){ label.textContent = labelFor({ t: 'main', i: parseInt(range.value, 10) }); });
+  range.addEventListener('change', function(){ goTo({ t: 'main', i: parseInt(range.value, 10) }); });
 
-  range.addEventListener('input', function(){ label.textContent = labelFor(parseInt(range.value, 10)); });
-  range.addEventListener('change', function(){ goTo(parseInt(range.value, 10)); });
-
-  /* enlaces internos (#…) y botones con data-goto / data-turn */
   document.addEventListener('click', function(e){
     var t = e.target.closest('[data-turn],[data-goto],a[href^="#"]');
     if(!t) return;
     if(t.hasAttribute('data-turn')){ e.preventDefault(); t.getAttribute('data-turn') === 'next' ? next() : prev(); return; }
     var id = t.hasAttribute('data-goto') ? t.getAttribute('data-goto') : t.getAttribute('href').slice(1);
     if(id && goToId(id)) e.preventDefault();
+  });
+
+  /* al abrir una pregunta frecuente cambia el alto: se actualiza el aviso de scroll */
+  document.addEventListener('click', function(e){
+    var trig = e.target.closest('.acc-trigger');
+    if(!trig) return;
+    setTimeout(function(){ updateHint(trig.closest('.page')); }, 320);
   });
 
   function typing(el){
@@ -2715,16 +2632,13 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
     if(typing(e.target) || e.altKey || e.ctrlKey || e.metaKey) return;
     if(e.key === 'ArrowRight' || e.key === 'PageDown'){ e.preventDefault(); next(); }
     else if(e.key === 'ArrowLeft' || e.key === 'PageUp'){ e.preventDefault(); prev(); }
-    else if(e.key === 'Home'){ e.preventDefault(); goTo(0); }
-    else if(e.key === 'End'){ e.preventDefault(); goTo(lastPos()); }
+    else if(e.key === 'Escape' && loc.t !== 'main'){ e.preventDefault(); goTo(boardLoc()); }
+    else if(e.key === 'Home'){ e.preventDefault(); goTo({ t: 'main', i: 0 }); }
+    else if(e.key === 'End'){ e.preventDefault(); goTo({ t: 'main', i: lastMain() }); }
   });
 
-  /* deslizar en pantallas táctiles */
   var sx = null, sy = null;
-  stage.addEventListener('pointerdown', function(e){
-    if(e.pointerType === 'mouse') return;
-    sx = e.clientX; sy = e.clientY;
-  });
+  stage.addEventListener('pointerdown', function(e){ if(e.pointerType === 'mouse') return; sx = e.clientX; sy = e.clientY; });
   stage.addEventListener('pointerup', function(e){
     if(sx === null) return;
     var dx = e.clientX - sx, dy = e.clientY - sy;
@@ -2734,19 +2648,18 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
   stage.addEventListener('pointercancel', function(){ sx = sy = null; });
 
   var rt = null;
-  window.addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(function(){ relayout(false); }, 180); });
-  window.addEventListener('load', function(){ relayout(true); });
-  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(function(){ relayout(true); }); }
+  window.addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(relayout, 160); });
+  window.addEventListener('load', function(){ afterShow(); });
 
   /* ---------- arranque ---------- */
-  relayout(true);
+  relayout();
   if(location.hash){
     var saveRM = reduceMotion; reduceMotion = true;
     goToId(location.hash.slice(1));
     reduceMotion = saveRM;
   }
 
-  window.ManualBook = { goToId: goToId, goToPage: goToPage, next: next, prev: prev };
+  window.ManualBook = { goToId: goToId, next: next, prev: prev };
 })();
 
 </script>
