@@ -819,6 +819,81 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
 .page--ficha.page--recto .page-head{justify-content:space-between}
 .page--ficha.page--bleed .page-body{padding-top:0}
 
+/* ============================================================
+   SÉNECA NAVEGA
+   ============================================================ */
+.seneca-fab{
+  position:fixed;right:20px;bottom:76px;z-index:90;display:flex;align-items:center;gap:0;
+  background:#fff;border:1px solid var(--line);border-radius:30px;padding:4px;cursor:pointer;
+  box-shadow:0 8px 22px rgba(16,26,36,.18);font-family:var(--sans);color:var(--uniandes);
+  transition:box-shadow .15s ease, border-color .15s ease;
+}
+.seneca-fab:hover{border-color:var(--route);box-shadow:0 10px 26px rgba(16,26,36,.24)}
+.seneca-fab img{width:44px;height:44px;border-radius:50%;object-fit:cover;background:var(--route-light);flex-shrink:0}
+.seneca-fab .sf-label{font-size:13px;font-weight:600;white-space:nowrap;max-width:0;overflow:hidden;transition:max-width .25s ease, padding .25s ease;padding:0}
+.seneca-fab:hover .sf-label,.seneca-fab:focus-visible .sf-label{max-width:140px;padding:0 12px 0 10px}
+body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
+
+.seneca-panel{padding:0 !important;
+  position:fixed;right:20px;bottom:76px;z-index:95;width:min(360px, calc(100vw - 24px));height:min(520px, calc(100dvh - 150px));
+  background:var(--paper-raised);border:1px solid var(--line);border-radius:12px;box-shadow:0 24px 60px rgba(16,26,36,.28);
+  display:flex;flex-direction:column;overflow:hidden;font-family:var(--sans);
+}
+.seneca-panel[hidden]{display:none}
+.sp-head{display:flex;align-items:center;gap:10px;padding:12px 12px 12px 14px;background:var(--uniandes);color:#fff;flex-shrink:0}
+.sp-head img{width:38px;height:38px;border-radius:50%;object-fit:cover;background:#fff;flex-shrink:0}
+.sp-title{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.25}
+.sp-title strong{font-family:var(--serif);font-size:16px;font-weight:600}
+.sp-title span{font-size:11.5px;color:#BFD3EA}
+.sp-close{background:none;border:1px solid rgba(255,255,255,.3);border-radius:6px;width:30px;height:30px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sp-close:hover{border-color:#fff}
+.sp-close svg{width:15px;height:15px}
+.sp-log{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--paper);scrollbar-width:thin}
+.sp-msg{max-width:88%;padding:10px 13px;border-radius:12px;font-size:13.5px;line-height:1.5}
+.sp-msg.bot{align-self:flex-start;background:#fff;border:1px solid var(--line-soft);color:var(--ink);border-bottom-left-radius:4px}
+.sp-msg.me{align-self:flex-end;background:var(--uniandes);color:#fff;border-bottom-right-radius:4px}
+.sp-msg.typing{display:flex;gap:4px;padding:12px 14px}
+.sp-msg.typing span{width:6px;height:6px;border-radius:50%;background:var(--ink-soft);opacity:.35;animation:spDot 1s infinite}
+.sp-msg.typing span:nth-child(2){animation-delay:.15s}
+.sp-msg.typing span:nth-child(3){animation-delay:.3s}
+@keyframes spDot{0%,100%{opacity:.25}50%{opacity:.8}}
+.sp-links{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.sp-link{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left;background:var(--route-light);
+  border:1px solid transparent;border-radius:8px;padding:8px 10px;font-size:13px;font-weight:600;color:var(--uniandes);
+  cursor:pointer;text-decoration:none;font-family:var(--sans)
+}
+.sp-link:hover{border-color:var(--route)}
+.sp-link svg{width:13px;height:13px;flex-shrink:0}
+.sp-chips{display:flex;flex-wrap:wrap;gap:6px;align-self:flex-start}
+.sp-chip{background:#fff;border:1px solid var(--line);border-radius:16px;padding:6px 12px;font-size:12.5px;font-weight:600;color:var(--uniandes);cursor:pointer;font-family:var(--sans)}
+.sp-chip:hover{border-color:var(--route);background:var(--route-light)}
+.sp-input{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line);background:#fff;flex-shrink:0}
+.sp-input input{flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-size:14px;font-family:var(--sans)}
+.sp-input input:disabled{background:var(--paper)}
+.sp-input button{width:38px;border-radius:8px;border:none;background:var(--uniandes);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.sp-input button:disabled{opacity:.4;cursor:default}
+.sp-input button svg{width:16px;height:16px}
+@media (max-width:700px){
+  .seneca-fab{right:12px;bottom:66px}
+  .seneca-fab img{width:40px;height:40px}
+  .seneca-panel{right:8px;left:8px;bottom:62px;width:auto;height:min(72dvh, 560px)}
+}
+
+/* portada: Séneca a la izquierda, sobre el botón de abrir */
+.cover-left{display:flex;flex-direction:column;align-items:flex-start;gap:12px;flex-shrink:0}
+.cover-mascot{height:clamp(120px, 30cqh, 230px);width:auto;filter:drop-shadow(0 10px 16px rgba(0,0,0,.35))}
+@container (max-width:420px){
+  /* celular: Séneca a la izquierda del pase y el botón debajo de ella */
+  .cover-bottom{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;align-items:end;column-gap:10px;row-gap:10px;padding-top:12px}
+  .cover-left{display:contents}
+  .cover-mascot{grid-column:1;grid-row:1;height:clamp(80px, 17cqh, 120px);align-self:end}
+  .cover-open{grid-column:1 / 3;grid-row:2;justify-self:start}
+  .cover-bottom .hero-pass{grid-column:2;grid-row:1;width:auto;max-width:none;min-width:0}
+  .cover-bottom .hero-pass .photo{height:clamp(56px, 10cqh, 90px) !important}
+  .cover-bottom .hero-pass .row{padding:3px 0}
+}
+
 </style>
 </head>
 <body class="reader-app">
@@ -890,11 +965,13 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
     <h1>Manual del Requisito Internacional</h1>
   </div>
   <div class="cover-bottom">
-    <button type="button" class="btn btn-ghost cover-open" data-turn="next">Abrir el manual <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    <div class="cover-left">
+      <img class="cover-mascot" src="../assets/img/mascota_uniandino.png" alt="Mascota Uniandino">
+      <button type="button" class="btn btn-ghost cover-open" data-turn="next">Abrir el manual <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    </div>
     <div class="hero-pass">
       <div class="strip"><span>REQUISITO INTERNACIONAL</span><span>UNIANDES</span></div>
       <div class="photo" style="position:relative;height:180px;background:linear-gradient(180deg, rgba(11,46,89,0) 20%, rgba(11,46,89,.7)), url('../assets/img/estudiantes_pantallas.jpg') center 35%/cover">
-        <img src="../assets/img/mascota_uniandino.png" alt="Mascota Uniandino" style="position:absolute;right:10px;bottom:0;height:165px;width:auto;filter:drop-shadow(0 8px 14px rgba(0,0,0,.35))">
       </div>
       <div class="body">
         <div class="row"><span>Componentes</span><span>2 independientes</span></div>
@@ -935,7 +1012,7 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
       <strong>Un principio fundamental:</strong> este requisito busca ser accesible para todos los estudiantes, independientemente de su situación financiera o de sus capacidades físicas y/o intelectuales. Es un modelo inclusivo y equitativo.
     </div>
 </section>
-<section class="src-page" data-kind="content" data-running="Qué es el requisito">
+<section class="src-page" data-kind="content" id="objetivos" data-running="Qué es el requisito" data-title="Objetivos del requisito">
     <div class="how-grid">
       <div class="how-col">
         <div class="how-tag">Objetivo general</div>
@@ -971,7 +1048,7 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
       <strong>Colores de las tarjetas:</strong> una tarjeta se pone <strong style="color:#8a6a1a">amarilla</strong> apenas empiezas a diligenciarla, y se pone <strong style="color:var(--verified)">verde</strong> cuando presionas el check de su esquina para marcarla como completada. Cuando marques como completadas tanto la tarjeta de Cursos Disciplinares en Inglés como al menos una tarjeta de Experiencia Internacional, la barra de progreso de la parte superior se pondrá en verde: eso indica que cumpliste el Requisito Internacional.
     </div>
 </section>
-<section class="src-page" data-kind="content" data-running="Cómo funciona">
+<section class="src-page" data-kind="content" id="componentes" data-running="Cómo funciona" data-title="Los dos componentes del requisito">
     <div class="how-grid">
       <a class="how-col" href="#seccion-componente-1" style="text-decoration:none;color:inherit;display:block;cursor:pointer">
         <div class="how-tag">Componente 1</div>
@@ -1008,7 +1085,7 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
       </article>
     </div>
 </section>
-<section class="src-page" data-kind="content" data-running="Componente 1 · Cursos en inglés">
+<section class="src-page" data-kind="content" id="cursos-ingles-detalle" data-running="Componente 1 · Cursos en inglés" data-title="Cursos Disciplinares en Inglés: detalle y registro">
 <div class="ficha-inline" id="panel-cursos-ingles">
   <div class="detail-head">
     <div class="detail-title">
@@ -1079,7 +1156,7 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
   <p><strong>Da clic en la experiencia que quieres visualizar</strong>, en la página de la derecha. Verás su detalle completo y podrás diligenciarla. Marca el check de la tarjeta cuando la hayas cumplido.</p>
 </div>
 </section>
-<section class="src-page" data-kind="content" id="todas-experiencias" data-running="Componente 2 · Experiencia internacional">
+<section class="src-page" data-kind="content" id="todas-experiencias" data-running="Componente 2 · Experiencia internacional" data-title="Todas las experiencias internacionales">
     <div class="dash-grid board">
       <article class="opt-card" data-card="intercambio">
         <button type="button" class="opt-check" data-complete="intercambio" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
@@ -2067,6 +2144,28 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
   </div>
 </div>
 
+<!-- ============================================================
+     SÉNECA NAVEGA — asistente de navegación del manual
+     ============================================================ -->
+<button type="button" class="seneca-fab" id="senecaFab" aria-expanded="false" aria-controls="senecaPanel">
+  <img src="../assets/img/seneca_bot.png" alt="">
+  <span class="sf-label">Séneca navega</span>
+</button>
+<section class="seneca-panel" id="senecaPanel" role="dialog" aria-label="Séneca navega" hidden>
+  <div class="sp-head">
+    <img src="../assets/img/seneca_bot.png" alt="">
+    <div class="sp-title"><strong>Séneca navega</strong><span>Te ayudo a encontrar lo que buscas en el manual</span></div>
+    <button type="button" class="sp-close" id="senecaClose" aria-label="Cerrar Séneca navega">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="sp-log" id="senecaLog" aria-live="polite"></div>
+  <form class="sp-input" id="senecaForm" autocomplete="off">
+    <input type="text" id="senecaInput" placeholder="Escribe tu pregunta…" aria-label="Escribe tu pregunta" disabled>
+    <button type="submit" aria-label="Enviar" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+  </form>
+</section>
+
 <script>
 (function(){
   "use strict";
@@ -2685,7 +2784,263 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
     reduceMotion = saveRM;
   }
 
-  window.ManualBook = { goToId: goToId, next: next, prev: prev };
+  /* índice de búsqueda para Séneca navega */
+  function titleOf(sp){
+    if(sp.getAttribute('data-title')) return sp.getAttribute('data-title');
+    if(sp.getAttribute('data-toc')) return sp.getAttribute('data-toc');
+    var h = sp.querySelector('h2'); return h ? h.textContent.trim() : '';
+  }
+  var searchIndex = [];
+  main.forEach(function(p){
+    var sp = p.__src, kind = sp.getAttribute('data-kind');
+    if(!sp.id || kind === 'cover' || kind === 'back' || kind === 'toc' || kind === 'intro') return;
+    searchIndex.push({ id: sp.id, title: titleOf(sp), text: sp.textContent });
+  });
+  order.forEach(function(slug){
+    searchIndex.push({ id: 'panel-' + slug, title: fichas[slug].title, text: fichas[slug].R.textContent, ficha: true });
+  });
+  var faqList = [];
+  main.forEach(function(p){
+    p.querySelectorAll('.accordion-item').forEach(function(it){
+      var q = it.querySelector('.acc-trigger').textContent.replace(/\+\s*$/, '').trim();
+      var a = it.querySelector('.acc-panel').textContent.trim();
+      faqList.push({ q: q, a: a });
+    });
+  });
+
+  window.ManualBook = { goToId: goToId, next: next, prev: prev, index: searchIndex, faq: faqList,
+    fichas: order.map(function(s){ return { id: 'panel-' + s, title: fichas[s].title }; }) };
+})();
+
+/* ============================================================
+   SÉNECA NAVEGA
+   Asistente sencillo que ubica en el manual lo que pregunta el
+   estudiante y lo lleva a la página. Funciona sin conexión a
+   servicios externos: usa palabras clave, las preguntas frecuentes
+   y un buscador sobre todo el contenido del manual.
+   ============================================================ */
+(function(){
+  "use strict";
+  var fab   = document.getElementById('senecaFab');
+  var panel = document.getElementById('senecaPanel');
+  var close = document.getElementById('senecaClose');
+  var log   = document.getElementById('senecaLog');
+  var form  = document.getElementById('senecaForm');
+  var input = document.getElementById('senecaInput');
+  var send  = form.querySelector('button');
+  var CRONO = '../index.html#section-gantt';
+  var started = false, profile = null;
+
+  function norm(s){ return (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9ñ\s]/g, ' ').replace(/\s+/g, ' ').trim(); }
+  var STOP = ('de la el los las un una unos unas y o a en con por para que como cual cuales donde cuando se me mi mis tu tus su sus es son ser estar esta este esto eso lo le les al del si no hay puedo puede quiero necesito saber ' +
+              'informacion info sobre hacer tengo tiene muy mas menos ya sea hola buenas gracias favor ayuda encontrar ver busco buscar tema dame dime').split(' ');
+  function tokens(s){
+    return norm(s).split(' ').filter(function(t){ return t.length > 2 && STOP.indexOf(t) === -1; })
+      .map(function(t){ return t.length > 4 ? t.replace(/(es|s)$/, '') : t; });
+  }
+
+  /* ---------- temas frecuentes (palabras clave → página) ---------- */
+  var FICHA_TXT = function(t){ return 'Esta es la ficha de <strong>' + t + '</strong>: ahí encuentras requisitos, validación, recomendaciones y el espacio para diligenciarla.'; };
+  var INTENTS = [
+    { k: ['que es el requisito', 'que es requisito internacional', 'para que sirve', 'objetivo', 'en que consiste', 'de que se trata'], id: 'que-es',
+      a: 'El Requisito Internacional es obligatorio para obtener el título de Administrador (vigente desde 2016) y busca que desarrolles una perspectiva global. Aquí te lo explico:' },
+    { k: ['componente', 'como funciona', 'partes del requisito', 'que debo cumplir', 'que tengo que cumplir', 'estructura'], id: 'como-funciona',
+      a: 'El requisito tiene dos componentes independientes que no se sustituyen: 2 cursos ADMI en inglés y al menos una experiencia internacional.' },
+    { k: ['ingles', 'admi', 'cursos disciplinares', 'componente 1'], id: 'cursos-ingles-detalle',
+      a: 'Para el componente 1 debes aprobar 2 cursos código ADMI dictados en inglés en la Facultad de Administración. En esta página ves las reglas y registras tus cursos.' },
+    { k: ['experiencias', 'opciones', 'modalidades', 'componente 2', 'experiencia internacional', 'todas las experiencias'], id: 'todas-experiencias',
+      a: 'Hay 11 modalidades de experiencia internacional y debes cumplir al menos una. Aquí las ves todas; da clic en la que quieras revisar.' },
+    { k: ['intercambio', 'semestre en el exterior', 'semestre afuera', 'moveon', 'convenios especificos'], id: 'panel-intercambio' },
+    { k: ['doble titulacion', 'doble titulo', 'dos titulos', 'tilburg', 'neoma', 'tulane', 'toulouse', 'fgv', 'getulio'], id: 'panel-doble-titulacion' },
+    { k: ['escuela internacional de verano', 'escuela de verano', 'eiv', 'verano uniandes', 'verano de los andes', 'cursos de verano', 'bootcamp'], id: 'panel-eiv-uniandes' },
+    { k: ['escuelas externas', 'escuela externa', 'invierno', 'universidad externa', 'verano externo', 'ects'], id: 'panel-socios-internacionales' },
+    { k: ['practica', 'trabajo en el exterior', 'ctp', 'practica profesional'], id: 'panel-practica-internacional' },
+    { k: ['lengua y cultura', 'opcion academica'], id: 'panel-opcion-lengua-cultura' },
+    { k: ['idioma', 'frances', 'aleman', 'portugues', 'italiano', 'japones', 'chino', 'coreano', 'cinco cursos', '5 cursos', 'lenguas'], id: 'panel-cinco-cursos-idioma' },
+    { k: ['competencia', 'concurso', 'case competition', 'competir'], id: 'panel-competencias-internacionales' },
+    { k: ['investigacion', 'pasantia de investigacion', 'pasantias'], id: 'panel-pasantias-investigacion' },
+    { k: ['programas de verano', 'programa internacional de verano', 'babson', 'global village', 'huwib'], id: 'panel-programas-verano' },
+    { k: ['freemover', 'free mover', 'por mi cuenta', 'sin convenio', 'autogestion'], id: 'panel-freemover' },
+    { k: ['consejeria', 'cita', 'agendar', 'asesor', 'asesoria', 'sophie', 'juan pablo', 'hablar con alguien', 'contacto', 'orientacion'], id: 'consejeria',
+      a: 'Puedes agendar una consejería internacional con Sophie Fernández Leal o con Juan Pablo Izquierdo. En esta página están los enlaces para agendar:' },
+    { k: ['preguntas frecuentes', 'dudas comunes', 'mitos'], id: 'preguntas',
+      a: 'En Preguntas frecuentes están las dudas más comunes sobre el requisito:' },
+    { k: ['progreso', 'marcar', 'completad', 'amarilla', 'verde', 'check', 'barra', 'como uso', 'como usar', 'se guarda'], id: 'como-funciona',
+      a: 'Las tarjetas se ponen amarillas cuando empiezas a diligenciarlas y verdes cuando marcas su check. Cuando completes los dos componentes, la barra superior se pone en verde. Aquí lo explico:' },
+    { k: ['indice', 'contenido del manual', 'tabla de contenido'], id: 'indice', a: 'Este es el contenido del manual:' },
+    { k: ['cronograma', 'fechas', 'calendario', 'convocatoria', 'cuando abren', 'sesiones informativas'], url: CRONO,
+      a: 'Las fechas de convocatorias, sesiones informativas y demás actividades del año están en el cronograma de actividades.' }
+  ];
+  INTENTS.forEach(function(it){ it.k = it.k.map(norm); });
+
+  function titleFor(id){
+    var e = window.ManualBook.index.filter(function(x){ return x.id === id; })[0];
+    return e ? e.title : '';
+  }
+
+  /* ---------- motor de respuesta ---------- */
+  function answer(q){
+    var nq = ' ' + norm(q) + ' ';
+    var qt = tokens(q);
+
+    /* 1. pregunta frecuente casi idéntica */
+    var bestF = null, bestFS = 0;
+    window.ManualBook.faq.forEach(function(f){
+      var ft = tokens(f.q), hit = 0;
+      qt.forEach(function(t){ if(ft.indexOf(t) > -1) hit++; });
+      var sc = qt.length ? hit / Math.max(qt.length, 1) : 0;
+      if(hit >= 2 && sc > bestFS){ bestFS = sc; bestF = f; }
+    });
+    if(bestF && bestFS >= 0.6){
+      return { text: '<strong>' + esc(bestF.q) + '</strong><br>' + esc(bestF.a), links: [{ id: 'preguntas', label: 'Ver preguntas frecuentes' }] };
+    }
+
+    /* 2. temas frecuentes */
+    var best = null, bestS = 0;
+    INTENTS.forEach(function(it){
+      var s = 0;
+      it.k.forEach(function(k){ if(nq.indexOf(' ' + k) > -1) s += k.length; });
+      if(s > bestS){ bestS = s; best = it; }
+    });
+    if(best){
+      if(best.url) return { text: best.a, links: [{ url: best.url, label: 'Ir al cronograma de actividades' }] };
+      var t = titleFor(best.id);
+      return { text: best.a || FICHA_TXT(esc(t)), links: [{ id: best.id, label: 'Ir a: ' + t }] };
+    }
+
+    /* 3. búsqueda en todo el manual */
+    if(qt.length){
+      var scored = window.ManualBook.index.map(function(e){
+        var txt = norm(e.text), tit = norm(e.title), s = 0;
+        qt.filter(function(t){ return t.length > 3; }).forEach(function(t){
+          var m = txt.split(t).length - 1;
+          s += Math.min(m, 4) + (tit.indexOf(t) > -1 ? 4 : 0);
+        });
+        return { e: e, s: s };
+      }).filter(function(x){ return x.s >= 2; }).sort(function(a, b){ return b.s - a.s; }).slice(0, 3);
+      if(scored.length){
+        return { text: 'Encontré esto en el manual que puede servirte:',
+                 links: scored.map(function(x){ return { id: x.e.id, label: x.e.title }; }) };
+      }
+    }
+
+    /* 4. sin resultado */
+    return { text: 'No encontré eso en el manual. Prueba con otras palabras (por ejemplo "intercambio", "cursos en inglés" o "no puedo salir del país"), o agenda una consejería internacional.',
+             links: [{ id: 'consejeria', label: 'Ir a consejería' }] };
+  }
+
+  /* ---------- interfaz ---------- */
+  function esc(s){ var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+  function scroll(){ log.scrollTop = log.scrollHeight; }
+  function bubble(who, html){
+    var b = document.createElement('div');
+    b.className = 'sp-msg ' + who;
+    b.innerHTML = html;
+    log.appendChild(b); scroll();
+    return b;
+  }
+  function bot(html, links, chips){
+    var typing = bubble('bot typing', '<span></span><span></span><span></span>');
+    setTimeout(function(){
+      typing.remove();
+      var b = bubble('bot', html);
+      if(links && links.length){
+        var wrap = document.createElement('div'); wrap.className = 'sp-links';
+        links.forEach(function(l){
+          var a = document.createElement(l.url ? 'a' : 'button');
+          a.className = 'sp-link';
+          if(l.url){ a.href = l.url; }
+          else {
+            a.type = 'button';
+            a.addEventListener('click', function(){
+              window.ManualBook.goToId(l.id);
+              if(window.innerWidth < 700) toggle(false);
+            });
+          }
+          a.innerHTML = esc(l.label) + ' <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+          wrap.appendChild(a);
+        });
+        b.appendChild(wrap);
+      }
+      if(chips) showChips(chips);
+      scroll();
+    }, 380);
+  }
+  function showChips(list){
+    var old = log.querySelector('.sp-chips'); if(old) old.remove();
+    var w = document.createElement('div'); w.className = 'sp-chips';
+    list.forEach(function(c){
+      var btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'sp-chip'; btn.textContent = c.label;
+      btn.addEventListener('click', function(){ w.remove(); c.run ? c.run() : ask(c.label); });
+      w.appendChild(btn);
+    });
+    log.appendChild(w); scroll();
+  }
+  function enableInput(on){ input.disabled = !on; send.disabled = !on; if(on) setTimeout(function(){ input.focus(); }, 420); }
+
+  var SUGGEST = [
+    { label: '¿Qué es el requisito?' }, { label: 'Cursos en inglés' }, { label: 'Ver las 11 experiencias' },
+    { label: '¿Qué hago si no puedo salir del país?' }, { label: 'Agendar consejería' }
+  ];
+
+  function choose(p){
+    profile = p;
+    bubble('me', p === 'pregrado' ? 'Pregrado' : 'Posgrado');
+    if(p === 'pregrado'){
+      bot('Perfecto. Pregúntame qué necesitas encontrar y te llevo a la página exacta del manual. También puedes empezar por aquí:', null, SUGGEST);
+      enableInput(true);
+    } else {
+      bot('Gracias. Este manual corresponde al <strong>pregrado en Administración</strong>, así que sus requisitos pueden no aplicar a tu programa de posgrado. Te recomiendo confirmar con la Oficina de Internacionalización de la Facultad.', null, [
+        { label: 'Me equivoqué, soy de pregrado', run: function(){ choose('pregrado'); } },
+        { label: 'Explorar el manual de todas formas', run: function(){
+            bubble('me', 'Explorar el manual de todas formas');
+            bot('Listo. Pregúntame qué quieres encontrar y te llevo a esa página.', null, SUGGEST);
+            enableInput(true);
+          } }
+      ]);
+    }
+  }
+
+  function start(){
+    started = true;
+    bot('Hola, soy <strong>Séneca</strong>. Te ayudo a encontrar información y a moverte por el Manual del Requisito Internacional.<br><br>Antes de empezar: ¿eres estudiante de <strong>pregrado</strong> o de <strong>posgrado</strong> de la Facultad de Administración?', null, [
+      { label: 'Pregrado', run: function(){ choose('pregrado'); } },
+      { label: 'Posgrado', run: function(){ choose('posgrado'); } }
+    ]);
+  }
+
+  function ask(q){
+    q = (q || '').trim();
+    if(!q) return;
+    var old = log.querySelector('.sp-chips'); if(old) old.remove();
+    bubble('me', esc(q));
+    if(norm(q) === 'ver las 11 experiencias') q = 'todas las experiencias';
+    var r = answer(q);
+    bot(r.text, r.links);
+  }
+
+  function toggle(open){
+    panel.hidden = !open;
+    fab.setAttribute('aria-expanded', open ? 'true' : 'false');
+    document.body.classList.toggle('seneca-open', open);
+    if(open){
+      if(!started) start();
+      else if(!input.disabled) input.focus();
+    } else { fab.focus(); }
+  }
+
+  fab.addEventListener('click', function(){ toggle(panel.hidden); });
+  close.addEventListener('click', function(){ toggle(false); });
+  panel.addEventListener('keydown', function(e){
+    e.stopPropagation();          /* que las flechas no pasen hojas mientras escribes */
+    if(e.key === 'Escape'){ e.preventDefault(); toggle(false); }
+  });
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var q = input.value; input.value = '';
+    ask(q);
+  });
 })();
 
 </script>
