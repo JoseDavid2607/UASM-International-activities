@@ -454,14 +454,292 @@ footer a{color:#D6E2EE}
 .cta-strip .btns{display:flex;gap:10px;flex-wrap:wrap}
 
 .opt-card .icon-wrap img.mascot-icon{width:44px;height:44px;object-fit:contain}
+/* ============================================================
+   MODO LIBRO — lector paginado con portada, índice y paso de hoja
+   (se suma al sistema visual existente; no cambia tokens)
+   ============================================================ */
+:root{ --desk:#D5DDE4; --pw:460px; --ph:620px; --lt:0px; --rt:0px; }
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+html,body.reader-app{height:100%}
+body.reader-app{
+  overflow:hidden;display:flex;flex-direction:column;height:100vh;height:100dvh;
+  background:radial-gradient(ellipse 70% 60% at 50% 45%, #E9EEF2 0%, var(--desk) 62%, #C8D2DB 100%);
+}
+body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,244,246,.96)}
+.book-source{display:none}
+
+/* ---------- escenario ---------- */
+.reader{flex:1;min-height:0;display:flex;flex-direction:column}
+.stage{flex:1;min-height:0;position:relative;display:flex;align-items:center;justify-content:center;perspective:2600px;overflow:hidden;touch-action:pan-y}
+.book{position:relative;width:calc(var(--pw) * 2);height:var(--ph);transform-style:preserve-3d;transition:transform .7s cubic-bezier(.45,.05,.2,1)}
+.book.single{width:var(--pw)}
+.book.at-front{transform:translateX(calc(var(--pw) * -.5))}
+.book.at-back{transform:translateX(calc(var(--pw) * .5))}
+.slot{position:absolute;top:0;width:var(--pw);height:var(--ph)}
+.slot-l{left:0}
+.slot-r{left:var(--pw)}
+.book.single .slot-l{display:none}
+.book.single .slot-r{left:0}
+.slot:not(:empty){box-shadow:0 1px 3px rgba(16,26,36,.10), 0 22px 44px -12px rgba(16,26,36,.30)}
+.slot > .page, .face > .page{position:absolute;inset:0}
+
+/* canto de hojas: crece o decrece según avanzas */
+.book.spread .slot-l:not(:empty)::before,
+.book.spread .slot-r:not(:empty)::before{
+  content:"";position:absolute;top:4px;bottom:4px;z-index:-1;
+  background:repeating-linear-gradient(90deg,#FFFFFF 0 1px,#DCE2E7 1px 2px);
+}
+.book.spread .slot-l:not(:empty)::before{left:calc(var(--lt) * -1);width:var(--lt);border-radius:3px 0 0 3px}
+.book.spread .slot-r:not(:empty)::before{right:calc(var(--rt) * -1);width:var(--rt);border-radius:0 3px 3px 0}
+
+/* ---------- hoja que gira ---------- */
+.leaf{position:absolute;top:0;width:var(--pw);height:var(--ph);transform-style:preserve-3d;z-index:30;will-change:transform}
+.leaf.fwd{left:var(--pw);transform-origin:left center}
+.leaf.back{left:0;transform-origin:right center}
+.book.single .leaf{left:0;transform-origin:left center}
+.leaf.turning{transition:transform .72s cubic-bezier(.45,.05,.25,1), opacity .3s ease .42s}
+.leaf.single-back.turning{transition:transform .72s cubic-bezier(.45,.05,.25,1), opacity .2s ease}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;background:var(--paper-raised)}
+.face.b{transform:rotateY(180deg)}
+.face::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;z-index:5}
+.leaf.fwd .face.f::after,.book.single .leaf .face.f::after{background:linear-gradient(90deg,rgba(16,26,36,.28),rgba(16,26,36,0) 55%)}
+.leaf.back .face.f::after{background:linear-gradient(270deg,rgba(16,26,36,.28),rgba(16,26,36,0) 55%)}
+.leaf .face.b::after{background:linear-gradient(90deg,rgba(16,26,36,0) 45%,rgba(16,26,36,.22))}
+.leaf.turning .face::after{animation:leafShade .72s ease-in-out}
+@keyframes leafShade{0%{opacity:0}50%{opacity:1}100%{opacity:0}}
+.leaf.turning{box-shadow:0 20px 50px -18px rgba(16,26,36,.45)}
+
+/* ---------- controles ---------- */
+.turn{
+  position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;
+  background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;
+  cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.14);color:var(--uniandes);z-index:40;
+}
+.turn:hover{border-color:var(--route)}
+.turn[disabled]{opacity:.35;cursor:default}
+.turn svg{width:18px;height:18px}
+.turn.prev{left:18px}
+.turn.next{right:18px}
+@media (max-width:760px){.turn{display:none}}
+
+.corner{position:absolute;bottom:0;width:64px;height:64px;z-index:25;background:none;border:0;padding:0;cursor:pointer}
+.corner.l{left:0}
+.corner.r{right:0}
+.corner[hidden]{display:none}
+.corner::before{content:"";position:absolute;bottom:0;width:0;height:0;transition:width .18s ease,height .18s ease;box-shadow:-3px -3px 8px rgba(16,26,36,.12)}
+.corner.r::before{right:0;background:linear-gradient(315deg,var(--desk) 0 50%,#E7ECF0 50%,#FFFFFF 90%)}
+.corner.l::before{left:0;background:linear-gradient(45deg,var(--desk) 0 50%,#E7ECF0 50%,#FFFFFF 90%);box-shadow:3px -3px 8px rgba(16,26,36,.12)}
+.corner:hover::before,.corner:focus-visible::before{width:34px;height:34px}
+
+.reader-bar{
+  flex-shrink:0;display:flex;align-items:center;gap:14px;padding:10px 20px;
+  background:rgba(241,244,246,.96);border-top:1px solid var(--line);
+}
+.bar-btn{
+  display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+  padding:8px 13px;font-size:13.5px;font-weight:600;color:var(--ink);cursor:pointer;text-decoration:none;font-family:var(--sans)
+}
+.bar-btn:hover{border-color:var(--route)}
+.bar-btn[disabled]{opacity:.4;cursor:default}
+.bar-btn svg{width:15px;height:15px}
+.bar-mid{flex:1;display:flex;align-items:center;gap:14px;min-width:0}
+.bar-mid input[type=range]{flex:1;min-width:60px;accent-color:var(--uniandes)}
+.bar-label{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);white-space:nowrap;min-width:13ch;text-align:right}
+@media (max-width:640px){
+  .reader-bar{gap:8px;padding:8px 10px}
+  .bar-btn span{display:none}
+  .bar-btn{padding:8px 10px}
+  .bar-label{min-width:0;font-size:11.5px}
+}
+
+/* ---------- hoja ---------- */
+.page{
+  position:relative;width:var(--pw);height:var(--ph);background:var(--paper-raised);overflow:hidden;
+  display:flex;flex-direction:column;container-type:size;
+  --pad:clamp(20px, calc(var(--pw) * .072), 46px);
+}
+.page-head{
+  flex-shrink:0;height:46px;margin:0 var(--pad);display:flex;justify-content:space-between;align-items:flex-end;gap:12px;
+  padding-bottom:9px;border-bottom:1px solid var(--line-soft);font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);white-space:nowrap;overflow:hidden
+}
+.page-head .rh-sec{color:var(--route);overflow:hidden;text-overflow:ellipsis}
+.page-body{flex:1;min-height:0;padding:22px var(--pad) 12px;overflow:hidden;container-type:inline-size;display:flow-root}
+.page-body.scrolls{overflow-y:auto}
+.page-body > :last-child{margin-bottom:0 !important}
+.page-foot{flex-shrink:0;height:44px;padding:0 var(--pad);display:flex;flex-direction:column;justify-content:center;gap:9px}
+.foot-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:10.5px;color:var(--ink-soft)}
+.folio{font-family:var(--serif);font-weight:600;font-size:13px;color:var(--ink)}
+.book.spread .page--verso .foot-row{flex-direction:row-reverse}
+.book.spread .page--verso .rh-sec{display:none}
+.book.spread .page--recto .rh-book{display:none}
+.book.spread .page--recto .page-head{justify-content:flex-end}
+/* sombra del lomo */
+.book.spread .page--verso::after,.book.spread .page--recto::after{content:"";position:absolute;top:0;bottom:0;width:44px;pointer-events:none;z-index:4}
+.book.spread .page--verso::after{right:0;background:linear-gradient(90deg,rgba(16,26,36,0),rgba(16,26,36,.075))}
+.book.spread .page--recto::after{left:0;background:linear-gradient(270deg,rgba(16,26,36,0),rgba(16,26,36,.075))}
+.page--bleed .page-head,.page--nohead .page-head{display:none}
+.page--bleed .page-body{padding-top:0}
+.page--nohead .page-body{padding-top:calc(var(--pad) * 1.2)}
+
+#measure{position:fixed;left:-20000px;top:0;visibility:hidden;pointer-events:none}
+
+/* ---------- apertura de capítulo ---------- */
+.chapter-head{margin:0 calc(var(--pad) * -1) 26px}
+.ch-band{background:var(--uniandes);color:#fff;padding:var(--pad) var(--pad) 22px;position:relative}
+.ch-band::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:2px;
+  background-image:radial-gradient(circle, rgba(255,255,255,.45) 1.4px, transparent 1.6px);background-size:10px 2px;background-repeat:repeat-x
+}
+.ch-num{display:block;font-family:var(--serif);font-weight:600;font-size:clamp(56px, 17cqw, 96px);line-height:.78;color:#D9BD7E;margin-bottom:16px;letter-spacing:-.03em}
+.ch-band .eyebrow{color:#BFD3EA;margin-bottom:8px}
+.ch-band h2.h-section{color:#fff;font-size:clamp(24px, 7cqw, 34px);line-height:1.12}
+.ch-lead{padding:0 var(--pad);margin:20px 0 0;font-size:15.5px}
+
+/* ---------- ajustes de componentes dentro de la hoja ---------- */
+.page-body p{max-width:none}
+.page-body .how-grid{grid-template-columns:1fr}
+.page-body .how-col{padding:22px 24px}
+.page-body .how-col + .how-col{border-left:none;border-top:1px solid var(--line)}
+.page-body .how-col h3{font-size:19px}
+@container (min-width:600px){
+  .page-body .how-grid{grid-template-columns:1fr 1fr}
+  .page-body .how-col + .how-col{border-left:1px solid var(--line);border-top:none}
+}
+.page-body .how-note{font-size:14px}
+.page-body .callout{font-size:14px}
+.page-body .dash-grid{grid-template-columns:1fr 1fr;gap:14px}
+.page-body .dash-grid + .dash-grid{margin-top:0}
+.page-body .dash-grid-single{grid-template-columns:minmax(0,300px)}
+@container (max-width:390px){.page-body .dash-grid{grid-template-columns:1fr}}
+.page-body .opt-card .icon-wrap{height:66px}
+.page-body .opt-card .icon-wrap svg{width:30px;height:30px}
+.page-body .opt-card .body{padding:14px 14px 16px}
+.page-body .opt-card h4{font-size:15.5px;margin-bottom:6px;padding-right:24px}
+.page-body .opt-card p{font-size:13px;margin-bottom:12px;line-height:1.45}
+.page-body .opt-meta{margin-bottom:0}
+.page-body .opt-check{top:8px;right:8px;width:26px;height:26px}
+.page-body .cta-strip{margin-top:18px;padding:16px 18px}
+.page-body .detail-head{margin-bottom:20px}
+.page-body .detail-title h3{font-size:clamp(22px, 6.4cqw, 28px)}
+.page-body .panel-photo-head{margin:0 calc(var(--pad) * -1) 20px;min-height:clamp(210px, 46cqw, 290px)}
+.page-body .panel-photo-head .photo-head-inner{padding:26px var(--pad) 22px}
+.page-body .block{margin-bottom:24px}
+.page-body .block li{font-size:14.5px}
+.page-body .card-side{position:static;margin-bottom:22px}
+.page-body .aside-docs{margin:0 0 22px}
+.page-body .region-cols{columns:2 150px}
+.page-body .accordion-item button.acc-trigger{font-size:14.5px;padding:13px 2px}
+.page-body .acc-panel p,.page-body .acc-panel div{font-size:14px}
+.page-body .select-grid{grid-template-columns:1fr 1fr}
+@container (max-width:380px){.page-body .select-grid{grid-template-columns:1fr}}
+
+/* bloque que continúa desde la hoja anterior */
+.is-cont[data-cont-title]::before{
+  content:attr(data-cont-title) " (continuación)";display:block;font-family:var(--sans);font-size:12.5px;font-weight:600;
+  color:var(--ink-soft);margin-bottom:12px
+}
+.accordion.is-cont .accordion-item:first-child,.accordion > .accordion-item:first-child{border-top:1px solid var(--line)}
+
+/* acciones de cada ficha */
+.ficha-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 24px;padding-bottom:16px;border-bottom:1px dashed var(--line)}
+.ficha-check{
+  display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:20px;
+  padding:6px 14px 6px 6px;font-size:13.5px;font-weight:600;color:var(--ink);cursor:pointer
+}
+.ficha-check:hover{border-color:var(--verified)}
+.fc-circle{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;color:transparent}
+.fc-circle svg{width:13px;height:13px}
+.ficha-check.is-done{background:var(--verified-soft);border-color:var(--verified);color:var(--verified)}
+.ficha-check.is-done .fc-circle{background:var(--verified);border-color:var(--verified);color:#fff}
+.fc-back{font-size:13.5px;font-weight:600;text-decoration:none}
+.fc-back:hover{text-decoration:underline}
+
+/* ---------- portada ---------- */
+.page--cover{background:var(--uniandes);color:#fff}
+.src-page[data-kind="cover"]{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  padding:calc(var(--pad) * 1.05) var(--pad) calc(var(--pad) * .9) calc(var(--pad) + 14px);
+  background:
+    radial-gradient(ellipse 80% 55% at 85% 0%, rgba(127,178,232,.22), rgba(127,178,232,0) 70%),
+    var(--uniandes);
+}
+.cover-spine{position:absolute;left:0;top:0;bottom:0;width:16px;background:linear-gradient(90deg,rgba(0,0,0,.35),rgba(0,0,0,.08) 60%,rgba(255,255,255,.08) 75%,rgba(0,0,0,0))}
+.cover-logo{height:clamp(26px, 7cqw, 38px);width:auto}
+.cover-title{margin-top:auto;padding-top:18px}
+.cover-title .hero-eyebrow{font-size:clamp(10.5px, 2.7cqw, 13px);margin-bottom:14px;align-items:flex-start}
+.cover-title .hero-eyebrow .dot{margin-top:5px;flex-shrink:0}
+.cover-title h1{font-size:clamp(30px, 10cqw, 60px);line-height:1.02;color:#fff;max-width:12ch}
+.cover-bottom{margin-top:auto;padding-top:20px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px}
+.cover-open{flex-shrink:0;padding:10px 16px;font-size:13.5px;background:transparent}
+.cover-bottom .hero-pass{width:min(64%, 330px);flex-shrink:1}
+.cover-bottom .hero-pass .photo{height:clamp(96px, 22cqh, 180px) !important}
+.cover-bottom .hero-pass .photo img{height:92% !important}
+.cover-bottom .hero-pass .strip{font-size:10.5px;padding:10px 14px}
+.cover-bottom .hero-pass .body{padding:10px 14px}
+.cover-bottom .hero-pass .row{font-size:11px;padding:5px 0;gap:10px}
+.cover-bottom .hero-pass .row span:last-child{text-align:right}
+@container (max-width:400px){
+  .cover-bottom{flex-direction:column-reverse;align-items:stretch}
+  .cover-bottom .hero-pass{width:auto;align-self:flex-end;max-width:92%}
+  .cover-open{align-self:flex-start}
+}
+
+/* ---------- presentación ---------- */
+.intro-title{font-size:clamp(26px, 7cqw, 34px);margin-bottom:18px}
+.intro-lead{font-family:var(--serif);font-size:clamp(17px, 4.3cqw, 21px);line-height:1.5;color:var(--ink)}
+#presentacion .hero-actions{margin-top:22px}
+.intro-howto{margin-top:34px}
+.intro-howto p{margin-top:16px;font-size:14px}
+
+/* ---------- contenido (índice) ---------- */
+.toc-title{font-size:clamp(26px, 7cqw, 34px);margin-bottom:20px}
+.toc-list{display:flex;flex-direction:column}
+.toc-row{display:flex;align-items:baseline;gap:10px;text-decoration:none;color:var(--ink);padding:5px 0}
+.toc-row:hover .toc-t{color:var(--route)}
+.toc-row.l1{font-family:var(--serif);font-weight:600;font-size:15.5px;padding-top:12px}
+.toc-row.l1:first-child{padding-top:0}
+.toc-row.l2{font-size:13.5px;color:var(--ink-soft);padding:3px 0 3px 30px}
+.toc-n{width:20px;flex-shrink:0;color:var(--brass);font-family:var(--serif)}
+.toc-t{flex:0 1 auto}
+.toc-lead{flex:1;min-width:16px;height:1px;align-self:center;margin-top:6px;
+  background-image:radial-gradient(circle, var(--line) 1.2px, transparent 1.3px);background-size:7px 2px;background-repeat:repeat-x}
+.toc-p{font-family:var(--mono);font-size:12px;color:var(--ink-soft);min-width:2ch;text-align:right}
+
+/* ---------- página en blanco ---------- */
+.blank-note{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink-soft);font-style:italic}
+
+/* ---------- contraportada ---------- */
+.page--back{background:var(--uniandes)}
+.src-page[data-kind="back"]{position:absolute;inset:0;display:flex;flex-direction:column;padding:calc(var(--pad) * 1.2) calc(var(--pad) + 14px) var(--pad) var(--pad);color:#CBD9E8}
+.page--back::before{content:"";position:absolute;right:0;top:0;bottom:0;width:16px;z-index:2;background:linear-gradient(270deg,rgba(0,0,0,.35),rgba(0,0,0,.08) 60%,rgba(0,0,0,0))}
+.back-logo{height:34px;width:auto;margin-bottom:22px}
+.src-page[data-kind="back"] p{color:#AFC3D8;font-size:13.5px}
+.src-page[data-kind="back"] .btn-ghost{background:transparent}
+.back-nav{margin-top:14px}
+.back-nav h5{color:#fff;font-family:var(--sans);font-size:14px;margin:0 0 10px}
+.back-nav a{color:#D6E2EE}
+.back-bottom{margin-top:auto;display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+.perf-light{width:100%;background-image:radial-gradient(circle, rgba(255,255,255,.35) 1.4px, transparent 1.6px)}
+
+@media (prefers-reduced-motion:reduce){
+  .book,.leaf.turning{transition:none !important}
+}
+
+.toc-compact .toc-title{margin-bottom:12px}
+.toc-compact .toc-row.l1{font-size:14.5px;padding-top:7px}
+.toc-compact .toc-row.l2{font-size:12.5px;padding:1px 0 1px 30px}
+.toc-compact-2 .toc-title{font-size:24px}
+.toc-compact-2 .toc-row.l1{font-size:13.5px;padding-top:4px}
+.toc-compact-2 .toc-row.l2{font-size:11.5px;padding:0 0 0 30px;line-height:1.4}
+
 </style>
 </head>
-<body>
+<body class="reader-app">
 <a href="#contenido" class="skip-link">Saltar al contenido</a>
 <div id="toast"><span class="dot"></span><span id="toast-text">Guardado</span></div>
 
 <!-- ============================================================
-     NAV
+     BARRA SUPERIOR
      ============================================================ -->
 <header class="site">
   <nav class="nav">
@@ -470,6 +748,7 @@ footer a{color:#D6E2EE}
     </a>
     <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false"><span></span></button>
     <div class="nav-links" id="navLinks">
+      <a href="#indice">Contenido</a>
       <a href="#que-es">Qué es</a>
       <a href="#como-funciona">Cómo funciona</a>
       <a href="#opciones">Opciones</a>
@@ -482,23 +761,57 @@ footer a{color:#D6E2EE}
   </nav>
 </header>
 
-<main id="contenido">
 <!-- ============================================================
-     HERO
+     LECTOR (el libro)
      ============================================================ -->
-<section class="hero" id="inicio">
-  <div class="wrap">
-    <div>
-      <div class="hero-eyebrow"><span class="dot"></span>Facultad de Administración · Universidad de los Andes · Actualizado agosto 2026</div>
-      <h1>Manual del Requisito Internacional</h1>
-      <p class="sub">Tu guía interactiva y siempre vigente para planear, aplicar y hacer seguimiento a cada camino posible para cumplir el requisito internacional del pregrado en Administración: 11 modalidades de experiencia internacional, más los cursos disciplinares en inglés.</p>
-      <div class="hero-actions">
-        <a href="#opciones" class="btn btn-primary">Explorar opciones
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-        <a href="#que-es" class="btn btn-ghost">Qué es el requisito</a>
-      </div>
+<main id="contenido" class="reader">
+  <div class="stage" id="stage">
+    <button class="turn prev" id="turnPrev" type="button" aria-label="Página anterior">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg>
+    </button>
+    <div class="book" id="book" aria-live="off">
+      <div class="slot slot-l" id="slotL"></div>
+      <div class="slot slot-r" id="slotR"></div>
+      <button class="corner l" id="cornerL" type="button" aria-label="Página anterior" tabindex="-1"></button>
+      <button class="corner r" id="cornerR" type="button" aria-label="Página siguiente" tabindex="-1"></button>
     </div>
+    <button class="turn next" id="turnNext" type="button" aria-label="Página siguiente">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg>
+    </button>
+  </div>
+  <div class="reader-bar">
+    <button class="bar-btn" id="barPrev" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg><span>Anterior</span></button>
+    <div class="bar-mid">
+      <label class="sr-only" for="pageRange">Ir a la página</label>
+      <input type="range" id="pageRange" min="0" max="1" value="0">
+      <span class="bar-label" id="pageLabel" aria-live="polite">Portada</span>
+    </div>
+    <a class="bar-btn bar-toc" href="#indice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Contenido</span></a>
+    <button class="bar-btn" id="barNext" type="button"><span>Siguiente</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg></button>
+  </div>
+</main>
+
+<div id="measure" aria-hidden="true"></div>
+
+<!-- ============================================================
+     CONTENIDO FUENTE DEL MANUAL
+     El lector lo reparte automáticamente en páginas según el
+     tamaño de la pantalla. Cada bloque va en el orden de lectura.
+     ============================================================ -->
+<div id="bookSource" class="book-source">
+
+<!-- ===== PORTADA ===== -->
+<div class="src-page" data-kind="cover" id="inicio">
+  <div class="cover-spine" aria-hidden="true"></div>
+  <div class="cover-top">
+    <img class="cover-logo" src="../assets/img/logo_uniandes_admon_blanco.png" alt="Universidad de los Andes — Facultad de Administración">
+  </div>
+  <div class="cover-title">
+    <div class="hero-eyebrow"><span class="dot"></span>Facultad de Administración · Universidad de los Andes · Actualizado agosto 2026</div>
+    <h1>Manual del Requisito Internacional</h1>
+  </div>
+  <div class="cover-bottom">
+    <button type="button" class="btn btn-ghost cover-open" data-turn="next">Abrir el manual <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
     <div class="hero-pass">
       <div class="strip"><span>REQUISITO INTERNACIONAL</span><span>UNIANDES</span></div>
       <div class="photo" style="position:relative;height:180px;background:linear-gradient(180deg, rgba(11,46,89,0) 20%, rgba(11,46,89,.7)), url('../assets/img/estudiantes_pantallas.jpg') center 35%/cover">
@@ -511,20 +824,40 @@ footer a{color:#D6E2EE}
       </div>
     </div>
   </div>
-  <div class="perf"></div>
-</section>
+</div>
 
-<!-- ============================================================
-     QUÉ ES EL REQUISITO
-     ============================================================ -->
-<section id="que-es">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow">Antes de empezar</div>
-      <h2 class="h-section">¿Qué es el Requisito Internacional?</h2>
-      <p>Para obtener el título de Administrador debes cumplir con el Requisito Internacional de la Facultad de Administración, vigente desde 2016 para todos los estudiantes que iniciaron sus estudios a partir de ese año. Está diseñado para complementar tu formación académica y desarrollar una perspectiva global frente a los mercados y entornos dinámicos actuales.</p>
-    </div>
+<!-- ===== PRESENTACIÓN ===== -->
+<div class="src-page" data-kind="intro" id="presentacion">
+  <h2 class="intro-title">Presentación</h2>
+  <p class="intro-lead">Tu guía interactiva y siempre vigente para planear, aplicar y hacer seguimiento a cada camino posible para cumplir el requisito internacional del pregrado en Administración: 11 modalidades de experiencia internacional, más los cursos disciplinares en inglés.</p>
+  <div class="hero-actions">
+    <a href="#opciones" class="btn btn-brass">Explorar opciones
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <a href="#que-es" class="btn btn-outline">Qué es el requisito</a>
+  </div>
+  <div class="intro-howto">
+    <div class="perf"></div>
+    <p>Pasa las páginas con las flechas, el teclado (← →), las esquinas inferiores de cada hoja o deslizando en tu celular. Usa <strong>Contenido</strong> para saltar directo a cualquier capítulo.</p>
+  </div>
+</div>
 
+<!-- ===== CONTENIDO (ÍNDICE) ===== -->
+<div class="src-page" data-kind="toc" id="indice">
+  <h2 class="toc-title">Contenido</h2>
+  <nav class="toc-list" id="tocList" aria-label="Contenido del manual"></nav>
+</div>
+
+<!-- ===== CAPÍTULO 1 · QUÉ ES ===== -->
+<div class="src-flow" id="que-es" data-running="Qué es el requisito" data-toc="¿Qué es el Requisito Internacional?" data-toc-level="1">
+<header class="chapter-head">
+  <div class="ch-band">
+    <span class="ch-num" aria-hidden="true">1</span>
+    <div class="eyebrow">Antes de empezar</div>
+    <h2 class="h-section">¿Qué es el Requisito Internacional?</h2>
+  </div>
+  <p class="ch-lead">Para obtener el título de Administrador debes cumplir con el Requisito Internacional de la Facultad de Administración, vigente desde 2016 para todos los estudiantes que iniciaron sus estudios a partir de ese año. Está diseñado para complementar tu formación académica y desarrollar una perspectiva global frente a los mercados y entornos dinámicos actuales.</p>
+</header>
     <div class="how-grid">
       <div class="how-col">
         <div class="how-tag">Objetivo general</div>
@@ -550,22 +883,18 @@ footer a{color:#D6E2EE}
     <div class="callout warn">
       <strong>Importante — no lo confundas con otros requisitos:</strong> el Requisito Internacional es independiente de los requisitos institucionales de lectura en inglés y de dominio de segunda lengua de Uniandes. Cumplir uno de estos requisitos no exime del cumplimiento de los otros.
     </div>
+</div>
+
+<!-- ===== CAPÍTULO 2 · CÓMO FUNCIONA ===== -->
+<div class="src-flow" id="como-funciona" data-running="Cómo funciona" data-toc="Dos componentes independientes" data-toc-level="1">
+<header class="chapter-head">
+  <div class="ch-band">
+    <span class="ch-num" aria-hidden="true">2</span>
+    <div class="eyebrow">Estructura del requisito</div>
+    <h2 class="h-section">Dos componentes independientes</h2>
   </div>
-</section>
-
-<div class="perf"></div>
-
-<!-- ============================================================
-     CÓMO FUNCIONA
-     ============================================================ -->
-<section class="band" id="como-funciona">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow">Estructura del requisito</div>
-      <h2 class="h-section">Dos componentes independientes</h2>
-      <p>El requisito implica cumplir con los siguientes dos componentes, que no se sustituyen entre sí.</p>
-    </div>
-
+  <p class="ch-lead">El requisito implica cumplir con los siguientes dos componentes, que no se sustituyen entre sí.</p>
+</header>
     <div class="how-grid">
       <a class="how-col" href="#seccion-componente-1" style="text-decoration:none;color:inherit;display:block;cursor:pointer">
         <div class="how-tag">Componente 1</div>
@@ -584,22 +913,18 @@ footer a{color:#D6E2EE}
       <br><br>
       <strong>Colores de las tarjetas:</strong> una tarjeta se pone <strong style="color:#8a6a1a">amarilla</strong> apenas empiezas a diligenciarla, y se pone <strong style="color:var(--verified)">verde</strong> cuando presionas el check de su esquina para marcarla como completada. Cuando marques como completadas tanto la tarjeta de Cursos Disciplinares en Inglés como al menos una tarjeta de Experiencia Internacional, la barra de progreso de la parte superior se pondrá en verde: eso indica que cumpliste el Requisito Internacional.
     </div>
+</div>
+
+<!-- ===== CAPÍTULO 3 · COMPONENTE 1 ===== -->
+<div class="src-flow" id="opciones" data-running="Componente 1 · Cursos en inglés" data-toc="Componente 1 · Cursos Disciplinares en Inglés" data-toc-level="1">
+<header class="chapter-head" id="seccion-componente-1">
+  <div class="ch-band">
+    <span class="ch-num" aria-hidden="true">3</span>
+    <div class="eyebrow">Componente 1 · Obligatorio</div>
+    <h2 class="h-section">Cursos Disciplinares en Inglés</h2>
   </div>
-</section>
-
-<div class="perf"></div>
-
-<!-- ============================================================
-     DASHBOARD DE OPCIONES
-     ============================================================ -->
-<section id="opciones">
-  <div class="wrap">
-    <div class="section-head" id="seccion-componente-1">
-      <div class="eyebrow">Componente 1 · Obligatorio</div>
-      <h2 class="h-section">Cursos Disciplinares en Inglés</h2>
-      <p>Este componente es completamente independiente de la Experiencia Internacional — debes cumplir los dos. Da clic en la tarjeta para diligenciarlo.</p>
-    </div>
-
+  <p class="ch-lead">Este componente es completamente independiente de la Experiencia Internacional — debes cumplir los dos. Da clic en la tarjeta para diligenciarlo.</p>
+</header>
     <div class="dash-grid dash-grid-single">
 
       <article class="opt-card" data-card="cursos-ingles">
@@ -615,13 +940,75 @@ footer a{color:#D6E2EE}
       </article>
 
     </div>
+</div>
 
-    <div class="section-head" id="seccion-componente-2" style="margin-top:56px">
-      <div class="eyebrow">Componente 2 · Elige una experiencia</div>
-      <h2 class="h-section">Experiencia Internacional</h2>
-      <p>Cumple con mínimo una de estas once modalidades. Da clic en cualquier tarjeta para ver el detalle completo y diligenciarla; marca el check cuando la hayas cumplido.</p>
+<div class="src-flow ficha" id="panel-cursos-ingles" data-running="Componente 1 · Cursos en inglés" data-continue>
+  <div class="detail-head">
+    <div class="detail-title">
+      <div class="kicker">Componente 1 de 2 · Obligatorio</div>
+      <h3>Cursos Disciplinares en Inglés</h3>
+      <p>Todo estudiante debe cursar y aprobar 2 asignaturas en inglés de código ADMI, ofrecidas directamente por la Facultad de Administración de Uniandes. Los cursos deben ser vistos y aprobados en Uniandes para cumplir este componente.</p>
     </div>
+    <div class="detail-badges">
+      <span class="pill">2 cursos ADMI · en inglés · en Uniandes</span>
+    </div>
+  </div>
 
+  <div class="ficha-actions">
+    <button type="button" class="ficha-check" data-complete="cursos-ingles">
+      <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
+      <span class="fc-label">Marcar como completada</span>
+    </button>
+    <a class="fc-back" href="#seccion-componente-1">Volver a las tarjetas</a>
+  </div>
+
+  <div class="detail-grid modal-grid">
+    <div>
+      <div class="block rec">
+        <h4>Reglas importantes</h4>
+        <ul>
+          <li>No se validan cursos homologados de otras instituciones.</li>
+          <li>No aplican los cursos de inglés ofrecidos por el Departamento de Lenguas y Cultura.</li>
+          <li>No aplican cursos cursados durante un intercambio y posteriormente homologados como cursos de la Facultad — deben verse en Uniandes, sin excepción.</li>
+          <li>Los cursos de la Escuela Internacional de Verano (EIV) de la Facultad de Administración <strong>sí pueden usarse</strong> para este componente, siempre que sean cursos ADMI en inglés y no sean los mismos cursos utilizados para cumplir la Experiencia Internacional.</li>
+          <li>Puedes tomar más de dos cursos en inglés — solo necesitas dos para cumplir este componente.</li>
+        </ul>
+      </div>
+      <div class="source-note">Nota: si planeas cumplir este componente combinándolo con la EIV de la Facultad, el anexo formal indica un mínimo de 3 cursos en total para el componente, mientras que la presentación de la Oficina Internacional indica que tomando 4 cursos en total (2 para experiencia internacional + 2 adicionales) se cumplen ambos componentes a la vez. Te recomendamos confirmar el número exacto con la Oficina de Internacionalización antes de matricular.</div>
+      <div class="block">
+        <h4>Registra tus cursos</h4>
+        <div class="tracker-field">
+          <label for="curso1-codigo">Curso 1 — código y nombre (ADMI)</label>
+          <input type="text" id="curso1-codigo" data-track="curso1" placeholder="Ej. ADMI 3210 — Negocios Internacionales">
+        </div>
+        <div class="check-row">
+          <input type="checkbox" id="curso1-check" data-track="curso1-check">
+          <label for="curso1-check">Curso 1 aprobado</label>
+        </div>
+        <div class="tracker-field">
+          <label for="curso2-codigo">Curso 2 — código y nombre (ADMI)</label>
+          <input type="text" id="curso2-codigo" data-track="curso2" placeholder="Ej. ADMI 2400 — Finanzas Corporativas">
+        </div>
+        <div class="check-row">
+          <input type="checkbox" id="curso2-check" data-track="curso2-check">
+          <label for="curso2-check">Curso 2 aprobado</label>
+        </div>
+        <p class="save-hint"><span class="dot"></span>Tu avance se guarda automáticamente en este navegador</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CAPÍTULO 4 · COMPONENTE 2 ===== -->
+<div class="src-flow" id="experiencia" data-running="Componente 2 · Experiencia internacional" data-toc="Componente 2 · Experiencia Internacional" data-toc-level="1">
+<header class="chapter-head" id="seccion-componente-2">
+  <div class="ch-band">
+    <span class="ch-num" aria-hidden="true">4</span>
+    <div class="eyebrow">Componente 2 · Elige una experiencia</div>
+    <h2 class="h-section">Experiencia Internacional</h2>
+  </div>
+  <p class="ch-lead">Cumple con mínimo una de estas once modalidades. Da clic en cualquier tarjeta para ver el detalle completo y diligenciarla; marca el check cuando la hayas cumplido.</p>
+</header>
     <div class="dash-grid">
 
       <article class="opt-card" data-card="intercambio">
@@ -743,98 +1130,10 @@ footer a{color:#D6E2EE}
         <a class="btn btn-brass" href="../index.html#section-gantt">Volver al cronograma de actividades</a>
       </div>
     </div>
-
-  </div>
-</section>
-
-<div class="perf"></div>
-
-<!-- ============================================================
-     MODAL: COMPONENTE 1 — CURSOS DISCIPLINARES EN INGLÉS
-     ============================================================ -->
-<div class="modal-overlay" id="component1Modal" aria-hidden="true">
-  <div class="modal-shell" role="dialog" aria-modal="true" aria-labelledby="c1Heading" style="max-width:680px">
-    <div class="modal-topbar" style="justify-content:flex-end">
-      <button class="modal-close" id="c1Close" aria-label="Cerrar" type="button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg>
-      </button>
-    </div>
-    <div class="modal-scroll">
-
-<div class="modal-panel active" id="panel-cursos-ingles" role="tabpanel">
-  <div class="detail-head">
-    <div class="detail-title">
-      <div class="kicker">Componente 1 de 2 · Obligatorio</div>
-      <h3>Cursos Disciplinares en Inglés</h3>
-      <p>Todo estudiante debe cursar y aprobar 2 asignaturas en inglés de código ADMI, ofrecidas directamente por la Facultad de Administración de Uniandes. Los cursos deben ser vistos y aprobados en Uniandes para cumplir este componente.</p>
-    </div>
-    <div class="detail-badges">
-      <span class="pill">2 cursos ADMI · en inglés · en Uniandes</span>
-    </div>
-  </div>
-
-  <div class="detail-grid modal-grid">
-    <div>
-      <div class="block rec">
-        <h4>Reglas importantes</h4>
-        <ul>
-          <li>No se validan cursos homologados de otras instituciones.</li>
-          <li>No aplican los cursos de inglés ofrecidos por el Departamento de Lenguas y Cultura.</li>
-          <li>No aplican cursos cursados durante un intercambio y posteriormente homologados como cursos de la Facultad — deben verse en Uniandes, sin excepción.</li>
-          <li>Los cursos de la Escuela Internacional de Verano (EIV) de la Facultad de Administración <strong>sí pueden usarse</strong> para este componente, siempre que sean cursos ADMI en inglés y no sean los mismos cursos utilizados para cumplir la Experiencia Internacional.</li>
-          <li>Puedes tomar más de dos cursos en inglés — solo necesitas dos para cumplir este componente.</li>
-        </ul>
-      </div>
-      <div class="source-note">Nota: si planeas cumplir este componente combinándolo con la EIV de la Facultad, el anexo formal indica un mínimo de 3 cursos en total para el componente, mientras que la presentación de la Oficina Internacional indica que tomando 4 cursos en total (2 para experiencia internacional + 2 adicionales) se cumplen ambos componentes a la vez. Te recomendamos confirmar el número exacto con la Oficina de Internacionalización antes de matricular.</div>
-      <div class="block">
-        <h4>Registra tus cursos</h4>
-        <div class="tracker-field">
-          <label for="curso1-codigo">Curso 1 — código y nombre (ADMI)</label>
-          <input type="text" id="curso1-codigo" data-track="curso1" placeholder="Ej. ADMI 3210 — Negocios Internacionales">
-        </div>
-        <div class="check-row">
-          <input type="checkbox" id="curso1-check" data-track="curso1-check">
-          <label for="curso1-check">Curso 1 aprobado</label>
-        </div>
-        <div class="tracker-field">
-          <label for="curso2-codigo">Curso 2 — código y nombre (ADMI)</label>
-          <input type="text" id="curso2-codigo" data-track="curso2" placeholder="Ej. ADMI 2400 — Finanzas Corporativas">
-        </div>
-        <div class="check-row">
-          <input type="checkbox" id="curso2-check" data-track="curso2-check">
-          <label for="curso2-check">Curso 2 aprobado</label>
-        </div>
-        <p class="save-hint"><span class="dot"></span>Tu avance se guarda automáticamente en este navegador</p>
-      </div>
-    </div>
-  </div>
 </div>
 
-    </div>
-  </div>
-</div>
-
-<!-- ============================================================
-     MODAL: FICHAS DE LAS 11 OPCIONES DE EXPERIENCIA INTERNACIONAL
-     ============================================================ -->
-<div class="modal-overlay" id="optionModal" aria-hidden="true">
-  <div class="modal-shell" role="dialog" aria-modal="true" aria-labelledby="modalHeading">
-    <button class="modal-arrow prev" id="modalPrev" aria-label="Opción anterior" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg>
-    </button>
-    <button class="modal-arrow next" id="modalNext" aria-label="Opción siguiente" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg>
-    </button>
-    <div class="modal-topbar">
-      <span class="modal-count" id="modalCount">Opción 1 de 11</span>
-      <div class="modal-dots" id="modalDots"></div>
-      <button class="modal-close" id="modalClose" aria-label="Cerrar" type="button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg>
-      </button>
-    </div>
-    <div class="modal-scroll" id="modalScroll">
-
-<div class="modal-panel" id="panel-intercambio" data-index="0" role="tabpanel">
+<!-- Fichas de las 11 modalidades: cada una empieza en una hoja nueva -->
+<div class="src-flow ficha" id="panel-intercambio" data-running="Componente 2 · Experiencia internacional" data-toc="Intercambio Académico" data-toc-level="2">
   <div class="panel-photo-head" style="background-image:url('../assets/img/intercambios_balcon.jpg')">
     <div class="photo-head-inner">
       <div class="kicker">Opción 1 de 11 · Movilidad académica</div>
@@ -844,6 +1143,14 @@ footer a{color:#D6E2EE}
         <span class="pill">+50 convenios específicos · +100 generales</span>
       </div>
     </div>
+  </div>
+
+  <div class="ficha-actions">
+    <button type="button" class="ficha-check" data-complete="intercambio">
+      <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
+      <span class="fc-label">Marcar como completada</span>
+    </button>
+    <a class="fc-back" href="#seccion-componente-2">Volver a las tarjetas</a>
   </div>
 
   <div class="detail-grid modal-grid">
@@ -938,8 +1245,7 @@ footer a{color:#D6E2EE}
     </div>
   </div>
 </div>
-
-<div class="modal-panel" id="panel-doble-titulacion" data-index="1" role="tabpanel">
+<div class="src-flow ficha" id="panel-doble-titulacion" data-running="Componente 2 · Experiencia internacional" data-toc="Doble Titulación" data-toc-level="2">
   <div class="detail-head">
     <div class="detail-title">
       <div class="kicker">Opción 2 de 11 · Doble título</div>
@@ -949,6 +1255,14 @@ footer a{color:#D6E2EE}
     <div class="detail-badges">
       <span class="pill">5 convenios activos</span>
     </div>
+  </div>
+
+  <div class="ficha-actions">
+    <button type="button" class="ficha-check" data-complete="doble-titulacion">
+      <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
+      <span class="fc-label">Marcar como completada</span>
+    </button>
+    <a class="fc-back" href="#seccion-componente-2">Volver a las tarjetas</a>
   </div>
 
   <div class="detail-grid modal-grid">
@@ -1059,8 +1373,7 @@ footer a{color:#D6E2EE}
     </div>
   </div>
 </div>
-
-<div class="modal-panel" id="panel-eiv-uniandes" data-index="2" role="tabpanel">
+<div class="src-flow ficha" id="panel-eiv-uniandes" data-running="Componente 2 · Experiencia internacional" data-toc="Escuela Internacional de Verano (Uniandes)" data-toc-level="2">
   <div class="panel-photo-head" style="background-image:url('../assets/img/escuela_verano_china.jpg')">
     <div class="photo-head-inner">
       <div class="kicker">Opción 3 de 11 · Periodo intersemestral</div>
@@ -1070,6 +1383,14 @@ footer a{color:#D6E2EE}
         <span class="pill">2 cursos · vacaciones junio-julio</span>
       </div>
     </div>
+  </div>
+
+  <div class="ficha-actions">
+    <button type="button" class="ficha-check" data-complete="eiv-uniandes">
+      <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
+      <span class="fc-label">Marcar como completada</span>
+    </button>
+    <a class="fc-back" href="#seccion-componente-2">Volver a las tarjetas</a>
   </div>
 
   <div class="detail-grid modal-grid">
@@ -1106,8 +1427,7 @@ footer a{color:#D6E2EE}
     </aside>
   </div>
 </div>
-
-<div class="modal-panel" id="panel-socios-internacionales" data-index="3" role="tabpanel">
+<div class="src-flow ficha" id="panel-socios-internacionales" data-running="Componente 2 · Experiencia internacional" data-toc="Escuelas de Verano o Invierno Externas" data-toc-level="2">
   <div class="detail-head">
     <div class="detail-title">
       <div class="kicker">Opción 4 de 11 · Homologación externa</div>
@@ -1117,6 +1437,14 @@ footer a{color:#D6E2EE}
     <div class="detail-badges">
       <span class="pill">Variable · periodo vacacional</span>
     </div>
+  </div>
+
+  <div class="ficha-actions">
+    <button type="button" class="ficha-check" data-complete="socios-internacionales">
+      <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
+      <span class="fc-label">Marcar como completada</span>
+    </button>
+    <a class="fc-back" href="#seccion-componente-2">Volver a las tarjetas</a>
   </div>
 
   <div class="detail-grid modal-grid">
@@ -1172,8 +1500,7 @@ footer a{color:#D6E2EE}
     </aside>
   </div>
 </div>
-
-<div class="modal-panel" id="panel-practica-internacional" data-index="4" role="tabpanel">
+<div class="src-flow ficha" id="panel-practica-internacional" data-running="Componente 2 · Experiencia internacional" data-toc="Práctica Internacional" data-toc-level="2">
   <div class="detail-head">
     <div class="detail-title">
       <div class="kicker">Opción 5 de 11 · Práctica profesional</div>
@@ -1183,6 +1510,14 @@ footer a{color:#D6E2EE}
     <div class="detail-badges">
       <span class="pill">1 semestre o periodo de verano (jun–jul)</span>
     </div>
+  </div>
+
+  <div class="ficha-actions">
+    <button type="button" class="ficha-check" data-complete="practica-internacional">
+      <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
+      <span class="fc-label">Marcar como completada</span>
+    </button>
+    <a class="fc-back" href="#seccion-componente-2">Volver a las tarjetas</a>
   </div>
 
   <div class="detail-grid modal-grid">
@@ -1224,8 +1559,7 @@ footer a{color:#D6E2EE}
     </aside>
   </div>
 </div>
-
-<div class="modal-panel" id="panel-opcion-lengua-cultura" data-index="5" role="tabpanel">
+<div class="src-flow ficha" id="panel-opcion-lengua-cultura" data-running="Componente 2 · Experiencia internacional" data-toc="Opción Académica en Lengua y Cultura" data-toc-level="2">
   <div class="panel-photo-head" style="background-image:url('../assets/img/lengua_cultura_clase.jpg')">
     <div class="photo-head-inner">
       <div class="kicker">Opción 6 de 11 · Programa académico institucional</div>
@@ -1235,6 +1569,14 @@ footer a{color:#D6E2EE}
         <span class="pill">Programa completo</span>
       </div>
     </div>
+  </div>
+
+  <div class="ficha-actions">
+    <button type="button" class="ficha-check" data-complete="opcion-lengua-cultura">
+      <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
+      <span class="fc-label">Marcar como completada</span>
+    </button>
+    <a class="fc-back" href="#seccion-componente-2">Volver a las tarjetas</a>
   </div>
 
   <div class="detail-grid modal-grid">
@@ -1278,8 +1620,7 @@ footer a{color:#D6E2EE}
     </div>
   </div>
 </div>
-
-<div class="modal-panel" id="panel-cinco-cursos-idioma" data-index="6" role="tabpanel">
+<div class="src-flow ficha" id="panel-cinco-cursos-idioma" data-running="Componente 2 · Experiencia internacional" data-toc="5 Cursos de un Idioma Diferente al Inglés" data-toc-level="2">
   <div class="detail-head">
     <div class="detail-title">
       <div class="kicker">Opción 7 de 11 · Departamento de Lenguas y Cultura</div>
@@ -1289,6 +1630,14 @@ footer a{color:#D6E2EE}
     <div class="detail-badges">
       <span class="pill">2–3 semestres · 5 cursos</span>
     </div>
+  </div>
+
+  <div class="ficha-actions">
+    <button type="button" class="ficha-check" data-complete="cinco-cursos-idioma">
+      <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
+      <span class="fc-label">Marcar como completada</span>
+    </button>
+    <a class="fc-back" href="#seccion-componente-2">Volver a las tarjetas</a>
   </div>
 
   <div class="detail-grid modal-grid">
@@ -1333,8 +1682,7 @@ footer a{color:#D6E2EE}
     </div>
   </div>
 </div>
-
-<div class="modal-panel" id="panel-competencias-internacionales" data-index="7" role="tabpanel">
+<div class="src-flow ficha" id="panel-competencias-internacionales" data-running="Componente 2 · Experiencia internacional" data-toc="Competencias Internacionales" data-toc-level="2">
   <div class="detail-head">
     <div class="detail-title">
       <div class="kicker">Opción 8 de 11 · Representación institucional</div>
@@ -1344,6 +1692,14 @@ footer a{color:#D6E2EE}
     <div class="detail-badges">
       <span class="pill">Proceso de selección</span>
     </div>
+  </div>
+
+  <div class="ficha-actions">
+    <button type="button" class="ficha-check" data-complete="competencias-internacionales">
+      <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
+      <span class="fc-label">Marcar como completada</span>
+    </button>
+    <a class="fc-back" href="#seccion-componente-2">Volver a las tarjetas</a>
   </div>
 
   <div class="detail-grid modal-grid">
@@ -1376,8 +1732,7 @@ footer a{color:#D6E2EE}
     </div>
   </div>
 </div>
-
-<div class="modal-panel" id="panel-pasantias-investigacion" data-index="8" role="tabpanel">
+<div class="src-flow ficha" id="panel-pasantias-investigacion" data-running="Componente 2 · Experiencia internacional" data-toc="Pasantías de Investigación" data-toc-level="2">
   <div class="detail-head">
     <div class="detail-title">
       <div class="kicker">Opción 9 de 11 · Inmersión en investigación</div>
@@ -1387,6 +1742,14 @@ footer a{color:#D6E2EE}
     <div class="detail-badges">
       <span class="pill">Periodo de verano</span>
     </div>
+  </div>
+
+  <div class="ficha-actions">
+    <button type="button" class="ficha-check" data-complete="pasantias-investigacion">
+      <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
+      <span class="fc-label">Marcar como completada</span>
+    </button>
+    <a class="fc-back" href="#seccion-componente-2">Volver a las tarjetas</a>
   </div>
 
   <div class="detail-grid modal-grid">
@@ -1413,8 +1776,7 @@ footer a{color:#D6E2EE}
     </div>
   </div>
 </div>
-
-<div class="modal-panel" id="panel-programas-verano" data-index="9" role="tabpanel">
+<div class="src-flow ficha" id="panel-programas-verano" data-running="Componente 2 · Experiencia internacional" data-toc="Programas Internacionales de Verano" data-toc-level="2">
   <div class="detail-head">
     <div class="detail-title">
       <div class="kicker">Opción 10 de 11 · Programas cortos</div>
@@ -1424,6 +1786,14 @@ footer a{color:#D6E2EE}
     <div class="detail-badges">
       <span class="pill">1–2 semanas · vacaciones</span>
     </div>
+  </div>
+
+  <div class="ficha-actions">
+    <button type="button" class="ficha-check" data-complete="programas-verano">
+      <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
+      <span class="fc-label">Marcar como completada</span>
+    </button>
+    <a class="fc-back" href="#seccion-componente-2">Volver a las tarjetas</a>
   </div>
 
   <div class="detail-grid modal-grid">
@@ -1473,8 +1843,7 @@ footer a{color:#D6E2EE}
     </div>
   </div>
 </div>
-
-<div class="modal-panel" id="panel-freemover" data-index="10" role="tabpanel">
+<div class="src-flow ficha" id="panel-freemover" data-running="Componente 2 · Experiencia internacional" data-toc="Freemover" data-toc-level="2">
   <div class="detail-head">
     <div class="detail-title">
       <div class="kicker">Opción 11 de 11 · Movilidad autogestionada</div>
@@ -1484,6 +1853,14 @@ footer a{color:#D6E2EE}
     <div class="detail-badges">
       <span class="pill">1 semestre · proceso autogestionado</span>
     </div>
+  </div>
+
+  <div class="ficha-actions">
+    <button type="button" class="ficha-check" data-complete="freemover">
+      <span class="fc-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></span>
+      <span class="fc-label">Marcar como completada</span>
+    </button>
+    <a class="fc-back" href="#seccion-componente-2">Volver a las tarjetas</a>
   </div>
 
   <div class="detail-grid modal-grid">
@@ -1537,45 +1914,16 @@ footer a{color:#D6E2EE}
   </div>
 </div>
 
-    </div>
+<!-- ===== CAPÍTULO 5 · PREGUNTAS FRECUENTES ===== -->
+<div class="src-flow" id="preguntas" data-running="Preguntas frecuentes" data-toc="Preguntas frecuentes" data-toc-level="1">
+<header class="chapter-head">
+  <div class="ch-band">
+    <span class="ch-num" aria-hidden="true">5</span>
+    <div class="eyebrow">Dudas comunes</div>
+    <h2 class="h-section">Preguntas frecuentes</h2>
   </div>
-</div>
-
-<!-- ============================================================
-     MODAL: FELICITACIÓN AL COMPLETAR AMBOS COMPONENTES
-     ============================================================ -->
-<div class="modal-overlay" id="congratsModal" aria-hidden="true">
-  <div class="modal-shell" role="dialog" aria-modal="true" aria-labelledby="congratsHeading" style="max-width:520px">
-    <div class="modal-topbar" style="justify-content:flex-end">
-      <button class="modal-close" id="congratsClose" aria-label="Cerrar" type="button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg>
-      </button>
-    </div>
-    <div class="modal-scroll" style="text-align:center;padding-top:6px">
-      <div style="width:56px;height:56px;border-radius:50%;background:var(--verified-soft);color:var(--verified);display:flex;align-items:center;justify-content:center;margin:0 auto 18px">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg>
-      </div>
-      <h3 id="congratsHeading" style="margin-bottom:12px">¡Muy bien!</h3>
-      <p style="max-width:40ch;margin:0 auto 20px">Cumpliendo estos dos componentes, cumplirías con el Requisito Internacional. Debes tomar una consejería con Sophie Fernández Leal o Juan Pablo Izquierdo Camacho para continuar con tu proceso de validación del Requisito Internacional.</p>
-      <div class="btns" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
-        <a class="btn btn-outline btn-small" href="https://consejeriascoordinaciones.bookeau.com/#/login" target="_blank" rel="noopener">Agendar con Sophie Fernández Leal</a>
-        <a class="btn btn-outline btn-small" href="https://outlook.office365.com/book/ConsejerasInternacionales@uniandes.onmicrosoft.com/?ismsaljsauthenabled=true" target="_blank" rel="noopener">Agendar con Juan Pablo Izquierdo</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ============================================================
-     FAQ
-     ============================================================ -->
-<section id="preguntas">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow">Dudas comunes</div>
-      <h2 class="h-section">Preguntas frecuentes</h2>
-      <p>Actualizadas a partir de las preguntas frecuentes oficiales de la Oficina Internacional, agosto de 2026.</p>
-    </div>
-
+  <p class="ch-lead">Actualizadas a partir de las preguntas frecuentes oficiales de la Oficina Internacional, agosto de 2026.</p>
+</header>
     <div class="accordion" id="accordion">
       <div class="accordion-item" data-open="false">
         <button class="acc-trigger" aria-expanded="false">¿Qué cursos cuentan para el componente de cursos disciplinares en inglés?<span class="plus">+</span></button>
@@ -1630,25 +1978,49 @@ footer a{color:#D6E2EE}
         <a class="btn btn-outline btn-small" href="https://outlook.office365.com/book/ConsejerasInternacionales@uniandes.onmicrosoft.com/?ismsaljsauthenabled=true" target="_blank" rel="noopener">Juan Pablo Izquierdo — Soluciones a Estudiantes CSA</a>
       </div>
     </div>
-  </div>
-</section>
+</div>
 
-</main>
-
-<footer>
-  <div class="wrap">
-    <div>
-      <img src="../assets/img/logo_uniandes_admon_blanco.png" alt="Universidad de los Andes — Facultad de Administración" style="height:32px;margin-bottom:12px">
-      <p>Manual del Requisito Internacional. Facultad de Administración, Universidad de los Andes. Contenido actualizado a partir del anexo formal y la presentación oficial de la Oficina Internacional (agosto 2026).</p>
+<!-- ===== CONTRAPORTADA ===== -->
+<div class="src-page" data-kind="back" id="contraportada">
+  <div class="back-inner">
+    <img src="../assets/img/logo_uniandes_admon_blanco.png" alt="Universidad de los Andes — Facultad de Administración" class="back-logo">
+    <p>Manual del Requisito Internacional. Facultad de Administración, Universidad de los Andes. Contenido actualizado a partir del anexo formal y la presentación oficial de la Oficina Internacional (agosto 2026).</p>
+    <div class="back-nav">
+      <h5>Navegación</h5>
+      <p><a href="#indice">Contenido</a><br><a href="#que-es">Qué es</a><br><a href="#como-funciona">Cómo funciona</a><br><a href="#opciones">Opciones</a><br><a href="#preguntas">Preguntas frecuentes</a></p>
     </div>
-    <div class="cols">
-      <div>
-        <h5>Navegación</h5>
-        <p><a href="#que-es">Qué es</a><br><a href="#como-funciona">Cómo funciona</a><br><a href="#opciones">Opciones</a><br><a href="#preguntas">Preguntas frecuentes</a></p>
+  </div>
+  <div class="back-bottom">
+    <div class="perf perf-light"></div>
+    <button type="button" class="btn btn-ghost btn-small" data-goto="inicio">Volver a la portada</button>
+  </div>
+</div>
+
+</div><!-- /bookSource -->
+
+<!-- ============================================================
+     MODAL: FELICITACIÓN AL COMPLETAR AMBOS COMPONENTES
+     ============================================================ -->
+<div class="modal-overlay" id="congratsModal" aria-hidden="true">
+  <div class="modal-shell" role="dialog" aria-modal="true" aria-labelledby="congratsHeading" style="max-width:520px">
+    <div class="modal-topbar" style="justify-content:flex-end">
+      <button class="modal-close" id="congratsClose" aria-label="Cerrar" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="modal-scroll" style="text-align:center;padding-top:6px">
+      <div style="width:56px;height:56px;border-radius:50%;background:var(--verified-soft);color:var(--verified);display:flex;align-items:center;justify-content:center;margin:0 auto 18px">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg>
+      </div>
+      <h3 id="congratsHeading" style="margin-bottom:12px">¡Muy bien!</h3>
+      <p style="max-width:40ch;margin:0 auto 20px">Cumpliendo estos dos componentes, cumplirías con el Requisito Internacional. Debes tomar una consejería con Sophie Fernández Leal o Juan Pablo Izquierdo Camacho para continuar con tu proceso de validación del Requisito Internacional.</p>
+      <div class="btns" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+        <a class="btn btn-outline btn-small" href="https://consejeriascoordinaciones.bookeau.com/#/login" target="_blank" rel="noopener">Agendar con Sophie Fernández Leal</a>
+        <a class="btn btn-outline btn-small" href="https://outlook.office365.com/book/ConsejerasInternacionales@uniandes.onmicrosoft.com/?ismsaljsauthenabled=true" target="_blank" rel="noopener">Agendar con Juan Pablo Izquierdo</a>
       </div>
     </div>
   </div>
-</footer>
+</div>
 
 <script>
 (function(){
@@ -1693,13 +2065,21 @@ footer a{color:#D6E2EE}
   /* ---------- card state: amarillo = en progreso, verde = completada ---------- */
   var cardEls = Array.prototype.slice.call(document.querySelectorAll('.opt-card[data-card]'));
 
+  /* las fichas se reparten en varias páginas del libro, así que los campos de cada
+     ficha se leen una sola vez (antes de paginar) y se guardan en caché */
+  var trackKeyCache = {};
   function panelTrackKeys(slug){
+    if(trackKeyCache[slug]) return trackKeyCache[slug];
     var panel = document.getElementById('panel-' + slug);
     if(!panel) return [];
-    return Array.prototype.slice.call(panel.querySelectorAll('[data-track]')).map(function(el){
+    trackKeyCache[slug] = Array.prototype.slice.call(panel.querySelectorAll('[data-track]')).map(function(el){
       return el.getAttribute('data-track');
     });
+    return trackKeyCache[slug];
   }
+  document.querySelectorAll('.opt-card[data-card]').forEach(function(c){ panelTrackKeys(c.getAttribute('data-card')); });
+  /* referencias fijas: las hojas fuera de vista no están en el documento */
+  var fichaChecks = Array.prototype.slice.call(document.querySelectorAll('.ficha-check'));
 
   function isComplete(slug){ return getItem(PREFIX + 'complete_' + slug) === '1'; }
 
@@ -1734,10 +2114,17 @@ footer a{color:#D6E2EE}
       if(isComplete(slug)){ card.classList.add('state-done'); }
       else if(hasProgress(slug)){ card.classList.add('state-progress'); }
     });
+    /* botón de completada dentro de cada ficha del libro */
+    fichaChecks.forEach(function(b){
+      var done = isComplete(b.getAttribute('data-complete'));
+      b.classList.toggle('is-done', done);
+      b.setAttribute('aria-pressed', done ? 'true' : 'false');
+      b.querySelector('.fc-label').textContent = done ? 'Completada' : 'Marcar como completada';
+    });
     updateProgress();
   }
 
-  document.querySelectorAll('.opt-check').forEach(function(btn){
+  document.querySelectorAll('.opt-check, .ficha-check').forEach(function(btn){
     btn.addEventListener('click', function(e){
       e.stopPropagation();
       var slug = btn.getAttribute('data-complete');
@@ -1763,12 +2150,13 @@ footer a{color:#D6E2EE}
   });
 
   /* ---------- accordion ---------- */
-  document.querySelectorAll('.accordion-item').forEach(function(item){
+  var accItems = Array.prototype.slice.call(document.querySelectorAll('.accordion-item'));
+  accItems.forEach(function(item){
     var btn = item.querySelector('.acc-trigger');
     var panel = item.querySelector('.acc-panel');
     btn.addEventListener('click', function(){
       var isOpen = item.getAttribute('data-open') === 'true';
-      document.querySelectorAll('.accordion-item').forEach(function(i){
+      accItems.forEach(function(i){
         i.setAttribute('data-open','false');
         i.querySelector('.acc-trigger').setAttribute('aria-expanded','false');
         i.querySelector('.acc-panel').style.maxHeight = null;
@@ -1779,98 +2167,6 @@ footer a{color:#D6E2EE}
         panel.style.maxHeight = panel.scrollHeight + 40 + 'px';
       }
     });
-  });
-
-  /* ---------- option modal (ficha emergente) — solo las 11 de Experiencia Internacional ---------- */
-  var panelsList = Array.prototype.slice.call(document.querySelectorAll('#modalScroll .modal-panel'));
-  var overlay = document.getElementById('optionModal');
-  var scrollEl = document.getElementById('modalScroll');
-  var countEl = document.getElementById('modalCount');
-  var dotsEl = document.getElementById('modalDots');
-  var btnPrev = document.getElementById('modalPrev');
-  var btnNext = document.getElementById('modalNext');
-  var btnClose = document.getElementById('modalClose');
-  var currentIndex = 0;
-  var lastFocused = null;
-
-  panelsList.forEach(function(p, i){
-    if(i === 0) p.classList.add('active');
-    var d = document.createElement('button');
-    d.type = 'button';
-    d.setAttribute('aria-label', 'Ir a la opción ' + (i+1));
-    d.addEventListener('click', function(){ showPanel(i); });
-    dotsEl.appendChild(d);
-  });
-  var dotEls = Array.prototype.slice.call(dotsEl.children);
-
-  function showPanel(i){
-    if(i < 0) i = panelsList.length - 1;
-    if(i >= panelsList.length) i = 0;
-    currentIndex = i;
-    panelsList.forEach(function(p, idx){ p.classList.toggle('active', idx === i); });
-    dotEls.forEach(function(d, idx){ d.setAttribute('aria-current', idx === i ? 'true' : 'false'); });
-    countEl.textContent = 'Opción ' + (i+1) + ' de ' + panelsList.length;
-    scrollEl.scrollTop = 0;
-  }
-
-  function openModal(slug){
-    var i = panelsList.findIndex(function(p){ return p.id === 'panel-' + slug; });
-    if(i === -1) i = 0;
-    lastFocused = document.activeElement;
-    showPanel(i);
-    overlay.classList.add('open');
-    overlay.setAttribute('aria-hidden','false');
-    document.body.classList.add('modal-open');
-    btnClose.focus();
-  }
-
-  function closeModal(){
-    overlay.classList.remove('open');
-    overlay.setAttribute('aria-hidden','true');
-    document.body.classList.remove('modal-open');
-    if(lastFocused && lastFocused.focus){ lastFocused.focus(); }
-  }
-
-  btnPrev.addEventListener('click', function(){ showPanel(currentIndex - 1); });
-  btnNext.addEventListener('click', function(){ showPanel(currentIndex + 1); });
-  btnClose.addEventListener('click', closeModal);
-  overlay.addEventListener('click', function(e){ if(e.target === overlay) closeModal(); });
-
-  document.addEventListener('keydown', function(e){
-    if(!overlay.classList.contains('open')) return;
-    if(e.key === 'Escape') closeModal();
-    else if(e.key === 'ArrowLeft') showPanel(currentIndex - 1);
-    else if(e.key === 'ArrowRight') showPanel(currentIndex + 1);
-    else if(e.key === 'Tab'){
-      var focusable = overlay.querySelectorAll('button, a[href], select, input, textarea, [tabindex]:not([tabindex="-1"])');
-      if(!focusable.length) return;
-      var first = focusable[0], last = focusable[focusable.length-1];
-      if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
-      else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
-    }
-  });
-
-  /* ---------- modal de Componente 1 (sin flechas, un solo panel) ---------- */
-  var comp1Overlay = document.getElementById('component1Modal');
-  var comp1Close = document.getElementById('c1Close');
-
-  function openComponent1(){
-    lastFocused = document.activeElement;
-    comp1Overlay.classList.add('open');
-    comp1Overlay.setAttribute('aria-hidden','false');
-    document.body.classList.add('modal-open');
-    comp1Close.focus();
-  }
-  function closeComponent1(){
-    comp1Overlay.classList.remove('open');
-    comp1Overlay.setAttribute('aria-hidden','true');
-    document.body.classList.remove('modal-open');
-    if(lastFocused && lastFocused.focus){ lastFocused.focus(); }
-  }
-  comp1Close.addEventListener('click', closeComponent1);
-  comp1Overlay.addEventListener('click', function(e){ if(e.target === comp1Overlay) closeComponent1(); });
-  document.addEventListener('keydown', function(e){
-    if(comp1Overlay.classList.contains('open') && e.key === 'Escape') closeComponent1();
   });
 
   /* ---------- modal de felicitación al completar ambos componentes ---------- */
@@ -1899,8 +2195,8 @@ footer a{color:#D6E2EE}
     card.setAttribute('tabindex','0');
     card.setAttribute('role','button');
     function trigger(){
-      if(slug === 'cursos-ingles'){ openComponent1(); }
-      else { openModal(slug); }
+      /* en el libro, cada tarjeta lleva a la página donde empieza su ficha */
+      if(window.ManualBook){ window.ManualBook.goToId('panel-' + slug); }
     }
     card.addEventListener('click', function(e){
       if(e.target.closest('.opt-check')) return;
@@ -1913,6 +2209,546 @@ footer a{color:#D6E2EE}
   });
 
 })();
+</script>
+<script>
+/* ============================================================
+   LECTOR TIPO LIBRO
+   - Reparte el contenido en hojas del tamaño de la pantalla
+   - Doble página (computador) o una página (celular)
+   - Paso de hoja animado, índice con números de página
+   ============================================================ */
+(function(){
+  "use strict";
+
+  var stage   = document.getElementById('stage');
+  var book    = document.getElementById('book');
+  var slotL   = document.getElementById('slotL');
+  var slotR   = document.getElementById('slotR');
+  var measure = document.getElementById('measure');
+  var source  = document.getElementById('bookSource');
+  var range   = document.getElementById('pageRange');
+  var label   = document.getElementById('pageLabel');
+  var btnPrev = document.getElementById('turnPrev');
+  var btnNext = document.getElementById('turnNext');
+  var barPrev = document.getElementById('barPrev');
+  var barNext = document.getElementById('barNext');
+  var cornerL = document.getElementById('cornerL');
+  var cornerR = document.getElementById('cornerR');
+  var root    = document.documentElement;
+
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* bloques que nunca se parten entre dos hojas */
+  var NOSPLIT = '.panel-photo-head,.detail-head,.chapter-head,.callout,.how-note,.tracker-field,.select-grid,' +
+                '.check-row,.opt-card,.accordion-item,.source-note,.cta-strip,.logo-row,.region,' +
+                '.ficha-actions,.detail-badges,.opt-meta,.btns,.hero-pass,.save-hint,.how-col';
+  /* bloques que abren hoja a sangre (sin cabezote) */
+  var BLEED = '.chapter-head,.panel-photo-head';
+
+  /* ---------- fuentes: páginas fijas y flujos de contenido ---------- */
+  var items = Array.prototype.slice.call(source.children).filter(function(n){
+    return n.classList.contains('src-page') || n.classList.contains('src-flow');
+  });
+  var backItem = items.filter(function(n){ return n.getAttribute('data-kind') === 'back'; })[0];
+  items = items.filter(function(n){ return n !== backItem; });
+
+  function flatten(flow){
+    var out = [];
+    Array.prototype.slice.call(flow.children).forEach(function(c){
+      if(c.classList.contains('detail-grid')){
+        Array.prototype.slice.call(c.children).forEach(function(c2){
+          if(c2.tagName === 'DIV' && !c2.className){ out.push.apply(out, Array.prototype.slice.call(c2.children)); }
+          else { out.push(c2); }
+        });
+      } else { out.push(c); }
+    });
+    return out;
+  }
+  var flowBlocks = new Map();
+  items.forEach(function(it){ if(it.classList.contains('src-flow')) flowBlocks.set(it, flatten(it)); });
+
+  /* ---------- índice (se arma una vez; los números se llenan al paginar) ---------- */
+  var tocList = document.getElementById('tocList');
+  var chapterN = 0;
+  items.forEach(function(it){
+    if(!it.hasAttribute('data-toc')) return;
+    var lvl = it.getAttribute('data-toc-level') || '1';
+    var a = document.createElement('a');
+    a.className = 'toc-row l' + lvl;
+    a.href = '#' + it.id;
+    var n = (lvl === '1') ? String(++chapterN) : '';
+    a.innerHTML = (lvl === '1' ? '<span class="toc-n">' + n + '</span>' : '') +
+      '<span class="toc-t"></span><span class="toc-lead"></span><span class="toc-p" data-toc-for="' + it.id + '"></span>';
+    a.querySelector('.toc-t').textContent = it.getAttribute('data-toc');
+    tocList.appendChild(a);
+  });
+
+  /* ---------- estado ---------- */
+  var pages = [];          // elementos .page en orden
+  var flowStart = {};      // id de flujo/página fija -> índice de página
+  var splits = [];         // registro de cortes para poder deshacerlos
+  var mode = 'spread';     // 'spread' | 'single'
+  var pos = 0;             // doble página: índice de pliego; una página: índice de página
+  var busy = false;
+  var sizeKey = '';
+
+  /* ---------- utilidades de medida ---------- */
+  var bodyPadB = 12;
+  function overflows(body){
+    var last = body.lastElementChild;
+    if(!last) return false;
+    var br = body.getBoundingClientRect();
+    return last.getBoundingClientRect().bottom > br.bottom - bodyPadB + 0.5;
+  }
+  function space(body){
+    var last = body.lastElementChild;
+    var br = body.getBoundingClientRect();
+    return (br.bottom - bodyPadB) - (last ? last.getBoundingClientRect().bottom : br.top);
+  }
+  function hasText(el){
+    for(var i = 0; i < el.childNodes.length; i++){
+      var n = el.childNodes[i];
+      if(n.nodeType === 3 && /\S/.test(n.nodeValue)) return true;
+    }
+    return false;
+  }
+  function stripWS(el){
+    Array.prototype.slice.call(el.childNodes).forEach(function(n){
+      if(n.nodeType === 3 && !/\S/.test(n.nodeValue)) el.removeChild(n);
+      else if(n.nodeType === 8) el.removeChild(n);
+    });
+  }
+  function isSplittable(el){
+    return el && el.nodeType === 1 && /^(DIV|UL|OL|ASIDE|SECTION|NAV)$/.test(el.tagName) &&
+      !el.matches(NOSPLIT) && !hasText(el) && el.children.length > 0;
+  }
+  function isHeadingLike(el){
+    return el && (/^H[1-6]$/.test(el.tagName) || el.matches('.kicker,.eyebrow,.how-tag'));
+  }
+
+  /* corta `el` para que quepa en `body`; devuelve la continuación (o null si nada cabe) */
+  function splitToFit(el, body){
+    stripWS(el);
+    var tail = el.cloneNode(false);
+    tail.removeAttribute('id');
+    tail.classList.add('is-cont');
+    tail.__origin = el;
+    var h = el.firstElementChild;
+    if(h && /^H[1-6]$/.test(h.tagName)) tail.setAttribute('data-cont-title', h.textContent.trim());
+    var rec = { el: el, tail: tail };
+    splits.push(rec);
+
+    while(overflows(body) && el.children.length > 1){
+      tail.insertBefore(el.lastChild, tail.firstChild);
+    }
+    if(overflows(body)){
+      var only = el.firstElementChild;
+      var sub = isSplittable(only) ? splitToFit(only, body) : null;
+      if(!sub){ restore(rec); return null; }
+      tail.insertBefore(sub, tail.firstChild);
+    } else {
+      var first = tail.firstElementChild;
+      if(first && isSplittable(first) && space(body) > 64){
+        el.appendChild(first);
+        var sub2 = splitToFit(first, body);
+        if(sub2) tail.insertBefore(sub2, tail.firstChild);
+        else tail.insertBefore(first, tail.firstChild);
+      }
+    }
+    /* no dejar un solo elemento suelto al comienzo de la hoja siguiente (viuda) */
+    if(tail.children.length === 1 && el.children.length > 2 && !isSplittable(tail.firstElementChild)){
+      tail.insertBefore(el.lastElementChild, tail.firstChild);
+    }
+    /* no dejar un título solo al final de la hoja */
+    while(el.lastElementChild && isHeadingLike(el.lastElementChild)){
+      tail.insertBefore(el.lastElementChild, tail.firstChild);
+    }
+    if(!el.firstElementChild || !tail.firstChild){ restore(rec); return null; }
+    return tail;
+  }
+  function restore(rec){
+    while(rec.tail.firstChild) rec.el.appendChild(rec.tail.firstChild);
+    var i = splits.indexOf(rec);
+    if(i > -1) splits.splice(i, 1);
+  }
+  function undoSplits(){
+    for(var i = splits.length - 1; i >= 0; i--){
+      var r = splits[i];
+      while(r.tail.firstChild) r.el.appendChild(r.tail.firstChild);
+      if(r.tail.parentNode) r.tail.parentNode.removeChild(r.tail);
+    }
+    splits = [];
+  }
+
+  /* ---------- construcción de hojas ---------- */
+  function makePage(running){
+    var p = document.createElement('div');
+    p.className = 'page';
+    p.innerHTML =
+      '<div class="page-head"><span class="rh-book">Manual del Requisito Internacional</span><span class="rh-sec"></span></div>' +
+      '<div class="page-body"></div>' +
+      '<div class="page-foot"><div class="perf"></div><div class="foot-row"><span>Facultad de Administración · Universidad de los Andes</span><span class="folio"></span></div></div>';
+    p.querySelector('.rh-sec').textContent = running || '';
+    p.setAttribute('data-running', running || '');
+    return p;
+  }
+  function addPage(p){ measure.appendChild(p); pages.push(p); return p; }
+
+  function placeBlock(block, state){
+    var body = state.cur.querySelector('.page-body');
+    if(!body.firstElementChild && block.matches(BLEED)) state.cur.classList.add('page--bleed');
+    body.appendChild(block);
+    if(!overflows(body)) return;
+    if(isSplittable(block)){
+      var tail = splitToFit(block, body);
+      if(tail){
+        state.cur = addPage(makePage(state.cur.getAttribute('data-running')));
+        placeBlock(tail, state);
+        return;
+      }
+    }
+    if(body.firstElementChild === block) return; // no cabe ni en hoja vacía: se queda (con scroll)
+    body.removeChild(block);
+    state.cur = addPage(makePage(state.cur.getAttribute('data-running')));
+    placeBlock(block, state);
+  }
+
+  function paginate(){
+    undoSplits();
+    /* devolver todo a la fuente antes de volver a repartir */
+    pages.forEach(function(p){ if(p.parentNode) p.parentNode.removeChild(p); });
+    pages = []; flowStart = {};
+    measure.innerHTML = '';
+    measure.className = 'book ' + mode;
+
+    var state = { cur: null };
+    items.forEach(function(it){
+      if(it.classList.contains('src-page')){
+        var kind = it.getAttribute('data-kind');
+        var p;
+        if(kind === 'cover'){
+          p = document.createElement('div'); p.className = 'page page--cover';
+          p.appendChild(it);
+        } else {
+          p = makePage(''); p.classList.add('page--nohead', 'page--' + kind);
+          p.querySelector('.page-body').appendChild(it);
+        }
+        addPage(p);
+        /* el índice se compacta si no cabe en una hoja */
+        if(kind === 'toc'){
+          var tb = p.querySelector('.page-body');
+          ['toc-compact', 'toc-compact-2'].forEach(function(c){ if(overflows(tb)) tb.classList.add(c); });
+        }
+        flowStart[it.id] = pages.length - 1;
+        state.cur = null;
+        return;
+      }
+      var running = it.getAttribute('data-running') || '';
+      if(!state.cur || !it.hasAttribute('data-continue')){
+        state.cur = addPage(makePage(running));
+      }
+      var blocks = flowBlocks.get(it);
+      blocks.forEach(function(b){ placeBlock(b, state); });
+      var firstPage = blocks.length ? blocks[0].closest('.page') : state.cur;
+      flowStart[it.id] = pages.indexOf(firstPage);
+    });
+
+    /* la contraportada va a la izquierda: se completa con una hoja en blanco si hace falta */
+    if(mode === 'spread' && pages.length % 2 === 0){
+      var blank = makePage(''); blank.classList.add('page--nohead', 'page--blank');
+      blank.querySelector('.page-body').innerHTML = '<div class="blank-note">Página en blanco</div>';
+      addPage(blank);
+    }
+    var back = document.createElement('div'); back.className = 'page page--back';
+    back.appendChild(backItem);
+    addPage(back);
+    flowStart[backItem.id] = pages.length - 1;
+
+    /* folios, lados, scroll de respaldo */
+    pages.forEach(function(p, i){
+      p.classList.toggle('page--verso', i % 2 === 1);
+      p.classList.toggle('page--recto', i % 2 === 0);
+      p.setAttribute('aria-label', 'Página ' + i);
+      var f = p.querySelector('.folio');
+      if(f) f.textContent = (p.classList.contains('page--blank')) ? '' : String(i);
+      var b = p.querySelector('.page-body');
+      if(b){ b.classList.toggle('scrolls', b.scrollHeight - b.clientHeight > 14); }
+    });
+    pages.forEach(function(p){ measure.removeChild(p); });
+    measure.className = '';
+
+    /* números del índice */
+    tocList.querySelectorAll('.toc-p[data-toc-for]').forEach(function(s){
+      var n = flowStart[s.getAttribute('data-toc-for')];
+      s.textContent = (n === undefined) ? '' : String(n);
+    });
+  }
+
+  /* ---------- tamaño y modo ---------- */
+  function layout(){
+    var W = stage.clientWidth, H = stage.clientHeight;
+    var gutter = W > 760 ? 80 : 10;
+    var vpad = W > 760 ? 26 : 10;
+    var availW = W - gutter * 2, availH = H - vpad * 2;
+    var ratio = 0.74;
+    var ph = Math.min(availH, (availW / 2) / ratio, 940);
+    var pw = ph * ratio;
+    var m, w, h;
+    if(pw >= 420){ m = 'spread'; w = pw; h = ph; }
+    else {
+      m = 'single';
+      w = Math.min(availW, 620);
+      h = Math.min(availH, 980);
+    }
+    w = Math.floor(w); h = Math.floor(h);
+    return { mode: m, w: w, h: h, key: m + ':' + w + 'x' + h };
+  }
+
+  function currentAnchor(){
+    var p = (mode === 'spread') ? (pages[2 * pos - 1] || pages[2 * pos]) : pages[pos];
+    if(!p) return null;
+    var body = p.querySelector('.page-body');
+    var a = body ? body.firstElementChild : p.firstElementChild;
+    while(a && a.__origin) a = a.__origin;
+    return a;
+  }
+  function pageIndexOf(el){
+    var p = el && el.closest ? el.closest('.page') : null;
+    return p ? pages.indexOf(p) : -1;
+  }
+  function posForPage(i){
+    if(mode === 'single') return i;
+    return i <= 0 ? 0 : Math.floor((i + 1) / 2);
+  }
+  function lastPos(){ return mode === 'single' ? pages.length - 1 : Math.floor(pages.length / 2); }
+
+  function relayout(force){
+    var L = layout();
+    if(!force && L.key === sizeKey) return;
+    var anchor = pages.length ? currentAnchor() : null;
+    sizeKey = L.key;
+    mode = L.mode;
+    root.style.setProperty('--pw', L.w + 'px');
+    root.style.setProperty('--ph', L.h + 'px');
+    book.classList.toggle('spread', mode === 'spread');
+    book.classList.toggle('single', mode === 'single');
+    slotL.innerHTML = ''; slotR.innerHTML = '';
+    var leftover = book.querySelector('.leaf'); if(leftover) leftover.remove();
+    busy = false;
+    paginate();
+    var idx = anchor ? pageIndexOf(anchor) : 0;
+    pos = Math.max(0, Math.min(lastPos(), posForPage(idx < 0 ? 0 : idx)));
+    render();
+  }
+
+  /* ---------- pintar el pliego actual ---------- */
+  function spreadPages(s){ return { L: s > 0 ? pages[2 * s - 1] || null : null, R: pages[2 * s] || null }; }
+  function put(slot, p){ slot.innerHTML = ''; if(p) slot.appendChild(p); }
+  function render(){
+    if(mode === 'spread'){
+      var sp = spreadPages(pos);
+      put(slotL, sp.L); put(slotR, sp.R);
+      book.classList.toggle('at-front', pos === 0);
+      book.classList.toggle('at-back', !sp.R);
+    } else {
+      put(slotL, null); put(slotR, pages[pos]);
+      book.classList.remove('at-front', 'at-back');
+    }
+    updateUI();
+  }
+  function updateUI(){
+    var last = lastPos();
+    range.max = String(last);
+    range.value = String(pos);
+    label.textContent = labelFor(pos);
+    [btnPrev, barPrev].forEach(function(b){ b.disabled = pos <= 0; });
+    [btnNext, barNext].forEach(function(b){ b.disabled = pos >= last; });
+    cornerL.hidden = pos <= 0;
+    cornerR.hidden = pos >= last;
+    var total = pages.length - 1;
+    if(mode === 'spread'){
+      var seen = pos === 0 ? 0 : 2 * pos - 1;
+      root.style.setProperty('--lt', Math.round(Math.min(9, seen / total * 12)) + 'px');
+      root.style.setProperty('--rt', Math.round(Math.min(9, (total - seen - 1) / total * 12)) + 'px');
+    }
+  }
+  function labelFor(p){
+    var total = pages.length - 2;
+    if(p === 0) return 'Portada';
+    if(mode === 'spread'){
+      var a = 2 * p - 1, b = 2 * p;
+      if(!pages[b]) return 'Contraportada';
+      return 'Págs. ' + a + '–' + b + ' de ' + total;
+    }
+    if(p === pages.length - 1) return 'Contraportada';
+    return 'Pág. ' + p + ' de ' + total;
+  }
+
+  /* ---------- paso de hoja ---------- */
+  function makeLeaf(cls){
+    var leaf = document.createElement('div');
+    leaf.className = 'leaf ' + cls;
+    leaf.innerHTML = '<div class="face f"></div><div class="face b"></div>';
+    book.appendChild(leaf);
+    return { el: leaf, f: leaf.children[0], b: leaf.children[1] };
+  }
+  function runLeaf(leaf, from, to, done){
+    var el = leaf.el;
+    el.style.transform = from;
+    el.getBoundingClientRect();
+    el.classList.add('turning');
+    el.style.transform = to;
+    var finished = false;
+    function end(e){
+      if(e && (e.target !== el || e.propertyName !== 'transform')) return;
+      if(finished) return; finished = true;
+      el.removeEventListener('transitionend', end);
+      done();
+      if(el.parentNode) el.parentNode.removeChild(el);
+      busy = false;
+      updateUI();
+    }
+    el.addEventListener('transitionend', end);
+    setTimeout(end, 950);
+  }
+
+  function goTo(target){
+    target = Math.max(0, Math.min(lastPos(), target));
+    if(busy || target === pos) return;
+    if(reduceMotion){ pos = target; render(); return; }
+    busy = true;
+    var fwd = target > pos;
+    var from = pos;
+    pos = target;
+
+    if(mode === 'spread'){
+      var c = spreadPages(from), t = spreadPages(target);
+      if(fwd){
+        put(slotR, t.R);
+        var lf = makeLeaf('fwd');
+        if(c.R) lf.f.appendChild(c.R);
+        if(t.L) lf.b.appendChild(t.L);
+        book.classList.remove('at-front');
+        book.classList.toggle('at-back', !t.R);
+        runLeaf(lf, 'rotateY(0deg)', 'rotateY(-180deg)', function(){ put(slotL, t.L); });
+      } else {
+        put(slotL, t.L);
+        var lb = makeLeaf('back');
+        if(c.L) lb.f.appendChild(c.L);
+        if(t.R) lb.b.appendChild(t.R);
+        book.classList.toggle('at-front', target === 0);
+        book.classList.remove('at-back');
+        runLeaf(lb, 'rotateY(0deg)', 'rotateY(180deg)', function(){ put(slotR, t.R); });
+      }
+    } else {
+      var cp = pages[from], tp = pages[target];
+      if(fwd){
+        put(slotR, tp);
+        var sf = makeLeaf('single-fwd');
+        sf.f.appendChild(cp);
+        sf.el.style.opacity = '1';
+        runLeaf(sf, 'rotateY(0deg)', 'rotateY(-180deg)', function(){});
+        requestAnimationFrame(function(){ sf.el.style.opacity = '0'; });
+      } else {
+        var sb = makeLeaf('single-back');
+        sb.f.appendChild(tp);
+        sb.el.style.opacity = '0';
+        runLeaf(sb, 'rotateY(-180deg)', 'rotateY(0deg)', function(){ put(slotR, tp); });
+        requestAnimationFrame(function(){ sb.el.style.opacity = '1'; });
+      }
+    }
+    label.textContent = labelFor(pos);
+    range.value = String(pos);
+  }
+  function next(){ goTo(pos + 1); }
+  function prev(){ goTo(pos - 1); }
+
+  function goToPage(i){ goTo(posForPage(i)); }
+  function goToId(id){
+    var i = flowStart[id];
+    if(i === undefined){
+      /* las hojas que no están a la vista no están en el documento: se buscan en el arreglo */
+      i = -1;
+      var sel = '#' + (window.CSS && CSS.escape ? CSS.escape(id) : id);
+      for(var k = 0; k < pages.length; k++){ if(pages[k].querySelector(sel)){ i = k; break; } }
+      if(i < 0) return false;
+    }
+    goToPage(i);
+    return true;
+  }
+
+  /* si al abrir una pregunta frecuente la hoja se llena, la hoja permite scroll */
+  document.addEventListener('click', function(e){
+    var trig = e.target.closest('.acc-trigger');
+    if(!trig) return;
+    setTimeout(function(){
+      var b = trig.closest('.page-body');
+      if(b) b.classList.toggle('scrolls', b.scrollHeight - b.clientHeight > 4);
+    }, 300);
+  });
+
+  /* ---------- eventos ---------- */
+  btnPrev.addEventListener('click', prev);
+  btnNext.addEventListener('click', next);
+  barPrev.addEventListener('click', prev);
+  barNext.addEventListener('click', next);
+  cornerL.addEventListener('click', prev);
+  cornerR.addEventListener('click', next);
+
+  range.addEventListener('input', function(){ label.textContent = labelFor(parseInt(range.value, 10)); });
+  range.addEventListener('change', function(){ goTo(parseInt(range.value, 10)); });
+
+  /* enlaces internos (#…) y botones con data-goto / data-turn */
+  document.addEventListener('click', function(e){
+    var t = e.target.closest('[data-turn],[data-goto],a[href^="#"]');
+    if(!t) return;
+    if(t.hasAttribute('data-turn')){ e.preventDefault(); t.getAttribute('data-turn') === 'next' ? next() : prev(); return; }
+    var id = t.hasAttribute('data-goto') ? t.getAttribute('data-goto') : t.getAttribute('href').slice(1);
+    if(id && goToId(id)) e.preventDefault();
+  });
+
+  function typing(el){
+    return el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT' || el.isContentEditable);
+  }
+  document.addEventListener('keydown', function(e){
+    if(document.body.classList.contains('modal-open')) return;
+    if(typing(e.target) || e.altKey || e.ctrlKey || e.metaKey) return;
+    if(e.key === 'ArrowRight' || e.key === 'PageDown'){ e.preventDefault(); next(); }
+    else if(e.key === 'ArrowLeft' || e.key === 'PageUp'){ e.preventDefault(); prev(); }
+    else if(e.key === 'Home'){ e.preventDefault(); goTo(0); }
+    else if(e.key === 'End'){ e.preventDefault(); goTo(lastPos()); }
+  });
+
+  /* deslizar en pantallas táctiles */
+  var sx = null, sy = null;
+  stage.addEventListener('pointerdown', function(e){
+    if(e.pointerType === 'mouse') return;
+    sx = e.clientX; sy = e.clientY;
+  });
+  stage.addEventListener('pointerup', function(e){
+    if(sx === null) return;
+    var dx = e.clientX - sx, dy = e.clientY - sy;
+    sx = sy = null;
+    if(Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.4){ dx < 0 ? next() : prev(); }
+  });
+  stage.addEventListener('pointercancel', function(){ sx = sy = null; });
+
+  var rt = null;
+  window.addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(function(){ relayout(false); }, 180); });
+  window.addEventListener('load', function(){ relayout(true); });
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(function(){ relayout(true); }); }
+
+  /* ---------- arranque ---------- */
+  relayout(true);
+  if(location.hash){
+    var saveRM = reduceMotion; reduceMotion = true;
+    goToId(location.hash.slice(1));
+    reduceMotion = saveRM;
+  }
+
+  window.ManualBook = { goToId: goToId, goToPage: goToPage, next: next, prev: prev };
+})();
+
 </script>
 </body>
 </html>
