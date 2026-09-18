@@ -794,6 +794,31 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
 @keyframes flashField{0%{box-shadow:0 0 0 0 rgba(156,122,46,.0)}30%{box-shadow:0 0 0 4px rgba(156,122,46,.35)}100%{box-shadow:0 0 0 0 rgba(156,122,46,0)}}
 .flash{animation:flashField 1.4s ease}
 
+/* botón del cronograma, al extremo izquierdo */
+.nav .nav-crono{display:inline-flex;align-items:center;gap:6px;color:#fff;padding:8px 13px;font-size:13px;flex-shrink:0;white-space:nowrap}
+.nav .nav-crono svg{width:13px;height:13px}
+.nav-crono .nc-short{display:none}
+.nav{justify-content:flex-start}
+.nav .brand{margin-right:auto}
+@media (max-width:1240px){ .nav-crono .nc-long{display:none} .nav-crono .nc-short{display:inline} }
+@media (max-width:880px){ .nav .brand{margin-right:auto} }
+
+/* pliego de experiencias */
+.pick-hint{display:flex;gap:12px;align-items:flex-start;background:var(--route-light);border-radius:6px;padding:16px 18px;color:var(--uniandes)}
+.pick-hint svg{width:22px;height:22px;flex-shrink:0;margin-top:1px}
+.pick-hint p{margin:0;font-size:14.5px;color:var(--uniandes)}
+.book.single .pick-hint svg{transform:rotate(90deg)}
+
+/* ficha: hoja izquierda */
+.chapter-head--compact{margin-bottom:24px}
+.ficha-card{margin-bottom:22px}
+.opt-card--static{cursor:default}
+.opt-card--static:hover{transform:none;box-shadow:none}
+.ficha-back{display:inline-flex;align-items:center;gap:8px;background:#fff}
+.ficha-back svg{width:14px;height:14px}
+.page--ficha.page--recto .page-head{justify-content:space-between}
+.page--ficha.page--bleed .page-body{padding-top:0}
+
 </style>
 </head>
 <body class="reader-app">
@@ -802,6 +827,7 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
 
 <header class="site">
   <nav class="nav">
+    <a class="btn btn-brass btn-small nav-crono" href="../index.html#section-gantt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg><span class="nc-long">Volver al cronograma de actividades</span><span class="nc-short">Cronograma</span></a>
     <a href="#inicio" class="brand">
       <img src="../assets/img/logo_uniandes_admon_negro.png" alt="Universidad de los Andes — Facultad de Administración" style="height:34px">
     </a>
@@ -811,7 +837,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
       <a href="#como-funciona">Cómo funciona</a>
       <a href="#opciones">Opciones</a>
       <a href="#preguntas">Preguntas frecuentes</a>
-      <a class="btn btn-brass btn-small nav-crono" href="../index.html#section-gantt">Volver al cronograma de actividades</a>
     </div>
     <div class="nav-progress" aria-live="polite">
       <span id="progressLabel">Componente 0 de 2</span>
@@ -1047,8 +1072,14 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
     <div class="eyebrow">Componente 2 · Elige una experiencia</div>
     <h2 class="h-section">Experiencia Internacional</h2>
   </div>
-  <p class="ch-lead">Cumple con mínimo una de estas once modalidades. Da clic en cualquier tarjeta para ver el detalle completo y diligenciarla; marca el check cuando la hayas cumplido.</p>
+  <p class="ch-lead">Inscribir, cursar en su totalidad y aprobar <strong>al menos una</strong> de las 11 modalidades del portafolio de experiencia internacional. Cumplirla te permite ganar una perspectiva global adicional a tu plan de estudios.</p>
 </header>
+<div class="pick-hint">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  <p><strong>Da clic en la experiencia que quieres visualizar</strong>, en la página de la derecha. Verás su detalle completo y podrás diligenciarla. Marca el check de la tarjeta cuando la hayas cumplido.</p>
+</div>
+</section>
+<section class="src-page" data-kind="content" id="todas-experiencias" data-running="Componente 2 · Experiencia internacional">
     <div class="dash-grid board">
       <article class="opt-card" data-card="intercambio">
         <button type="button" class="opt-check" data-complete="intercambio" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
@@ -1086,10 +1117,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
           <div class="opt-meta"><span class="pill">Variable · vacaciones</span></div>
         </div>
       </article>
-    </div>
-</section>
-<section class="src-page" data-kind="content" data-running="Componente 2 · Experiencia internacional">
-    <div class="dash-grid board">
       <article class="opt-card" data-card="practica-internacional">
         <button type="button" class="opt-check" data-complete="practica-internacional" aria-label="Marcar como completada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg></button>
         <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="7" width="18" height="13" rx="1.5"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg><div class="stub"></div></div>
@@ -2253,7 +2280,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
   var cornerR = document.getElementById('cornerR');
   var root    = document.documentElement;
   var tocList = document.getElementById('tocList');
-  var boardSrc = document.getElementById('experiencia');
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg>';
@@ -2302,20 +2328,29 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
     var f = p.querySelector('.folio'); if(f) f.textContent = String(i);
   });
 
-  /* ---------- fichas: información a la izquierda, diligenciamiento a la derecha ---------- */
-  function flatten(panel){
-    var out = [];
-    Array.prototype.slice.call(panel.children).forEach(function(c){
-      if(c.classList.contains('detail-grid')){
-        Array.prototype.slice.call(c.children).forEach(function(c2){
-          if(c2.tagName === 'DIV' && !c2.className){ out.push.apply(out, Array.prototype.slice.call(c2.children)); }
-          else { out.push(c2); }
-        });
-      } else { out.push(c); }
+  /* ---------- fichas: la tarjeta a la izquierda, toda la información y el diligenciamiento a la derecha ---------- */
+  var boardCardsPage = null, boardHead = null;
+  main.forEach(function(p){
+    if(p.__src.id === 'todas-experiencias') boardCardsPage = p;
+    if(p.__src.id === 'experiencia') boardHead = p.querySelector('.chapter-head');
+  });
+
+  function cardClone(slug){
+    var orig = boardCardsPage.querySelector('.opt-card[data-card="' + slug + '"]');
+    var c = orig.cloneNode(true);
+    c.removeAttribute('tabindex'); c.removeAttribute('role');
+    c.classList.add('opt-card--static');
+    /* la copia refleja el estado (amarillo / verde) de la tarjeta original */
+    function sync(){ c.className = orig.className + ' opt-card--static'; }
+    new MutationObserver(sync).observe(orig, { attributes: true, attributeFilter: ['class'] });
+    sync();
+    /* su check marca la tarjeta original */
+    c.querySelector('.opt-check').addEventListener('click', function(e){
+      e.stopPropagation();
+      orig.querySelector('.opt-check').click();
     });
-    return out;
+    return c;
   }
-  function isDocs(b){ return b.matches('.aside-docs, .card-side') && !!b.querySelector('a.doc-link, img'); }
 
   var fichas = {}, order = [];
   var srcFichas = Array.prototype.slice.call(source.querySelectorAll(':scope > .src-ficha'));
@@ -2324,38 +2359,31 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
     var slug = panel.id.replace('panel-', '');
     var n = panel.getAttribute('data-n');
     var title = panel.getAttribute('data-title');
-    var blocks = flatten(panel);
-    var head = blocks.shift();
-    var actions = null, left = [], right = [];
-    var seenTrack = false;
-    blocks.forEach(function(b){
-      if(b.matches('.ficha-actions')){ actions = b; return; }
-      if(b.querySelector('[data-track]')) seenTrack = true;
-      if(seenTrack || isDocs(b) || (b.querySelector('img') && !b.matches('.panel-photo-head'))) right.push(b);
-      else left.push(b);
-    });
-    /* fichas sin campos para diligenciar: se equilibra el contenido entre las dos hojas */
-    if(!right.length){
-      while(left.length > right.length + 1) right.unshift(left.pop());
-    }
 
-    var L = frame(''), R = frame('');
-    [L, R].forEach(function(p){ p.classList.add('page--ficha'); });
-    L.classList.add('page--verso'); R.classList.add('page--recto');
-    L.querySelector('.page-head').innerHTML =
-      '<a class="ph-back" href="#seccion-componente-2">' + ICON_BACK + 'Volver a las opciones</a>' +
-      '<span class="ph-count">Opción ' + n + ' de ' + total + '</span>';
-    R.querySelector('.page-head').innerHTML =
-      '<span class="ph-title"></span><span class="ph-count">Opción ' + n + ' de ' + total + '</span>';
-    R.querySelector('.ph-title').textContent = title;
-    L.querySelector('.folio').textContent = '';
-    R.querySelector('.folio').textContent = '';
-
-    var lb = bodyOf(L), rb = bodyOf(R);
+    /* hoja izquierda: cabezote del capítulo + la tarjeta elegida + volver */
+    var L = frame('');
+    L.classList.add('page--ficha', 'page--verso', 'page--bleed');
+    var head = document.createElement('header');
+    head.className = 'chapter-head chapter-head--compact';
+    head.appendChild(boardHead.querySelector('.ch-band').cloneNode(true));
+    var lb = bodyOf(L);
     lb.appendChild(head);
-    left.forEach(function(b){ lb.appendChild(b); });
-    if(actions) rb.appendChild(actions);
-    right.forEach(function(b){ rb.appendChild(b); });
+    var grid = document.createElement('div');
+    grid.className = 'dash-grid dash-grid-single ficha-card';
+    grid.appendChild(cardClone(slug));
+    lb.appendChild(grid);
+    var back = document.createElement('a');
+    back.className = 'btn btn-outline ficha-back';
+    back.href = '#todas-experiencias';
+    back.innerHTML = ICON_BACK + 'Volver a todas las experiencias';
+    lb.appendChild(back);
+
+    /* hoja derecha: la ficha completa */
+    var R = frame('');
+    R.classList.add('page--ficha', 'page--recto');
+    R.querySelector('.page-head').innerHTML = '<span class="ph-title"></span><span class="ph-count">Opción ' + n + ' de ' + total + '</span>';
+    R.querySelector('.ph-title').textContent = title;
+    bodyOf(R).appendChild(panel);
 
     fichas[slug] = { L: L, R: R, n: +n, title: title };
     order.push(slug);
@@ -2385,7 +2413,7 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
   var mode = 'spread';
   var loc = { t: 'main', i: 0 };   // t: 'main' o el slug de una ficha; i: pliego (doble) o página (sencilla)
   var busy = false, sizeKey = '';
-  var BOARD = main.indexOf(boardSrc.closest('.page'));
+  var BOARD = main.indexOf(boardCardsPage);
 
   function trackPages(t){ return t === 'main' ? main : [fichas[t].L, fichas[t].R]; }
   function spreadOfPage(i){ return i <= 0 ? 0 : Math.floor((i + 1) / 2); }
@@ -2399,23 +2427,22 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
     }
     return { P: trackPages(l.t)[l.i] };
   }
-  /* orden de lectura, para saber hacia qué lado gira la hoja */
+  /* orden de lectura, para saber hacia qué lado gira la hoja.
+     Una ficha ocupa el lugar del tablero: antes vienen las experiencias, después las preguntas */
   function rank(l){
     if(l.t === 'main') return mode === 'spread' ? l.i * 2 : l.i;
-    var base = mode === 'spread' ? spreadOfPage(BOARD) * 2 : BOARD + 1;
-    return base + 0.5 + order.indexOf(l.t) / 100 + l.i / 1000;
+    return (mode === 'spread' ? spreadOfPage(BOARD) * 2 : BOARD) + 0.5 + l.i / 10;
   }
+  function afterBoard(){ return { t: 'main', i: mode === 'spread' ? spreadOfPage(BOARD) + 1 : BOARD + 1 }; }
   function nextLoc(l){
     if(l.t === 'main') return l.i < lastMain() ? { t: 'main', i: l.i + 1 } : null;
-    var k = order.indexOf(l.t);
     if(mode === 'single' && l.i === 0) return { t: l.t, i: 1 };
-    return k < order.length - 1 ? { t: order[k + 1], i: 0 } : boardLoc();
+    return afterBoard();
   }
   function prevLoc(l){
     if(l.t === 'main') return l.i > 0 ? { t: 'main', i: l.i - 1 } : null;
-    var k = order.indexOf(l.t);
     if(mode === 'single' && l.i === 1) return { t: l.t, i: 0 };
-    return k > 0 ? { t: order[k - 1], i: mode === 'single' ? 1 : 0 } : boardLoc();
+    return boardLoc();
   }
 
   /* ---------- tamaño ---------- */
@@ -2476,8 +2503,7 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
   }
   function labelFor(l){
     if(l.t !== 'main'){
-      var f = fichas[l.t];
-      return 'Opción ' + f.n + ' de ' + total + (mode === 'single' ? ' · ' + (l.i + 1) + '/2' : '');
+      return fichas[l.t].title;
     }
     var last = main.length - 1, numbered = main.length - 2;
     if(mode === 'spread'){
