@@ -581,6 +581,7 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO){
     panelPosgrado.style.display = view === 'pregrado' ? 'none' : '';
     consejeriaSophie.style.display = view === 'posgrado' ? 'none' : '';
     applyFilters();
+    refreshNext();
   }
   viewToggleButtons.forEach(b => b.addEventListener('click', () => applyView(b.dataset.view)));
 
@@ -707,10 +708,19 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO){
   }, { threshold:.4 });
   divObserver.observe(td);
 
-  // ---------- next event ticker ----------
+  // ---------- next event ticker (respeta la vista activa: todo / pregrado / posgrado) ----------
   function refreshNext(){
-    const upcoming = ALL_EVENTS.map(e => ({ e, date: eventDate(e) })).filter(x => x.date >= TODAY).sort((a,b) => a.date - b.date)[0];
-    if (!upcoming) return;
+    const pool = ALL_EVENTS.filter(e => activeView === 'todo'
+      || (activeView === 'pregrado' && e.program === 'Pregrado')
+      || (activeView === 'posgrado' && e.program !== 'Pregrado'));
+    const upcoming = pool.map(e => ({ e, date: eventDate(e) })).filter(x => x.date >= TODAY).sort((a,b) => a.date - b.date)[0];
+    if (!upcoming) {
+      document.getElementById('nextDateBig').textContent = '–';
+      document.getElementById('nextSub').textContent = 'Sin próximas actividades';
+      document.getElementById('nextTitle').textContent = activeView === 'todo' ? 'No hay actividades próximas' : 'No hay actividades próximas para esta vista';
+      document.getElementById('nextTicket').onclick = null;
+      return;
+    }
     const days = Math.round((upcoming.date - TODAY) / 86400000);
     const dayLabel = days === 0 ? 'Hoy' : (days === 1 ? 'En 1 día' : 'En ' + days + ' días');
     document.getElementById('nextDateBig').textContent = upcoming.e.d + ' ' + MONTHS_SHORT[upcoming.e.m-1];
