@@ -72,10 +72,16 @@ a{color:inherit;}
 .hero-cta:hover{background:var(--route);transform:translateY(-1px);}
 
 /* ---------- view toggle (todo / solo pregrado / solo posgrado) ---------- */
-.view-toggle{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap;}
-.view-toggle-btn{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.02em;color:var(--ink-soft);background:var(--paper-raised);border:1.3px solid var(--line);padding:8px 15px;border-radius:100px;transition:.15s ease;}
-.view-toggle-btn:hover{border-color:var(--route);color:var(--route);}
-.view-toggle-btn[aria-pressed="true"]{background:var(--uniandes);color:#fff;border-color:var(--uniandes);}
+.view-toggle{display:flex;gap:26px;margin-top:24px;flex-wrap:wrap;border-bottom:1px solid var(--line);}
+.view-toggle-btn{position:relative;font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-faint);padding:0 0 11px;transition:color .18s ease;}
+.view-toggle-btn::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:transparent;transform:scaleX(.4);transform-origin:left;transition:background .18s ease, transform .18s ease;}
+.view-toggle-btn:hover{color:var(--ink-soft);}
+.view-toggle-btn[aria-pressed="true"]{color:var(--uniandes);}
+.view-toggle-btn[aria-pressed="true"]::after{background:var(--brass);transform:scaleX(1);}
+.view-toggle-btn[data-view="pregrado"][aria-pressed="true"]{color:#7d631f;}
+.view-toggle-btn[data-view="pregrado"][aria-pressed="true"]::after{background:var(--brass);}
+.view-toggle-btn[data-view="posgrado"][aria-pressed="true"]{color:var(--route);}
+.view-toggle-btn[data-view="posgrado"][aria-pressed="true"]::after{background:var(--route);}
 
 /* ---------- next-event ticket ---------- */
 .next-wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px 6px;}
@@ -263,8 +269,10 @@ a{color:inherit;}
 .modal-cta:hover{background:var(--col);}
 .modal-action-btn{margin-top:9px;width:100%;padding:12px;border-radius:var(--r);background:var(--btncol,var(--uniandes));color:#fff;font-weight:600;font-size:13.5px;transition:.15s ease;display:flex;align-items:center;justify-content:center;gap:7px;text-decoration:none;}
 .modal-action-btn:hover{filter:brightness(1.08);}
-.modal-gcal-link{display:block;text-align:center;margin-top:8px;font-family:var(--mono);font-size:11.5px;color:var(--ink-faint);text-decoration:underline;text-decoration-color:var(--line);}
-.modal-gcal-link:hover{color:var(--uniandes);}
+.modal-cal-row{display:flex;align-items:center;justify-content:center;gap:9px;margin-top:14px;}
+.modal-cal-link{font-family:var(--mono);font-size:11px;color:var(--ink-faint);text-decoration:underline;text-decoration-color:var(--line);background:none;padding:0;}
+.modal-cal-link:hover{color:var(--uniandes);}
+.modal-cal-sep{color:var(--line);font-size:10px;}
 .modal-link{margin-top:9px;display:none;align-items:center;justify-content:center;gap:6px;width:100%;padding:11px;border-radius:var(--r);border:1.3px solid var(--line);color:var(--ink-soft);font-weight:600;font-size:13px;text-decoration:none;transition:.15s ease;}
 .modal-link:hover{border-color:var(--uniandes);color:var(--uniandes);}
 
@@ -287,8 +295,8 @@ a{color:inherit;}
   <p>Convocatorias, movilidades, sesiones informativas y eventos, organizados por Pregrado y por Posgrado (EPOS). Toca cualquier actividad para ver el detalle.</p>
   <div class="view-toggle" id="viewToggle">
     <button class="view-toggle-btn" data-view="todo" aria-pressed="true">Ver todo</button>
-    <button class="view-toggle-btn" data-view="pregrado" aria-pressed="false">Activar vista solo pregrado</button>
-    <button class="view-toggle-btn" data-view="posgrado" aria-pressed="false">Activar vista solo posgrados</button>
+    <button class="view-toggle-btn" data-view="pregrado" aria-pressed="false">Vista solo pregrado</button>
+    <button class="view-toggle-btn" data-view="posgrado" aria-pressed="false">Vista solo posgrados</button>
   </div>
   <a class="hero-cta" href="#consejerias">📅 Agenda tu consejería internacional</a>
 </header>
@@ -401,8 +409,11 @@ a{color:inherit;}
       <div class="modal-title" id="modalTitle">Título</div>
       <div class="modal-desc" id="modalDesc">Descripción</div>
       <a class="modal-action-btn" id="modalSessionLink" style="--btncol:var(--verified);display:none;" target="_blank" rel="noopener">🔗 Unirme a la sesión</a>
-      <button class="modal-cta" id="modalCta">📅 Agregar a mi calendario</button>
-      <a class="modal-gcal-link" id="modalGcalLink" target="_blank" rel="noopener">o añadir directo en Google Calendar</a>
+      <div class="modal-cal-row" id="modalCalRow">
+        <button class="modal-cal-link" id="modalCta">📥 Descargar .ics</button>
+        <span class="modal-cal-sep">·</span>
+        <a class="modal-cal-link" id="modalOutlookLink" target="_blank" rel="noopener">📅 Añadir en Outlook</a>
+      </div>
       <a class="modal-action-btn" id="modalRecordingLink" style="--btncol:var(--ink-soft);display:none;" target="_blank" rel="noopener">🎥 Ver la grabación</a>
       <a class="modal-link" id="modalLink" target="_blank" rel="noopener">↗ Más información</a>
     </div>
@@ -882,18 +893,22 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO){
     setTimeout(() => URL.revokeObjectURL(url), 2000);
   }
 
-  function gcalLink(e){
-    const start = icsDate(e.year, e.m, e.d);
+  function outlookLink(e){
+    const fmt = (y,m,d) => `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}T00:00:00`;
+    const start = fmt(e.year, e.m, e.d);
     const endObj = eventEndDate(e);
     endObj.setDate(endObj.getDate() + 1);
-    const end = icsDate(endObj.getFullYear(), endObj.getMonth()+1, endObj.getDate());
+    const end = fmt(endObj.getFullYear(), endObj.getMonth()+1, endObj.getDate());
     const params = new URLSearchParams({
-      action: 'TEMPLATE',
-      text: e.title,
-      dates: `${start}/${end}`,
-      details: e.long || e.desc,
+      path: '/calendar/action/compose',
+      rru: 'addevent',
+      subject: e.title,
+      startdt: start,
+      enddt: end,
+      body: e.long || e.desc,
+      allday: 'true',
     });
-    return 'https://calendar.google.com/calendar/render?' + params.toString();
+    return 'https://outlook.office.com/calendar/0/deeplink/compose?' + params.toString();
   }
 
   // ---------- modal ----------
@@ -915,15 +930,13 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO){
     if (e.sessionLink && !past) { sessionEl.href = e.sessionLink; sessionEl.style.display = 'flex'; }
     else { sessionEl.removeAttribute('href'); sessionEl.style.display = 'none'; }
 
-    const ctaEl = document.getElementById('modalCta');
-    const gcalEl = document.getElementById('modalGcalLink');
+    const calRowEl = document.getElementById('modalCalRow');
+    const outlookEl = document.getElementById('modalOutlookLink');
     if (!past) {
-      ctaEl.style.display = 'block';
-      gcalEl.style.display = 'block';
-      gcalEl.href = gcalLink(e);
+      calRowEl.style.display = 'flex';
+      outlookEl.href = outlookLink(e);
     } else {
-      ctaEl.style.display = 'none';
-      gcalEl.style.display = 'none';
+      calRowEl.style.display = 'none';
     }
 
     const recEl = document.getElementById('modalRecordingLink');
@@ -933,7 +946,6 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO){
     const linkEl = document.getElementById('modalLink');
     if (e.link) { linkEl.href = e.link; linkEl.style.display = 'inline-flex'; }
     else { linkEl.removeAttribute('href'); linkEl.style.display = 'none'; }
-    document.getElementById('modalCta').style.setProperty('--col', `var(${c.col})`);
     overlay.dataset.open = 'true';
     if (scrollTo) {
       const target = [...document.querySelectorAll('.card')].find(el => el.querySelector('.card-title').textContent === e.title);
