@@ -127,6 +127,15 @@ header.site{
 .hero-pass .flags{display:flex;gap:8px;padding:0 18px 18px}
 .hero-pass .flags img{height:16px;width:auto;border:1px solid var(--line-soft)}
 
+.comp-eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:10px}
+.comp-duo{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.comp-chip{font-family:var(--sans);font-weight:700;font-size:13.5px;color:var(--uniandes);background:var(--route-light);padding:8px 12px;border-radius:5px;line-height:1.25}
+.comp-plus{font-family:var(--mono);font-size:13px;color:var(--brass);font-weight:700;flex-shrink:0}
+.comp-cta{margin-top:14px;display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11.5px;font-weight:700;color:var(--brass);text-decoration:none;letter-spacing:.02em}
+.comp-cta svg{width:13px;height:13px;flex-shrink:0}
+.comp-cta:hover{text-decoration:underline}
+@media (max-width:880px){.comp-chip{font-size:12.5px;padding:7px 10px}}
+
 @media (max-width:880px){
   .hero .wrap{grid-template-columns:1fr;padding-bottom:44px}
   .hero-pass{transform:none;justify-self:start;max-width:340px}
@@ -438,13 +447,6 @@ footer a{color:#D6E2EE}
 .uni-detail li.warn-line{color:#8C2F22}
 .uni-detail li.warn-line::before{color:#B23A2C}
 
-.region-cols{columns:3 160px;column-gap:22px;font-size:13.5px;color:var(--ink-soft);margin:14px 0}
-@media (max-width:640px){.region-cols{columns:2 140px}}
-.region-cols .region{break-inside:avoid;margin-bottom:14px}
-.region-cols .region h6{font-family:var(--sans);font-size:12.5px;font-weight:700;color:var(--ink);margin:0 0 4px}
-.region-cols .region ul{margin:0;padding:0;list-style:none}
-.region-cols .region li{margin-bottom:2px}
-.region-cols .region li .dbl{color:var(--brass);font-weight:700}
 
 .cta-strip{
   background:var(--paper-raised);border:1px solid var(--line);border-radius:8px;padding:20px 24px;
@@ -636,7 +638,6 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
 .page-body .block li{font-size:14.5px}
 .page-body .card-side{position:static;margin-bottom:22px}
 .page-body .aside-docs{margin:0 0 22px}
-.page-body .region-cols{columns:2 150px}
 .page-body .accordion-item button.acc-trigger{font-size:14.5px;padding:13px 2px}
 .page-body .acc-panel p,.page-body .acc-panel div{font-size:14px}
 .page-body .select-grid{grid-template-columns:1fr 1fr}
@@ -699,6 +700,9 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
 #presentacion .hero-actions{margin-top:22px}
 .intro-howto{margin-top:34px}
 .intro-howto p{margin-top:16px;font-size:14px}
+.intro-disclaimer{margin-top:18px;font-size:12.5px;font-style:italic;color:var(--ink-faint);line-height:1.5;max-width:62ch}
+.intro-disclaimer a{color:var(--ink-faint);text-decoration:underline;text-decoration-color:var(--line)}
+.intro-disclaimer a:hover{color:var(--route)}
 
 /* ---------- contenido (índice) ---------- */
 .toc-title{font-size:clamp(26px, 7cqw, 34px);margin-bottom:20px}
@@ -762,7 +766,12 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
 .ph-back{display:inline-flex;align-items:center;gap:6px;font-weight:600;color:var(--route);text-decoration:none;font-size:12.5px}
 .ph-back svg{width:13px;height:13px}
 .ph-back:hover{text-decoration:underline}
+.ph-nav{display:inline-flex;align-items:center;gap:8px}
 .ph-count{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft)}
+.ph-arrow{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;color:var(--ink-faint);opacity:.6;transition:opacity .15s ease,color .15s ease,background .15s ease}
+.ph-arrow svg{width:12px;height:12px}
+.ph-arrow:hover{opacity:1;color:var(--route);background:var(--route-light)}
+.ph-arrow[disabled]{opacity:.2;cursor:default;pointer-events:none}
 .ph-title{font-family:var(--serif);font-weight:600;font-size:13px;color:var(--ink);overflow:hidden;text-overflow:ellipsis}
 .book.spread .page--ficha .rh-sec,.book.spread .page--ficha .rh-book{display:inline}
 .book.spread .page--ficha.page--recto .page-head{justify-content:space-between}
@@ -770,6 +779,11 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
 .page--ficha .panel-photo-head{margin-top:-18px}
 .ficha-inline .ficha-actions{margin-top:0}
 .page-body .ficha-actions{margin:0 0 20px}
+
+/* ---------- modo ficha: solo se navega con "volver" o la flechita sutil de opciones ---------- */
+body.ficha-mode #turnPrev,body.ficha-mode #turnNext,
+body.ficha-mode #cornerL,body.ficha-mode #cornerR,
+body.ficha-mode #barPrev,body.ficha-mode #barNext{display:none !important}
 
 /* ---------- consejería ---------- */
 .consejeria{display:flex;flex-direction:column;gap:14px}
@@ -814,8 +828,8 @@ body.reader-app header.site{position:relative;flex-shrink:0;background:rgba(241,
 .ficha-card{margin-bottom:22px}
 .opt-card--static{cursor:default}
 .opt-card--static:hover{transform:none;box-shadow:none}
-.ficha-back{display:inline-flex;align-items:center;gap:8px;background:#fff}
-.ficha-back svg{width:14px;height:14px}
+.ficha-back{display:inline-flex;align-items:center;gap:9px}
+.ficha-back svg{width:15px;height:15px}
 .page--ficha.page--recto .page-head{justify-content:space-between}
 .page--ficha.page--bleed .page-body{padding-top:0}
 
@@ -974,9 +988,15 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
       <div class="photo" style="position:relative;height:180px;background:linear-gradient(180deg, rgba(11,46,89,0) 20%, rgba(11,46,89,.7)), url('../assets/img/estudiantes_pantallas.jpg') center 35%/cover">
       </div>
       <div class="body">
-        <div class="row"><span>Componentes</span><span>2 independientes</span></div>
-        <div class="row"><span>Componente 1</span><span>2 cursos ADMI en inglés</span></div>
-        <div class="row"><span>Componente 2</span><span>1 de 11 experiencias internacionales</span></div>
+        <div class="comp-eyebrow">2 componentes independientes</div>
+        <div class="comp-duo">
+          <span class="comp-chip">Cursos ADMI en inglés</span>
+          <span class="comp-plus">+</span>
+          <span class="comp-chip">Experiencia internacional</span>
+        </div>
+        <a class="comp-cta" href="#como-funciona">Descubre cómo cumplirlo
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
       </div>
     </div>
   </div>
@@ -994,6 +1014,7 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
     <div class="perf"></div>
     <p>Pasa las páginas con las flechas, el teclado (← →), las esquinas inferiores de cada hoja o deslizando en tu celular. Si una hoja tiene más contenido, desliza hacia abajo dentro de ella. Usa <strong>Contenido</strong> para saltar directo a cualquier capítulo.</p>
   </div>
+  <p class="intro-disclaimer">Este manual es una guía de seguimiento: diligenciarlo no garantiza por sí solo el cumplimiento del Requisito Internacional. Debes además coordinar una cita de <a href="#consejeria">consejería internacional</a> y reportar tu experiencia en <a href="SALESFORCE-ENLACE-PENDIENTE" target="_blank" rel="noopener">Salesforce</a>.</p>
 </section>
 <section class="src-page" data-kind="toc" id="indice" data-running="">
   <h2 class="toc-title">Contenido</h2>
@@ -1033,22 +1054,15 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
       <strong>Importante — no lo confundas con otros requisitos:</strong> el Requisito Internacional es independiente de los requisitos institucionales de lectura en inglés y de dominio de segunda lengua de Uniandes. Cumplir uno de estos requisitos no exime del cumplimiento de los otros.
     </div>
 </section>
-<section class="src-page" data-kind="content" id="como-funciona" data-running="Cómo funciona" data-toc="Dos componentes independientes" data-toc-level="1">
+<section class="src-page" data-kind="content" id="como-funciona" data-running="Cómo funciona" data-toc="¿Cómo cumplir con el requisito internacional?" data-toc-level="1">
 <header class="chapter-head">
   <div class="ch-band">
     <span class="ch-num" aria-hidden="true">2</span>
     <div class="eyebrow">Estructura del requisito</div>
-    <h2 class="h-section">Dos componentes independientes</h2>
+    <h2 class="h-section">¿Cómo cumplir con el requisito internacional?</h2>
   </div>
-  <p class="ch-lead">El requisito implica cumplir con los siguientes dos componentes, que no se sustituyen entre sí.</p>
+  <p class="ch-lead">Debes cumplir con los siguientes dos componentes, que son independientes y no se sustituyen entre sí.</p>
 </header>
-    <div class="how-note">
-      <strong>Cómo usar este manual:</strong> en cada modalidad encontrarás requisitos, validación, documentos y espacios interactivos para ir registrando tu avance, guardado automáticamente en tu navegador.
-      <br><br>
-      <strong>Colores de las tarjetas:</strong> una tarjeta se pone <strong style="color:#8a6a1a">amarilla</strong> apenas empiezas a diligenciarla, y se pone <strong style="color:var(--verified)">verde</strong> cuando presionas el check de su esquina para marcarla como completada. Cuando marques como completadas tanto la tarjeta de Cursos Disciplinares en Inglés como al menos una tarjeta de Experiencia Internacional, la barra de progreso de la parte superior se pondrá en verde: eso indica que cumpliste el Requisito Internacional.
-    </div>
-</section>
-<section class="src-page" data-kind="content" id="componentes" data-running="Cómo funciona" data-title="Los dos componentes del requisito">
     <div class="how-grid">
       <a class="how-col" href="#seccion-componente-1" style="text-decoration:none;color:inherit;display:block;cursor:pointer">
         <div class="how-tag">Componente 1</div>
@@ -1062,6 +1076,14 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
       </a>
     </div>
 </section>
+<section class="src-page" data-kind="content" id="componentes" data-running="Cómo funciona" data-title="Cómo usar este manual">
+    <div class="how-note">
+      <strong>Cómo usar este manual:</strong> en cada modalidad encontrarás requisitos, validación, documentos y espacios interactivos para ir registrando tu avance, guardado automáticamente en tu navegador.
+    </div>
+    <div class="how-note">
+      <strong>Colores de las tarjetas:</strong> una tarjeta se pone <strong style="color:#8a6a1a">amarilla</strong> apenas empiezas a diligenciarla, y se pone <strong style="color:var(--verified)">verde</strong> cuando presionas el check de su esquina para marcarla como completada. Cuando marques como completadas tanto la tarjeta de Cursos Disciplinares en Inglés como al menos una tarjeta de Experiencia Internacional, la barra de progreso de la parte superior se pondrá en verde: eso indica que cumpliste el Requisito Internacional.
+    </div>
+</section>
 <section class="src-page" data-kind="content" id="opciones" data-running="Componente 1 · Cursos en inglés" data-toc="Componente 1 · Cursos Disciplinares en Inglés" data-toc-level="1">
 <header class="chapter-head" id="seccion-componente-1">
   <div class="ch-band">
@@ -1069,7 +1091,7 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
     <div class="eyebrow">Componente 1 · Obligatorio</div>
     <h2 class="h-section">Cursos Disciplinares en Inglés</h2>
   </div>
-  <p class="ch-lead">Este componente es completamente independiente de la Experiencia Internacional — debes cumplir los dos. Da clic en la tarjeta para diligenciarlo.</p>
+  <p class="ch-lead">Este es el primer componente, y es independiente al cumplimiento de la experiencia internacional. Recuerda cumplir con ambos. A continuación la tarjeta de los cursos disciplinares en inglés para tu seguimiento.</p>
 </header>
     <div class="dash-grid dash-grid-single">
       <article class="opt-card" data-card="cursos-ingles">
@@ -1149,7 +1171,7 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
     <div class="eyebrow">Componente 2 · Elige una experiencia</div>
     <h2 class="h-section">Experiencia Internacional</h2>
   </div>
-  <p class="ch-lead">Inscribir, cursar en su totalidad y aprobar <strong>al menos una</strong> de las 11 modalidades del portafolio de experiencia internacional. Cumplirla te permite ganar una perspectiva global adicional a tu plan de estudios.</p>
+  <p class="ch-lead">Este es el segundo componente. Recuerda que aparte de aprobar los cursos en inglés, debes cursar y aprobar al menos una de las opciones disponibles de experiencias internacionales de la Facultad de Administración.</p>
 </header>
 <div class="pick-hint">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -1329,7 +1351,10 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
       <span class="adv-role">Soluciones a Estudiantes CSA</span>
       <span class="adv-cta">Agendar con Juan Pablo Izquierdo <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
     </a>
-    <div class="callout info">Cumpliendo estos dos componentes, cumplirías con el Requisito Internacional. Debes tomar una consejería con Sophie Fernández Leal o Juan Pablo Izquierdo Camacho para continuar con tu proceso de validación del Requisito Internacional.</div>
+    <div class="callout info">Cumpliendo estos dos componentes habrás avanzado en tu Requisito Internacional, pero para validarlo formalmente debes ingresar al enlace de Salesforce y diligenciar cómo cumpliste tu Requisito Internacional — ahí se realizan las validaciones correspondientes y, con esto, darás por terminado tu proceso ante la Facultad. Si tienes dudas sobre los pasos a seguir, puedes tomar una consejería con Sophie Fernández Leal o Juan Pablo Izquierdo Camacho.</div>
+    <a class="btn btn-brass btn-small" href="SALESFORCE-ENLACE-PENDIENTE" target="_blank" rel="noopener">Reportar mi Requisito Internacional en Salesforce
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
   </div>
 </section>
 <section class="src-page" data-kind="back" id="contraportada">
@@ -1350,14 +1375,14 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
 
 <!-- ===== FICHAS DE LAS 11 EXPERIENCIAS (se abren desde las tarjetas) ===== -->
 <div class="src-ficha" id="panel-intercambio" data-title="Intercambio Académico" data-n="1">
-  <div class="panel-photo-head" style="background-image:url('../assets/img/intercambios_balcon.jpg')">
-    <div class="photo-head-inner">
+  <div class="detail-head">
+    <div class="detail-title">
       <div class="kicker">Opción 1 de 11 · Movilidad académica</div>
       <h3>Intercambio Académico</h3>
       <p>Realiza un intercambio académico a través de la convocatoria oficial de Uniandes: cursa un semestre en una universidad aliada, con la posibilidad de homologar asignaturas del programa de Administración.</p>
-      <div class="detail-badges">
-        <span class="pill">+50 convenios específicos · +100 generales</span>
-      </div>
+    </div>
+    <div class="detail-badges">
+      <span class="pill">+50 convenios específicos · +100 generales</span>
     </div>
   </div>
 
@@ -1424,39 +1449,19 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
         </div>
       </div>
       <div class="block">
-        <h4>Convenios específicos de la Facultad (+50)</h4>
-        <p style="font-size:13.5px;margin-bottom:6px">La oferta es sujeta a cada convocatoria — planea tu aplicación revisando el portal de MoveOn. Las universidades marcadas con <span class="dbl" style="color:var(--brass);font-weight:700">**</span> también ofrecen doble titulación.</p>
-        <div class="region-cols">
-          <div class="region"><h6>United Kingdom</h6><ul><li>Aston Business School</li><li>University of Exeter</li><li>University of Nottingham</li></ul></div>
-          <div class="region"><h6>Belgium</h6><ul><li>Solvay Brussels School of Economics and Management</li></ul></div>
-          <div class="region"><h6>Denmark</h6><ul><li>Copenhagen School of Business</li></ul></div>
-          <div class="region"><h6>Finland</h6><ul><li>Aalto University</li></ul></div>
-          <div class="region"><h6>Slovenia</h6><ul><li>Ljubljana University</li></ul></div>
-          <div class="region"><h6>France</h6><ul><li>Audencia École de Management</li><li>EDHEC Business School</li><li>Université de Strasbourg</li><li>NEOMA Business School <span class="dbl">**</span></li><li>ESCP Europe</li><li>ESSEC</li><li>Grenoble École de Management</li><li>HEC Paris</li><li>ICN Business School</li><li>Toulouse Business School <span class="dbl">**</span></li></ul></div>
-          <div class="region"><h6>Switzerland</h6><ul><li>HEC Lausanne</li><li>University of Saint Gallen</li></ul></div>
-          <div class="region"><h6>Spain</h6><ul><li>ESADE</li></ul></div>
-          <div class="region"><h6>Germany</h6><ul><li>KLU Kühne Logistics University</li><li>University of Cologne</li><li>University of Kaiserslautern</li><li>University of Mannheim</li></ul></div>
-          <div class="region"><h6>Netherlands</h6><ul><li>Radboud University</li><li>Tilburg University <span class="dbl">**</span></li><li>Maastricht University</li></ul></div>
-          <div class="region"><h6>Norway</h6><ul><li>BI Norwegian Business School</li><li>Norwegian School of Economics</li></ul></div>
-          <div class="region"><h6>Turkey</h6><ul><li>Koc University</li></ul></div>
-          <div class="region"><h6>Poland</h6><ul><li>Warsaw School of Economics</li><li>Kozminski University</li></ul></div>
-          <div class="region"><h6>Italy</h6><ul><li>Politecnico di Milano</li><li>Università Commerciale Luigi Bocconi</li></ul></div>
-          <div class="region"><h6>Portugal</h6><ul><li>Católica Lisbon Business & Economics</li><li>Nova School of Business and Economics</li></ul></div>
-          <div class="region"><h6>Sweden</h6><ul><li>Lunds Universitet</li><li>Jönköping International Business School</li></ul></div>
-          <div class="region"><h6>United States</h6><ul><li>Tulane University <span class="dbl">**</span></li></ul></div>
-          <div class="region"><h6>Canada</h6><ul><li>FSA Laval</li><li>HEC Montreal</li><li>McGill University</li><li>Queens University School of Business</li></ul></div>
-          <div class="region"><h6>Mexico</h6><ul><li>ITAM</li><li>ITESM-EGADE</li></ul></div>
-          <div class="region"><h6>Brazil</h6><ul><li>Fundação Dom Cabral</li><li>Fundação Getulio Vargas <span class="dbl">**</span></li></ul></div>
-          <div class="region"><h6>Chile</h6><ul><li>Universidad de Chile</li></ul></div>
-          <div class="region"><h6>Peru</h6><ul><li>Universidad del Pacífico</li></ul></div>
-          <div class="region"><h6>Hong Kong</h6><ul><li>City University of Hong Kong</li></ul></div>
-          <div class="region"><h6>Japan</h6><ul><li>Nagoya University of Commerce and Business</li></ul></div>
-          <div class="region"><h6>Taiwan</h6><ul><li>National Chengchi University</li></ul></div>
-        </div>
+        <h4>Convenios específicos de la Facultad</h4>
+        <p style="font-size:14px;margin-bottom:12px">La oferta de convenios específicos varía en cada convocatoria. Para ver el listado vigente de convenios específicos de la Facultad de Administración, ingresa al siguiente enlace:</p>
+        <a class="btn btn-outline btn-small" href="https://administracion.uniandes.edu.co/internacionalizacion/intercambio/estudiantes-uniandinos/#:~:text=Explora%20las%20experiencias%0Ainternacionales%20que%20tenemos%20para%20ti" target="_blank" rel="noopener">Ver convenios de la Facultad
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
       </div>
-    </div>
-    <div class="aside-docs" style="align-self:start">
-      <img src="../assets/img/mapa_convenios.png" alt="Mapa de países con convenio" style="border-radius:6px;border:1px solid var(--line)">
+      <div class="block">
+        <h4>Cupos y tendencia de postulaciones</h4>
+        <p style="font-size:14px;margin-bottom:12px">Consulta el PowerBI de cupos de la Dirección de Internacionalización para ver la tendencia de postulaciones por convenio y postularte de manera estratégica:</p>
+        <a class="btn btn-outline btn-small" href="https://app.powerbi.com/view?r=eyJrIjoiY2Q4ZDI3OTYtYmNmNi00OWRkLTliZjQtNzMzNDYzZmQyMjgyIiwidCI6ImZhYmQwNDdjLWZmNDgtNDkyYS04YmJiLThmOThiOWZiOWNjYSIsImMiOjR9" target="_blank" rel="noopener">Ver PowerBI de cupos
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
     </div>
   </div>
 </div>
@@ -1588,14 +1593,14 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
   </div>
 </div>
 <div class="src-ficha" id="panel-eiv-uniandes" data-title="Escuela Internacional de Verano (Uniandes)" data-n="3">
-  <div class="panel-photo-head" style="background-image:url('../assets/img/escuela_verano_china.jpg')">
-    <div class="photo-head-inner">
+  <div class="detail-head">
+    <div class="detail-title">
       <div class="kicker">Opción 3 de 11 · Periodo intersemestral</div>
       <h3>Escuela Internacional de Verano (Uniandes)</h3>
       <p>Aprueba 2 cursos de la Escuela Internacional de Verano (EIV) de la Facultad de Administración, o de otras facultades de la Universidad de los Andes, uno de ellos 100% presencial.</p>
-      <div class="detail-badges">
-        <span class="pill">2 cursos · vacaciones junio-julio</span>
-      </div>
+    </div>
+    <div class="detail-badges">
+      <span class="pill">2 cursos · vacaciones junio-julio</span>
     </div>
   </div>
 
@@ -1771,14 +1776,14 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
   </div>
 </div>
 <div class="src-ficha" id="panel-opcion-lengua-cultura" data-title="Opción Académica en Lengua y Cultura" data-n="6">
-  <div class="panel-photo-head" style="background-image:url('../assets/img/lengua_cultura_clase.jpg')">
-    <div class="photo-head-inner">
+  <div class="detail-head">
+    <div class="detail-title">
       <div class="kicker">Opción 6 de 11 · Programa académico institucional</div>
       <h3>Opción Académica en Lengua y Cultura</h3>
       <p>Cursa y aprueba en su totalidad alguna de las 9 opciones de lengua y cultura de la Universidad de los Andes.</p>
-      <div class="detail-badges">
-        <span class="pill">Programa completo</span>
-      </div>
+    </div>
+    <div class="detail-badges">
+      <span class="pill">Programa completo</span>
     </div>
   </div>
 
@@ -2135,8 +2140,9 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L19 7"/></svg>
       </div>
       <h3 id="congratsHeading" style="margin-bottom:12px">¡Muy bien!</h3>
-      <p style="max-width:40ch;margin:0 auto 20px">Cumpliendo estos dos componentes, cumplirías con el Requisito Internacional. Debes tomar una consejería con Sophie Fernández Leal o Juan Pablo Izquierdo Camacho para continuar con tu proceso de validación del Requisito Internacional.</p>
+      <p style="max-width:42ch;margin:0 auto 20px">Cumpliendo estos dos componentes habrás avanzado en tu Requisito Internacional. Para validarlo, ingresa al enlace de Salesforce y diligencia cómo lo cumpliste — ahí se realizan las validaciones y darás por terminado tu proceso. Si tienes dudas sobre los pasos a seguir, también puedes tomar una consejería.</p>
       <div class="btns" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+        <a class="btn btn-brass btn-small" href="SALESFORCE-ENLACE-PENDIENTE" target="_blank" rel="noopener">Reportar en Salesforce</a>
         <a class="btn btn-outline btn-small" href="https://consejeriascoordinaciones.bookeau.com/#/login" target="_blank" rel="noopener">Agendar con Sophie Fernández Leal</a>
         <a class="btn btn-outline btn-small" href="https://outlook.office365.com/book/ConsejerasInternacionales@uniandes.onmicrosoft.com/?ismsaljsauthenabled=true" target="_blank" rel="noopener">Agendar con Juan Pablo Izquierdo</a>
       </div>
@@ -2381,8 +2387,10 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
   var tocList = document.getElementById('tocList');
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  var ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg>';
+  var ICON_RETURN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M9 14l-4-4 4-4"/><path d="M5 10h9a5 5 0 015 5v1"/></svg>';
   var ICON_DOWN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>';
+  var ICON_CHEV_L = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg>';
+  var ICON_CHEV_R = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg>';
 
   /* ---------- marco de una hoja ---------- */
   function frame(running){
@@ -2454,17 +2462,21 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
   var fichas = {}, order = [];
   var srcFichas = Array.prototype.slice.call(source.querySelectorAll(':scope > .src-ficha'));
   var total = srcFichas.length;
+  var baseChNum = boardHead.querySelector('.ch-num').textContent.trim();
   srcFichas.forEach(function(panel){
     var slug = panel.id.replace('panel-', '');
     var n = panel.getAttribute('data-n');
     var title = panel.getAttribute('data-title');
 
-    /* hoja izquierda: cabezote del capítulo + la tarjeta elegida + volver */
+    /* hoja izquierda: cabezote del capítulo (numerado 4.N) + la tarjeta elegida + volver */
     var L = frame('');
     L.classList.add('page--ficha', 'page--verso', 'page--bleed');
     var head = document.createElement('header');
     head.className = 'chapter-head chapter-head--compact';
-    head.appendChild(boardHead.querySelector('.ch-band').cloneNode(true));
+    var chBand = boardHead.querySelector('.ch-band').cloneNode(true);
+    chBand.querySelector('.ch-num').textContent = baseChNum + '.' + n;
+    chBand.querySelector('.h-section').textContent = title;
+    head.appendChild(chBand);
     var lb = bodyOf(L);
     lb.appendChild(head);
     var grid = document.createElement('div');
@@ -2472,20 +2484,35 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
     grid.appendChild(cardClone(slug));
     lb.appendChild(grid);
     var back = document.createElement('a');
-    back.className = 'btn btn-outline ficha-back';
+    back.className = 'btn btn-brass ficha-back';
     back.href = '#todas-experiencias';
-    back.innerHTML = ICON_BACK + 'Volver a todas las experiencias';
+    back.innerHTML = ICON_RETURN + 'Volver a todas las experiencias internacionales';
     lb.appendChild(back);
 
-    /* hoja derecha: la ficha completa */
+    /* hoja derecha: la ficha completa, con navegación sutil entre opciones */
     var R = frame('');
     R.classList.add('page--ficha', 'page--recto');
-    R.querySelector('.page-head').innerHTML = '<span class="ph-title"></span><span class="ph-count">Opción ' + n + ' de ' + total + '</span>';
+    R.querySelector('.page-head').innerHTML = '<span class="ph-title"></span>' +
+      '<span class="ph-nav"><button type="button" class="ph-arrow ph-prev" aria-label="Experiencia anterior">' + ICON_CHEV_L + '</button>' +
+      '<span class="ph-count">Opción ' + n + ' de ' + total + '</span>' +
+      '<button type="button" class="ph-arrow ph-next" aria-label="Siguiente experiencia">' + ICON_CHEV_R + '</button></span>';
     R.querySelector('.ph-title').textContent = title;
     bodyOf(R).appendChild(panel);
 
     fichas[slug] = { L: L, R: R, n: +n, title: title };
     order.push(slug);
+  });
+
+  /* ---------- navegación sutil entre experiencias (sin pasar por "volver a todas") ---------- */
+  order.forEach(function(slug, idx){
+    var R = fichas[slug].R;
+    var prevBtn = R.querySelector('.ph-prev'), nextBtn = R.querySelector('.ph-next');
+    if(idx === 0){ prevBtn.disabled = true; } else {
+      prevBtn.addEventListener('click', function(){ goTo({ t: order[idx - 1], i: loc.t !== 'main' ? loc.i : 0 }); });
+    }
+    if(idx === order.length - 1){ nextBtn.disabled = true; } else {
+      nextBtn.addEventListener('click', function(){ goTo({ t: order[idx + 1], i: loc.t !== 'main' ? loc.i : 0 }); });
+    }
   });
 
   /* ---------- contenido (índice) ---------- */
@@ -2513,6 +2540,7 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
   var loc = { t: 'main', i: 0 };   // t: 'main' o el slug de una ficha; i: pliego (doble) o página (sencilla)
   var busy = false, sizeKey = '';
   var BOARD = main.indexOf(boardCardsPage);
+  var savedBoardScroll = 0;   // conserva el scroll del listado de experiencias al entrar y salir de una ficha
 
   function trackPages(t){ return t === 'main' ? main : [fichas[t].L, fichas[t].R]; }
   function spreadOfPage(i){ return i <= 0 ? 0 : Math.floor((i + 1) / 2); }
@@ -2599,6 +2627,10 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
   function afterShow(){
     [slotL.firstElementChild, slotR.firstElementChild].forEach(function(p){ if(p){ fitToc(p); updateHint(p); } });
     updateUI();
+    if(loc.t === 'main' && loc.i === boardLoc().i){
+      var bb = bodyOf(boardCardsPage);
+      if(bb) bb.scrollTop = savedBoardScroll;
+    }
   }
   function labelFor(l){
     if(l.t !== 'main'){
@@ -2625,6 +2657,8 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
     [btnPrev, barPrev].forEach(function(b){ b.disabled = noPrev; });
     [btnNext, barNext].forEach(function(b){ b.disabled = noNext; });
     cornerL.hidden = noPrev; cornerR.hidden = noNext;
+    /* dentro de una ficha, solo se navega con "volver" o con la flechita sutil de opciones */
+    document.body.classList.toggle('ficha-mode', !inMain);
     if(mode === 'spread'){
       var tot = main.length - 1, seen = shown === 0 ? 0 : 2 * shown - 1;
       root.style.setProperty('--lt', Math.round(Math.min(9, seen / tot * 12)) + 'px');
@@ -2662,10 +2696,16 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
   function goTo(target){
     if(!target || busy) return;
     if(target.t === loc.t && target.i === loc.i) return;
+    if(loc.t === 'main' && loc.i === boardLoc().i){
+      var bb0 = bodyOf(boardCardsPage);
+      if(bb0) savedBoardScroll = bb0.scrollTop;
+    }
+    /* entrar, salir o cambiar entre fichas de experiencia: cambio directo, sin animación de paso de página */
+    var skipAnim = (loc.t !== 'main') || (target.t !== 'main');
     var fwd = rank(target) > rank(loc);
     var from = viewOf(loc), to = viewOf(target);
     loc = target;
-    if(reduceMotion){ render(); return; }
+    if(reduceMotion || skipAnim){ render(); return; }
     busy = true;
     if(mode === 'spread'){
       if(fwd){
