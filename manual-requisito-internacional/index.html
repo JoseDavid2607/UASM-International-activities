@@ -128,12 +128,10 @@ header.site{
 .hero-pass .flags img{height:16px;width:auto;border:1px solid var(--line-soft)}
 
 .comp-eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:10px}
-.comp-duo{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
-.comp-duo::-webkit-scrollbar{display:none}
-.comp-chip{font-family:var(--sans);font-weight:700;font-size:13.5px;color:var(--uniandes);background:var(--route-light);padding:8px 12px;border-radius:5px;line-height:1.25;white-space:nowrap}
+.comp-duo{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
+.comp-chip{font-family:var(--sans);font-weight:700;font-size:13px;color:var(--uniandes);background:var(--route-light);padding:7px 11px;border-radius:5px;line-height:1.3}
 .comp-plus{font-family:var(--mono);font-size:13px;color:var(--brass);font-weight:700;flex-shrink:0}
-@media (max-width:880px){.comp-chip{font-size:11.5px;padding:7px 9px}.comp-duo{gap:6px}}
-@media (max-width:520px){.comp-chip{font-size:10px;padding:6px 7px}.comp-duo{gap:4px}}
+@media (max-width:880px){.comp-chip{font-size:12px;padding:6px 9px}}
 
 @media (max-width:880px){
   .hero .wrap{grid-template-columns:1fr;padding-bottom:44px}
@@ -836,15 +834,14 @@ body.ficha-mode #barPrev,body.ficha-mode #barNext{display:none !important}
    SÉNECA NAVEGA
    ============================================================ */
 .seneca-fab{
-  position:fixed;right:20px;bottom:76px;z-index:90;display:flex;align-items:center;gap:0;
-  background:#fff;border:1px solid var(--line);border-radius:30px;padding:4px;cursor:pointer;
-  box-shadow:0 8px 22px rgba(16,26,36,.18);font-family:var(--sans);color:var(--uniandes);
-  transition:box-shadow .15s ease, border-color .15s ease;
+  position:fixed;right:20px;bottom:76px;z-index:90;display:flex;align-items:center;gap:11px;
+  background:#fff;border:2px solid var(--brass);border-radius:36px;padding:6px 18px 6px 6px;cursor:pointer;
+  box-shadow:0 12px 30px rgba(16,26,36,.22);font-family:var(--sans);color:var(--uniandes);
+  transition:box-shadow .15s ease, border-color .15s ease, transform .15s ease;
 }
-.seneca-fab:hover{border-color:var(--route);box-shadow:0 10px 26px rgba(16,26,36,.24)}
-.seneca-fab img{width:44px;height:44px;border-radius:50%;object-fit:cover;background:var(--route-light);flex-shrink:0}
-.seneca-fab .sf-label{font-size:13px;font-weight:600;white-space:nowrap;max-width:0;overflow:hidden;transition:max-width .25s ease, padding .25s ease;padding:0}
-.seneca-fab:hover .sf-label,.seneca-fab:focus-visible .sf-label{max-width:140px;padding:0 12px 0 10px}
+.seneca-fab:hover{border-color:var(--route);box-shadow:0 16px 36px rgba(16,26,36,.28);transform:translateY(-2px)}
+.seneca-fab img{width:54px;height:54px;border-radius:50%;object-fit:cover;background:var(--route-light);flex-shrink:0}
+.seneca-fab .sf-label{font-size:14.5px;font-weight:700;white-space:nowrap;max-width:150px;overflow:hidden}
 body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
 
 .seneca-panel{padding:0 !important;
@@ -888,8 +885,9 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
 .sp-input button:disabled{opacity:.4;cursor:default}
 .sp-input button svg{width:16px;height:16px}
 @media (max-width:700px){
-  .seneca-fab{right:12px;bottom:66px}
-  .seneca-fab img{width:40px;height:40px}
+  .seneca-fab{right:12px;bottom:66px;padding:5px 14px 5px 5px;gap:8px}
+  .seneca-fab img{width:46px;height:46px}
+  .seneca-fab .sf-label{font-size:13px;max-width:100px}
   .seneca-panel{right:8px;left:8px;bottom:62px;width:auto;height:min(72dvh, 560px)}
 }
 
@@ -2865,7 +2863,7 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
   var input = document.getElementById('senecaInput');
   var send  = form.querySelector('button');
   var CRONO = '../index.html#section-gantt';
-  var started = false, profile = null;
+  var started = false;
 
   function norm(s){ return (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9ñ\s]/g, ' ').replace(/\s+/g, ' ').trim(); }
   var STOP = ('de la el los las un una unos unas y o a en con por para que como cual cuales donde cuando se me mi mis tu tus su sus es son ser estar esta este esto eso lo le les al del si no hay puedo puede quiero necesito saber ' +
@@ -2880,12 +2878,12 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
   var INTENTS = [
     { k: ['que es el requisito', 'que es requisito internacional', 'para que sirve', 'objetivo', 'en que consiste', 'de que se trata'], id: 'que-es',
       a: 'El Requisito Internacional es obligatorio para obtener el título de Administrador (vigente desde 2016) y busca que desarrolles una perspectiva global. Aquí te lo explico:' },
-    { k: ['componente', 'como funciona', 'partes del requisito', 'que debo cumplir', 'que tengo que cumplir', 'estructura'], id: 'como-funciona',
-      a: 'El requisito tiene dos componentes independientes que no se sustituyen: 2 cursos ADMI en inglés y al menos una experiencia internacional.' },
+    { k: ['componente', 'como funciona', 'partes del requisito', 'que debo cumplir', 'que tengo que cumplir', 'estructura', 'cumplo el requisito', 'cumplo con el requisito', 'cumplo mi requisito', 'cumplo con mi requisito', 'cumplir el requisito', 'cumplir con el requisito', 'cumplir mi requisito'], id: 'como-funciona',
+      a: 'El requisito tiene dos componentes independientes que no se sustituyen: 2 cursos ADMI en inglés y al menos una experiencia internacional. Debes cumplir ambos.' },
     { k: ['ingles', 'admi', 'cursos disciplinares', 'componente 1'], id: 'cursos-ingles-detalle',
       a: 'Para el componente 1 debes aprobar 2 cursos código ADMI dictados en inglés en la Facultad de Administración. En esta página ves las reglas y registras tus cursos.' },
-    { k: ['experiencias', 'opciones', 'modalidades', 'componente 2', 'experiencia internacional', 'todas las experiencias'], id: 'todas-experiencias',
-      a: 'Hay 11 modalidades de experiencia internacional y debes cumplir al menos una. Aquí las ves todas; da clic en la que quieras revisar.' },
+    { k: ['experiencias', 'opciones', 'modalidades', 'componente 2', 'experiencia internacional', 'todas las experiencias', 'cumplo mi experiencia', 'cumplo la experiencia', 'cumplir mi experiencia', 'cumplir la experiencia', 'cumplir con la experiencia'], id: 'todas-experiencias',
+      a: 'Hay varias experiencias internacionales entre las que puedes elegir — debes cumplir al menos una. Recuerda que este es solo uno de los 2 componentes del Requisito Internacional (el otro son los cursos ADMI en inglés). Aquí las ves todas:' },
     { k: ['intercambio', 'semestre en el exterior', 'semestre afuera', 'moveon', 'convenios especificos'], id: 'panel-intercambio' },
     { k: ['doble titulacion', 'doble titulo', 'dos titulos', 'tilburg', 'neoma', 'tulane', 'toulouse', 'fgv', 'getulio'], id: 'panel-doble-titulacion' },
     { k: ['escuela internacional de verano', 'escuela de verano', 'eiv', 'verano uniandes', 'verano de los andes', 'cursos de verano', 'bootcamp'], id: 'panel-eiv-uniandes' },
@@ -3016,34 +3014,14 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
   function enableInput(on){ input.disabled = !on; send.disabled = !on; if(on) setTimeout(function(){ input.focus(); }, 420); }
 
   var SUGGEST = [
-    { label: '¿Qué es el requisito?' }, { label: 'Cursos en inglés' }, { label: 'Ver las 11 experiencias' },
+    { label: '¿Cómo cumplo el requisito?' }, { label: 'Cursos en inglés' }, { label: 'Ver las 11 experiencias' },
     { label: '¿Qué hago si no puedo salir del país?' }, { label: 'Agendar consejería' }
   ];
 
-  function choose(p){
-    profile = p;
-    bubble('me', p === 'pregrado' ? 'Pregrado' : 'Posgrado');
-    if(p === 'pregrado'){
-      bot('Perfecto. Pregúntame qué necesitas encontrar y te llevo a la página exacta del manual. También puedes empezar por aquí:', null, SUGGEST);
-      enableInput(true);
-    } else {
-      bot('Gracias. Este manual corresponde al <strong>pregrado en Administración</strong>, así que sus requisitos pueden no aplicar a tu programa de posgrado. Te recomiendo confirmar con la Oficina de Internacionalización de la Facultad.', null, [
-        { label: 'Me equivoqué, soy de pregrado', run: function(){ choose('pregrado'); } },
-        { label: 'Explorar el manual de todas formas', run: function(){
-            bubble('me', 'Explorar el manual de todas formas');
-            bot('Listo. Pregúntame qué quieres encontrar y te llevo a esa página.', null, SUGGEST);
-            enableInput(true);
-          } }
-      ]);
-    }
-  }
-
   function start(){
     started = true;
-    bot('Hola, soy <strong>Séneca</strong>. Te ayudo a encontrar información y a moverte por el Manual del Requisito Internacional.<br><br>Antes de empezar: ¿eres estudiante de <strong>pregrado</strong> o de <strong>posgrado</strong> de la Facultad de Administración?', null, [
-      { label: 'Pregrado', run: function(){ choose('pregrado'); } },
-      { label: 'Posgrado', run: function(){ choose('posgrado'); } }
-    ]);
+    bot('¡Hola! Soy Séneca, beeee 🐑 Te ayudo a encontrar información y a moverte por el Manual del Requisito Internacional.<br><br><strong>¿Qué necesitas?</strong>', null, SUGGEST);
+    enableInput(true);
   }
 
   function ask(q){
