@@ -128,13 +128,12 @@ header.site{
 .hero-pass .flags img{height:16px;width:auto;border:1px solid var(--line-soft)}
 
 .comp-eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:10px}
-.comp-duo{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.comp-chip{font-family:var(--sans);font-weight:700;font-size:13.5px;color:var(--uniandes);background:var(--route-light);padding:8px 12px;border-radius:5px;line-height:1.25}
+.comp-duo{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.comp-duo::-webkit-scrollbar{display:none}
+.comp-chip{font-family:var(--sans);font-weight:700;font-size:13.5px;color:var(--uniandes);background:var(--route-light);padding:8px 12px;border-radius:5px;line-height:1.25;white-space:nowrap}
 .comp-plus{font-family:var(--mono);font-size:13px;color:var(--brass);font-weight:700;flex-shrink:0}
-.comp-cta{margin-top:14px;display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11.5px;font-weight:700;color:var(--brass);text-decoration:none;letter-spacing:.02em}
-.comp-cta svg{width:13px;height:13px;flex-shrink:0}
-.comp-cta:hover{text-decoration:underline}
-@media (max-width:880px){.comp-chip{font-size:12.5px;padding:7px 10px}}
+@media (max-width:880px){.comp-chip{font-size:11.5px;padding:7px 9px}.comp-duo{gap:6px}}
+@media (max-width:520px){.comp-chip{font-size:10px;padding:6px 7px}.comp-duo{gap:4px}}
 
 @media (max-width:880px){
   .hero .wrap{grid-template-columns:1fr;padding-bottom:44px}
@@ -994,9 +993,6 @@ body.seneca-open .seneca-fab{opacity:0;pointer-events:none}
           <span class="comp-plus">+</span>
           <span class="comp-chip">Experiencia internacional</span>
         </div>
-        <a class="comp-cta" href="#como-funciona">Descubre cómo cumplirlo
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
       </div>
     </div>
   </div>
