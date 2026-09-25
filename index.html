@@ -71,6 +71,12 @@ a{color:inherit;}
 .hero-cta{display:inline-flex;align-items:center;gap:8px;margin-top:18px;font-family:var(--mono);font-size:12.5px;font-weight:600;letter-spacing:.02em;color:#fff;background:var(--uniandes);padding:10px 17px;border-radius:100px;text-decoration:none;transition:.15s ease;border:none;cursor:pointer;}
 .hero-cta:hover{background:var(--route);transform:translateY(-1px);}
 
+/* ---------- view toggle (todo / solo pregrado / solo posgrado) ---------- */
+.view-toggle{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap;}
+.view-toggle-btn{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.02em;color:var(--ink-soft);background:var(--paper-raised);border:1.3px solid var(--line);padding:8px 15px;border-radius:100px;transition:.15s ease;}
+.view-toggle-btn:hover{border-color:var(--route);color:var(--route);}
+.view-toggle-btn[aria-pressed="true"]{background:var(--uniandes);color:#fff;border-color:var(--uniandes);}
+
 /* ---------- next-event ticket ---------- */
 .next-wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px 6px;}
 .next-ticket{margin-top:22px;display:flex;align-items:stretch;background:var(--paper-raised);border:1px solid var(--line);border-left:3px solid var(--brass);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;width:100%;text-align:left;transition:transform .18s var(--ease), box-shadow .18s var(--ease);}
@@ -89,11 +95,6 @@ a{color:inherit;}
 .data-status[data-error="true"]{background:var(--wine-soft);color:var(--wine);border-color:rgba(138,59,65,.3);}
 .controls{position:sticky;top:0;z-index:30;background:rgba(241,244,246,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);padding:13px 0;}
 .controls-inner{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
-.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:9px;}
-.chip{font-family:var(--sans);font-weight:600;font-size:12.5px;display:inline-flex;align-items:center;gap:7px;padding:6px 13px 6px 10px;border-radius:100px;border:1.3px solid var(--col);color:var(--col);background:var(--tint);transition:.15s ease;}
-.chip .dot{width:7px;height:7px;border-radius:50%;background:var(--col);flex:none;}
-.chip[data-active="false"]{background:transparent;color:var(--ink-faint);border-color:var(--line);}
-.chip[data-active="false"] .dot{background:var(--ink-faint);}
 .count-line{font-family:var(--mono);font-size:11.5px;color:var(--ink-faint);}
 
 /* ---------- month nav (now lives at the top of the timeline section) ---------- */
@@ -283,7 +284,12 @@ a{color:inherit;}
   <img class="hero-watermark" src="assets/img/Logo_Uniandes.png" alt="">
   <div class="hero-eyebrow">Agenda internacional</div>
   <h1>Todo lo internacional del año, en un solo lugar.</h1>
-  <p>Convocatorias, movilidades, sesiones informativas y eventos, organizados por Pregrado y por Posgrado (EPOS). Filtra por tema y toca cualquier actividad para ver el detalle.</p>
+  <p>Convocatorias, movilidades, sesiones informativas y eventos, organizados por Pregrado y por Posgrado (EPOS). Toca cualquier actividad para ver el detalle.</p>
+  <div class="view-toggle" id="viewToggle">
+    <button class="view-toggle-btn" data-view="todo" aria-pressed="true">Ver todo</button>
+    <button class="view-toggle-btn" data-view="pregrado" aria-pressed="false">Activar vista solo pregrado</button>
+    <button class="view-toggle-btn" data-view="posgrado" aria-pressed="false">Activar vista solo posgrados</button>
+  </div>
   <a class="hero-cta" href="#consejerias">📅 Agenda tu consejería internacional</a>
 </header>
 
@@ -306,7 +312,6 @@ a{color:inherit;}
 
 <div class="controls">
   <div class="controls-inner">
-    <div class="filters" id="filters"></div>
     <div class="count-line" id="countLine">– actividades este año</div>
   </div>
 </div>
@@ -316,19 +321,19 @@ a{color:inherit;}
   <div class="section-head reveal">
     <div class="hero-eyebrow">Sección 1</div>
     <h2>Cronograma detallado del año</h2>
-    <p>Separado por Pregrado y Posgrado (EPOS). Cada fila es una categoría: las barras son ventanas de postulación y los rombos son fechas puntuales. Desliza hacia los lados para ver los 12 meses — los filtros de arriba también aplican aquí.</p>
+    <p>Separado por Pregrado y Posgrado (EPOS). Cada fila es una categoría: las barras son ventanas de postulación y los rombos son fechas puntuales. El calendario se muestra por quincenas — desliza hacia los lados para ver el año completo. La vista de arriba (todo, solo pregrado o solo posgrado) también aplica aquí.</p>
   </div>
   <div class="gantt-legend reveal">
     <span><span class="legend-bar"></span> Ventana de postulación</span>
     <span><span class="legend-diamond"></span> Fecha puntual</span>
   </div>
 
-  <div class="gantt-panel reveal">
+  <div class="gantt-panel reveal" id="panelPregrado">
     <div class="gantt-panel-head"><h3>🎓 Pregrado</h3><span class="count" id="countPregrado"></span><a class="panel-link-btn" href="manual-requisito-internacional/index.html">📖 Manual del requisito internacional</a></div>
     <div class="gantt-scroll"><div class="gantt-inner" id="ganttPregrado"></div></div>
   </div>
 
-  <div class="gantt-panel reveal">
+  <div class="gantt-panel reveal" id="panelPosgrado">
     <div class="gantt-panel-head"><h3>📘 Posgrado · EPOS</h3><span class="count" id="countPosgrado"></span></div>
     <div class="gantt-scroll"><div class="gantt-inner" id="ganttPosgrado"></div></div>
   </div>
@@ -364,7 +369,7 @@ a{color:inherit;}
     <p>Habla directo con el equipo de la ORI para resolver dudas puntuales sobre tu proceso de intercambio, dobles titulaciones o el Requisito Internacional.</p>
   </div>
   <div class="consejeria-grid">
-    <div class="consejeria-card">
+    <div class="consejeria-card" id="consejeriaSophie">
       <div class="consejeria-name">Sophie Fernández Leal</div>
       <div class="consejeria-role">Profesional Internacional Pregrado</div>
       <a class="consejeria-btn" href="https://consejeriascoordinaciones.bookeau.com/#/login" target="_blank" rel="noopener">Agendar cita →</a>
@@ -459,7 +464,13 @@ const lastWM = WINDOW_MONTHS[WINDOW_MONTHS.length - 1];
 const WINDOW_END = new Date(lastWM.year, lastWM.month, 1); // exclusivo: 1º día del mes siguiente al último
 const WINDOW_DAYS = Math.round((WINDOW_END - WINDOW_START) / 86400000);
 
-const TRACK_W = 1070;
+/* Columnas del cronograma por quincena (1–15 y 16–fin de cada mes de la ventana) */
+const QUINCENAS = [];
+WINDOW_MONTHS.forEach(({year, month}) => {
+  QUINCENAS.push({ year, month, half: 1 });
+  QUINCENAS.push({ year, month, half: 2 });
+});
+const TRACK_W = QUINCENAS.length * 84; // más ancho que antes -> menos apeñuscado, se recorre con scroll horizontal
 const LABEL_W = 170;
 
 function eventDate(e){ return new Date(e.year, e.m-1, e.d); }
@@ -545,26 +556,22 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO){
   const EVENTS_POSGRADO_WIN = EVENTS_POSGRADO.filter(inWindow);
   const ALL_EVENTS = EVENTS_PREGRADO_WIN.concat(EVENTS_POSGRADO_WIN);
 
-  let activeCats = new Set(Object.keys(CATS));
+  let activeView = 'todo'; // 'todo' | 'pregrado' | 'posgrado'
 
-  // ---------- filter chips ----------
-  const filtersEl = document.getElementById('filters');
-  filtersEl.innerHTML = '';
-  Object.entries(CATS).forEach(([key, c]) => {
-    const chip = document.createElement('button');
-    chip.className = 'chip';
-    chip.style.setProperty('--col', `var(${c.col})`);
-    chip.style.setProperty('--tint', `var(${c.tint})`);
-    chip.dataset.active = 'true';
-    chip.dataset.cat = key;
-    chip.innerHTML = `<span class="dot"></span>${c.icon} ${c.label}`;
-    chip.addEventListener('click', () => {
-      if (activeCats.has(key)) { activeCats.delete(key); chip.dataset.active='false'; }
-      else { activeCats.add(key); chip.dataset.active='true'; }
-      applyFilters();
-    });
-    filtersEl.appendChild(chip);
-  });
+  // ---------- view toggle (todo / solo pregrado / solo posgrado) ----------
+  const viewToggleButtons = [...document.querySelectorAll('.view-toggle-btn')];
+  const panelPregrado = document.getElementById('panelPregrado');
+  const panelPosgrado = document.getElementById('panelPosgrado');
+  const consejeriaSophie = document.getElementById('consejeriaSophie');
+  function applyView(view){
+    activeView = view;
+    viewToggleButtons.forEach(b => b.setAttribute('aria-pressed', b.dataset.view === view ? 'true' : 'false'));
+    panelPregrado.style.display = view === 'posgrado' ? 'none' : '';
+    panelPosgrado.style.display = view === 'pregrado' ? 'none' : '';
+    consejeriaSophie.style.display = view === 'posgrado' ? 'none' : '';
+    applyFilters();
+  }
+  viewToggleButtons.forEach(b => b.addEventListener('click', () => applyView(b.dataset.view)));
 
   // ---------- month nav (lives at the top of the timeline section) ----------
   const monthnavEl = document.getElementById('monthnav');
@@ -604,6 +611,7 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO){
       const row = document.createElement('div');
       row.className = 'row ' + (sideToggle ? 'align-left' : 'align-right');
       row.dataset.cat = e.cat;
+      row.dataset.program = e.program;
 
       const past = isPast(e);
       const tags = [];
@@ -651,14 +659,13 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO){
     const rows = document.querySelectorAll('.row');
     let visible = 0;
     rows.forEach(r => {
-      const show = activeCats.has(r.dataset.cat);
+      const show = activeView === 'todo'
+        || (activeView === 'pregrado' && r.dataset.program === 'Pregrado')
+        || (activeView === 'posgrado' && r.dataset.program !== 'Pregrado');
       r.dataset.hidden = show ? 'false' : 'true';
       if (show) visible++;
     });
     document.getElementById('countLine').textContent = `${visible} de ${ALL_EVENTS.length} actividades`;
-    document.querySelectorAll('.lane-row').forEach(l => {
-      l.dataset.hidden = activeCats.has(l.dataset.cat) ? 'false' : 'true';
-    });
   }
 
   // ---------- scroll spy for month nav ----------
@@ -747,11 +754,17 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO){
 
   function buildGantt(containerEl, events){
     containerEl.innerHTML = '';
+    containerEl.style.minWidth = (LABEL_W + TRACK_W) + 'px';
 
     const headerRow = document.createElement('div');
     headerRow.className = 'gantt-row header-row';
     const rangeLabel = WINDOW_MONTHS[0].year === lastWM.year ? String(lastWM.year) : (WINDOW_MONTHS[0].year + '–' + lastWM.year);
-    headerRow.innerHTML = `<div class="lane-label">${rangeLabel}</div><div class="month-cols">${WINDOW_MONTHS.map(({year,month}) => `<div class="month-col">${MONTHS_SHORT[month-1]}<br>${String(year).slice(2)}</div>`).join('')}</div>`;
+    const quincenaCols = QUINCENAS.map(({year, month, half}) => {
+      const lastDay = new Date(year, month, 0).getDate();
+      const range = half === 1 ? '1–15' : ('16–' + lastDay);
+      return `<div class="month-col">${MONTHS_SHORT[month-1]}<br>${range}</div>`;
+    }).join('');
+    headerRow.innerHTML = `<div class="lane-label">${rangeLabel}</div><div class="month-cols" style="width:${TRACK_W}px">${quincenaCols}</div>`;
     containerEl.appendChild(headerRow);
 
     const presentCats = CAT_ORDER.filter(key => events.some(e => e.cat === key));
@@ -764,6 +777,7 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO){
 
       const track = document.createElement('div');
       track.className = 'lane-track';
+      track.style.width = TRACK_W + 'px';
       track.style.setProperty('--tint', `var(${c.tint})`);
 
       events.filter(e => e.cat === key).forEach(e => {
