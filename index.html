@@ -568,6 +568,33 @@ function setStatus(msg, isError){
 }
 
 /* ================== fila de Excel -> objeto de evento ================== */
+/* Convierte una celda de fecha del Excel en {y,m,d} sin depender de la zona horaria del navegador.
+   Acepta: número serial de Excel, Date, o texto 'AAAA-MM-DD' / 'DD/MM/AAAA'. Devuelve null si no es válida. */
+function parseExcelDate(v){
+  let y, m, d;
+  if (typeof v === 'number' && isFinite(v)) {
+    const dt = new Date(Date.UTC(1899, 11, 30) + Math.floor(v) * 86400000); // época de Excel; se descarta la fracción (hora)
+    y = dt.getUTCFullYear(); m = dt.getUTCMonth() + 1; d = dt.getUTCDate();
+  } else if (v instanceof Date && !isNaN(v)) {
+    const dt = new Date(v.getTime() + 12 * 3600000); // +12 h: absorbe desfases de segundos/zona horaria alrededor de medianoche
+    y = dt.getFullYear(); m = dt.getMonth() + 1; d = dt.getDate();
+  } else if (typeof v === 'string') {
+    const t = v.trim();
+    let mt = t.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if (mt) { y = +mt[1]; m = +mt[2]; d = +mt[3]; }
+    else if ((mt = t.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})$/))) { d = +mt[1]; m = +mt[2]; y = +mt[3]; }
+    else return null;
+  } else return null;
+  const chk = new Date(y, m - 1, d); // rechaza fechas imposibles (p. ej. 31/02)
+  if (y < 2000 || y > 2100 || chk.getFullYear() !== y || chk.getMonth() !== m - 1 || chk.getDate() !== d) return null;
+  return { y, m, d };
+}
+/* Solo se aceptan enlaces http(s); evita esquemas como javascript: provenientes del Excel. */
+function safeURL(v){
+  const t = String(v || '').trim();
+  return /^https?:\/\//i.test(t) ? t : null;
+}
+
 function excelRowToEvent(row){
   const estado = String(row['Estado'] || 'Confirmada').trim();
   if (estado === 'Cancelada') return null;
@@ -575,21 +602,28 @@ function excelRowToEvent(row){
   const catKey = CAT_LABEL_TO_KEY[catLabel];
   const program = String(row['Programa'] || '').trim();
   const title = String(row['Título'] || '').trim();
-  const start = row['Fecha inicio'];
-  if (!catKey || !program || !title || !(start instanceof Date) || isNaN(start)) return null;
+  const start = parseExcelDate(row['Fecha inicio']);
+  if (!catKey || !program || !title || !start) {
+    console.warn('Fila omitida (categoría, programa, título o fecha de inicio inválidos):', row);
+    return null;
+  }
   const ev = {
-    year: start.getFullYear(), m: start.getMonth()+1, d: start.getDate(),
+    year: start.y, m: start.m, d: start.d,
     cat: catKey, program, title,
     desc: String(row['Descripción corta'] || '').trim(),
     long: String(row['Descripción larga'] || row['Descripción corta'] || '').trim(),
     estado,
-    link: String(row['Enlace / formulario'] || '').trim() || null,
-    sessionLink: String(row['Enlace de la sesión'] || '').trim() || null,
-    recording: String(row['Enlace de la grabación'] || '').trim() || null,
+    link: safeURL(row['Enlace / formulario']),
+    sessionLink: safeURL(row['Enlace de la sesión']),
+    recording: safeURL(row['Enlace de la grabación']),
   };
-  const end = row['Fecha fin (opcional)'];
-  if (end instanceof Date && !isNaN(end)) {
-    ev.y2 = end.getFullYear(); ev.m2 = end.getMonth()+1; ev.d2 = end.getDate();
+  const end = parseExcelDate(row['Fecha fin (opcional)']);
+  if (end) {
+    if (new Date(end.y, end.m-1, end.d) > new Date(start.y, start.m-1, start.d)) {
+      ev.y2 = end.y; ev.m2 = end.m; ev.d2 = end.d;
+    } else if (new Date(end.y, end.m-1, end.d) < new Date(start.y, start.m-1, start.d)) {
+      console.warn('Fecha fin anterior a la de inicio; se ignora la fecha fin:', title);
+    }
   }
   return ev;
 }
@@ -603,7 +637,7 @@ const evidencePromise = loadEvidence().catch(err => { console.warn('No se pudier
 fetch(DATA_FILE)
   .then(res => { if (!res.ok) throw new Error('HTTP ' + res.status); return res.arrayBuffer(); })
   .then(async buf => {
-    const wb = XLSX.read(buf, { type:'array', cellDates:true });
+    const wb = XLSX.read(buf, { type:'array', cellDates:false }) /* fechas como número serial: sin conversiones de zona horaria */;
     const sheetName = wb.SheetNames.includes(DATA_SHEET) ? DATA_SHEET : wb.SheetNames[0];
     const sheet = wb.Sheets[sheetName];
     const rows = XLSX.utils.sheet_to_json(sheet, { defval:null });
@@ -708,11 +742,11 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO, EVIDENCE){
             <span class="card-date">${fmtShort(e)}</span>
             <span class="card-cat">${c.icon} ${c.label}</span>
             ${e.estado === 'Por confirmar' ? '<span class="card-status">Por confirmar</span>' : ''}
-            <span class="card-audience">${e.program}</span>
+            <span class="card-audience">${escapeHTML(e.program)}</span>
           </div>
           <div class="card-body">
-            <div class="card-title">${e.title}</div>
-            <div class="card-desc">${e.desc}</div>
+            <div class="card-title">${escapeHTML(e.title)}</div>
+            <div class="card-desc">${escapeHTML(e.desc)}</div>
             ${tags.length ? `<div class="card-tags">${tags.join('')}</div>` : ''}
             ${evidStrip}
           </div>
@@ -830,10 +864,10 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO, EVIDENCE){
     const c = CATS[e.cat];
     ganttTooltip.style.setProperty('--col', `var(${c.col})`);
     ganttTooltip.innerHTML = `
-      <div class="tt-cat">${c.icon} ${c.label} · ${e.program}${e.estado==='Por confirmar' ? ' · Por confirmar' : ''}</div>
+      <div class="tt-cat">${c.icon} ${c.label} · ${escapeHTML(e.program)}${e.estado==='Por confirmar' ? ' · Por confirmar' : ''}</div>
       <div class="tt-date">${fmtLong(e)}</div>
-      <div class="tt-title">${e.title}</div>
-      <div class="tt-desc">${e.desc}</div>`;
+      <div class="tt-title">${escapeHTML(e.title)}</div>
+      <div class="tt-desc">${escapeHTML(e.desc)}</div>`;
     const rect = ev.currentTarget.getBoundingClientRect();
     let left = rect.left + rect.width / 2;
     left = Math.max(135, Math.min(window.innerWidth - 135, left));
