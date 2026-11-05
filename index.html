@@ -211,6 +211,19 @@ a{color:inherit;}
 .card-tag.reminder{color:var(--verified);}
 .card-tag.session{color:var(--route);}
 .card-tag.recording{color:var(--ink-soft);}
+.card-tag.evidence{color:var(--uniandes, var(--ink-soft));}
+/* ---------- evidencias (documentos de la carpeta de Drive con el mismo nombre de la actividad) ---------- */
+.evid-strip{display:flex;gap:6px;margin-top:10px;align-items:center;}
+.evid-thumb{width:54px;height:40px;border-radius:3px;border:1px solid var(--line);background:var(--paper) center/cover no-repeat;display:flex;align-items:center;justify-content:center;font-size:17px;flex:none;overflow:hidden;}
+.evid-more{font-family:var(--mono);font-size:10.5px;font-weight:600;color:var(--ink-faint);}
+.modal-evid{margin-top:18px;padding-top:14px;border-top:1px dashed var(--line);}
+.modal-evid-title{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;margin-bottom:9px;}
+.evid-list{display:flex;flex-direction:column;gap:8px;max-height:230px;overflow-y:auto;}
+.evid-item{display:flex;align-items:center;gap:11px;padding:7px;border:1px solid var(--line-soft);border-radius:var(--r);text-decoration:none;color:var(--ink);transition:.15s ease;}
+.evid-item:hover{border-color:var(--line);background:var(--paper);}
+.evid-item .evid-thumb{width:64px;height:46px;}
+.evid-name{font-size:12.5px;font-weight:600;line-height:1.3;word-break:break-word;}
+.evid-kind{font-family:var(--mono);font-size:10px;color:var(--ink-faint);margin-top:2px;text-transform:uppercase;}
 @keyframes cardPulse{
   0%{box-shadow:0 0 0 0 rgba(156,122,46,.55);}
   25%{box-shadow:0 0 0 3px var(--col,var(--brass)),0 0 0 3px var(--col,var(--brass));}
@@ -416,6 +429,10 @@ a{color:inherit;}
       </div>
       <a class="modal-action-btn" id="modalRecordingLink" style="--btncol:var(--ink-soft);display:none;" target="_blank" rel="noopener">🎥 Ver la grabación</a>
       <a class="modal-link" id="modalLink" target="_blank" rel="noopener">↗ Más información</a>
+      <div class="modal-evid" id="modalEvidence" style="display:none;">
+        <div class="modal-evid-title">📎 Evidencias</div>
+        <div class="evid-list" id="modalEvidList"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -450,6 +467,50 @@ const MONTHS_SHORT = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT
 const DRIVE_API_KEY = 'AIzaSyDpliU-N1s07NlbSCC1ot7-lJSNzfQB5zQ';
 const DRIVE_FILE_ID = '1Hu7iJYf-FWxiGQaP2VSgF203C877Nj8M';
 const DATA_SHEET = 'Actividades';
+// Carpeta "evidencias" en Drive (debe estar compartida como "Cualquier persona con el enlace: Lector").
+// Dentro puede haber subcarpetas de agrupación; toda carpeta cuyo nombre coincida con el título de una
+// actividad del Excel aporta sus archivos como evidencias de esa actividad.
+const EVIDENCE_ROOT_ID = '1NhEF_I9U13BmA9nszeI4Z9tRRnN8oTYz';
+const FOLDER_MIME = 'application/vnd.google-apps.folder';
+
+function normKey(s){
+  return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+}
+function escapeHTML(s){
+  return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function evidKind(f){
+  const m = f.mimeType || '';
+  if (m.startsWith('image/')) return { icon:'🖼️', label:'Imagen' };
+  if (m.startsWith('video/')) return { icon:'🎥', label:'Video' };
+  if (m === 'application/pdf') return { icon:'📄', label:'PDF' };
+  if (m.includes('presentation')) return { icon:'📊', label:'Presentación' };
+  if (m.includes('spreadsheet')) return { icon:'📈', label:'Hoja de cálculo' };
+  if (m.includes('word') || m.includes('document')) return { icon:'📝', label:'Documento' };
+  return { icon:'📎', label:'Archivo' };
+}
+function evidThumbURL(f, size){
+  return f.thumbnailLink ? f.thumbnailLink.replace(/=s\d+$/, '=s' + size) : null;
+}
+// Lista recursivamente la carpeta de evidencias y devuelve { títuloNormalizado: [archivos] }
+async function loadEvidence(){
+  const byFolder = {};
+  const queue = [{ id: EVIDENCE_ROOT_ID, name: '' }];
+  while (queue.length) {
+    const folder = queue.shift();
+    const q = encodeURIComponent(`'${folder.id}' in parents and trashed=false`);
+    const fields = encodeURIComponent('files(id,name,mimeType,thumbnailLink,webViewLink)');
+    const url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=${fields}&pageSize=200&orderBy=name&key=${DRIVE_API_KEY}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    (data.files || []).forEach(f => {
+      if (f.mimeType === FOLDER_MIME) queue.push({ id: f.id, name: f.name });
+      else if (folder.name) (byFolder[normKey(folder.name)] = byFolder[normKey(folder.name)] || []).push(f);
+    });
+  }
+  return byFolder;
+}
 // Archivo .xlsx real subido a Drive (no un Google Sheet nativo) -> alt=media.
 const DATA_FILE = `https://www.googleapis.com/drive/v3/files/${DRIVE_FILE_ID}?alt=media&key=${DRIVE_API_KEY}`;
 
@@ -536,9 +597,12 @@ function excelRowToEvent(row){
 /* ================== cargar el Excel desde Drive (vía Drive API) y arrancar la página ================== */
 setStatus('Cargando actividades desde Google Drive…', false);
 
+// Las evidencias se cargan en paralelo y son opcionales: si fallan, la página funciona igual sin ellas.
+const evidencePromise = loadEvidence().catch(err => { console.warn('No se pudieron cargar las evidencias:', err); return {}; });
+
 fetch(DATA_FILE)
   .then(res => { if (!res.ok) throw new Error('HTTP ' + res.status); return res.arrayBuffer(); })
-  .then(buf => {
+  .then(async buf => {
     const wb = XLSX.read(buf, { type:'array', cellDates:true });
     const sheetName = wb.SheetNames.includes(DATA_SHEET) ? DATA_SHEET : wb.SheetNames[0];
     const sheet = wb.Sheets[sheetName];
@@ -551,17 +615,18 @@ fetch(DATA_FILE)
     } else {
       setStatus('', false);
     }
-    init(eventsPregrado, eventsPosgrado);
+    init(eventsPregrado, eventsPosgrado, await evidencePromise);
   })
   .catch(err => {
     console.error(err);
     setStatus('No se pudo cargar el archivo desde Google Drive. Verifica que DRIVE_API_KEY y DRIVE_FILE_ID estén bien puestos, que la Drive API esté habilitada en tu proyecto de Google Cloud, y que el archivo esté compartido como "Cualquier persona con el enlace: Lector".', true);
-    init([], []);
+    init([], [], {});
   });
 
 
 /* ================== construir toda la página a partir de los eventos ================== */
-function init(EVENTS_PREGRADO, EVENTS_POSGRADO){
+function init(EVENTS_PREGRADO, EVENTS_POSGRADO, EVIDENCE){
+  const evidenceOf = e => EVIDENCE[normKey(e.title)] || [];
 
   const EVENTS_PREGRADO_WIN = EVENTS_PREGRADO.filter(inWindow);
   const EVENTS_POSGRADO_WIN = EVENTS_POSGRADO.filter(inWindow);
@@ -630,6 +695,12 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO){
       if (!past) tags.push('<span class="card-tag reminder">🔔 Puedes pedir recordatorio</span>');
       if (e.sessionLink && !past) tags.push('<span class="card-tag session">🔗 Enlace de la sesión</span>');
       if (e.recording && past) tags.push('<span class="card-tag recording">🎥 Grabación disponible</span>');
+      const evid = evidenceOf(e);
+      if (evid.length) tags.push(`<span class="card-tag evidence">📎 ${evid.length} ${evid.length === 1 ? 'evidencia' : 'evidencias'}</span>`);
+      const evidStrip = evid.length ? `<div class="evid-strip">${evid.slice(0,3).map(f => {
+        const t = evidThumbURL(f, 160);
+        return `<span class="evid-thumb"${t ? ` style="background-image:url('${escapeHTML(t)}')"` : ''}>${t ? '' : evidKind(f).icon}</span>`;
+      }).join('')}${evid.length > 3 ? `<span class="evid-more">+${evid.length - 3}</span>` : ''}</div>` : '';
 
       const cardHTML = `
         <button class="card" style="--col:var(${c.col});--tint:var(${c.tint})">
@@ -643,6 +714,7 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO){
             <div class="card-title">${e.title}</div>
             <div class="card-desc">${e.desc}</div>
             ${tags.length ? `<div class="card-tags">${tags.join('')}</div>` : ''}
+            ${evidStrip}
           </div>
         </button>`;
 
@@ -956,6 +1028,27 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO){
     const linkEl = document.getElementById('modalLink');
     if (e.link) { linkEl.href = e.link; linkEl.style.display = 'inline-flex'; }
     else { linkEl.removeAttribute('href'); linkEl.style.display = 'none'; }
+    const evidBox = document.getElementById('modalEvidence');
+    const evidList = document.getElementById('modalEvidList');
+    const evid = evidenceOf(e);
+    evidList.innerHTML = '';
+    evid.forEach(f => {
+      const k = evidKind(f), t = evidThumbURL(f, 200);
+      const a = document.createElement('a');
+      a.className = 'evid-item';
+      a.href = f.webViewLink || ('https://drive.google.com/file/d/' + f.id + '/view');
+      a.target = '_blank'; a.rel = 'noopener';
+      const th = document.createElement('span');
+      th.className = 'evid-thumb';
+      if (t) th.style.backgroundImage = `url("${t}")`; else th.textContent = k.icon;
+      const info = document.createElement('span');
+      const nm = document.createElement('div'); nm.className = 'evid-name'; nm.textContent = f.name;
+      const kd = document.createElement('div'); kd.className = 'evid-kind'; kd.textContent = k.icon + ' ' + k.label;
+      info.append(nm, kd);
+      a.append(th, info);
+      evidList.appendChild(a);
+    });
+    evidBox.style.display = evid.length ? '' : 'none';
     overlay.dataset.open = 'true';
     if (scrollTo) {
       const target = [...document.querySelectorAll('.card')].find(el => el.querySelector('.card-title').textContent === e.title);
