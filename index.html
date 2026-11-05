@@ -440,7 +440,6 @@ a{color:inherit;}
 <div class="toast" id="toast">✓ Descargado — ábrelo para agregarlo a tu calendario</div>
 <div class="gantt-tooltip" id="ganttTooltip"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 /* ================== catálogo y utilidades — no dependen de los datos del Excel ================== */
 const CATS = {
@@ -460,18 +459,10 @@ const CAT_LABEL_TO_KEY = {
 const MONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 const MONTHS_SHORT = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
 
-// ⚠️ CONFIGURACIÓN — datos del archivo de Excel en Google Drive.
-// 1) Comparte el archivo en Drive como "Cualquier persona con el enlace: Lector".
-// 2) Copia su ID (la parte entre /d/ y /view en el link para compartir).
-// 3) Pega aquí tu API key de Google (con la Drive API habilitada) y ese ID.
-const DRIVE_API_KEY = 'AIzaSyDpliU-N1s07NlbSCC1ot7-lJSNzfQB5zQ';
-const DRIVE_FILE_ID = '1Hu7iJYf-FWxiGQaP2VSgF203C877Nj8M';
-const DATA_SHEET = 'Actividades';
-// Carpeta "evidencias" en Drive (debe estar compartida como "Cualquier persona con el enlace: Lector").
-// Dentro puede haber subcarpetas de agrupación; toda carpeta cuyo nombre coincida con el título de una
-// actividad del Excel aporta sus archivos como evidencias de esa actividad.
-const EVIDENCE_ROOT_ID = '1NhEF_I9U13BmA9nszeI4Z9tRRnN8oTYz';
-const FOLDER_MIME = 'application/vnd.google-apps.folder';
+// Los datos los genera GitHub Actions (scripts/build-data.mjs) a partir del Excel y la carpeta de evidencias en
+// Drive y los publica como archivos estáticos. Así la API key de Google nunca llega al navegador.
+const EVENTS_URL = 'data/events.json';
+const EVIDENCE_URL = 'data/evidence.json';
 
 function normKey(s){
   return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
@@ -489,30 +480,7 @@ function evidKind(f){
   if (m.includes('word') || m.includes('document')) return { icon:'📝', label:'Documento' };
   return { icon:'📎', label:'Archivo' };
 }
-function evidThumbURL(f, size){
-  return f.thumbnailLink ? f.thumbnailLink.replace(/=s\d+$/, '=s' + size) : null;
-}
-// Lista recursivamente la carpeta de evidencias y devuelve { títuloNormalizado: [archivos] }
-async function loadEvidence(){
-  const byFolder = {};
-  const queue = [{ id: EVIDENCE_ROOT_ID, name: '' }];
-  while (queue.length) {
-    const folder = queue.shift();
-    const q = encodeURIComponent(`'${folder.id}' in parents and trashed=false`);
-    const fields = encodeURIComponent('files(id,name,mimeType,thumbnailLink,webViewLink)');
-    const url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=${fields}&pageSize=200&orderBy=name&key=${DRIVE_API_KEY}`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    (data.files || []).forEach(f => {
-      if (f.mimeType === FOLDER_MIME) queue.push({ id: f.id, name: f.name });
-      else if (folder.name) (byFolder[normKey(folder.name)] = byFolder[normKey(folder.name)] || []).push(f);
-    });
-  }
-  return byFolder;
-}
-// Archivo .xlsx real subido a Drive (no un Google Sheet nativo) -> alt=media.
-const DATA_FILE = `https://www.googleapis.com/drive/v3/files/${DRIVE_FILE_ID}?alt=media&key=${DRIVE_API_KEY}`;
+function evidThumbURL(f){ return f.thumb || null; }
 
 /* ---------------- Ventana móvil: 2 meses atrás + hoy + 10 meses adelante ---------------- */
 const now = new Date();
@@ -567,93 +535,29 @@ function setStatus(msg, isError){
   dataStatusEl.style.display = msg ? 'block' : 'none';
 }
 
-/* ================== fila de Excel -> objeto de evento ================== */
-/* Convierte una celda de fecha del Excel en {y,m,d} sin depender de la zona horaria del navegador.
-   Acepta: número serial de Excel, Date, o texto 'AAAA-MM-DD' / 'DD/MM/AAAA'. Devuelve null si no es válida. */
-function parseExcelDate(v){
-  let y, m, d;
-  if (typeof v === 'number' && isFinite(v)) {
-    const dt = new Date(Date.UTC(1899, 11, 30) + Math.floor(v) * 86400000); // época de Excel; se descarta la fracción (hora)
-    y = dt.getUTCFullYear(); m = dt.getUTCMonth() + 1; d = dt.getUTCDate();
-  } else if (v instanceof Date && !isNaN(v)) {
-    const dt = new Date(v.getTime() + 12 * 3600000); // +12 h: absorbe desfases de segundos/zona horaria alrededor de medianoche
-    y = dt.getFullYear(); m = dt.getMonth() + 1; d = dt.getDate();
-  } else if (typeof v === 'string') {
-    const t = v.trim();
-    let mt = t.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
-    if (mt) { y = +mt[1]; m = +mt[2]; d = +mt[3]; }
-    else if ((mt = t.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})$/))) { d = +mt[1]; m = +mt[2]; y = +mt[3]; }
-    else return null;
-  } else return null;
-  const chk = new Date(y, m - 1, d); // rechaza fechas imposibles (p. ej. 31/02)
-  if (y < 2000 || y > 2100 || chk.getFullYear() !== y || chk.getMonth() !== m - 1 || chk.getDate() !== d) return null;
-  return { y, m, d };
-}
-/* Solo se aceptan enlaces http(s); evita esquemas como javascript: provenientes del Excel. */
-function safeURL(v){
-  const t = String(v || '').trim();
-  return /^https?:\/\//i.test(t) ? t : null;
+/* ================== cargar los datos publicados (data/*.json) y arrancar la página ================== */
+setStatus('Cargando actividades…', false);
+
+async function fetchJSON(url){
+  const res = await fetch(url, { cache:'no-cache' });
+  if (!res.ok) throw new Error(url + ' -> HTTP ' + res.status);
+  return res.json();
 }
 
-function excelRowToEvent(row){
-  const estado = String(row['Estado'] || 'Confirmada').trim();
-  if (estado === 'Cancelada') return null;
-  const catLabel = String(row['Categoría'] || '').trim();
-  const catKey = CAT_LABEL_TO_KEY[catLabel];
-  const program = String(row['Programa'] || '').trim();
-  const title = String(row['Título'] || '').trim();
-  const start = parseExcelDate(row['Fecha inicio']);
-  if (!catKey || !program || !title || !start) {
-    console.warn('Fila omitida (categoría, programa, título o fecha de inicio inválidos):', row);
-    return null;
-  }
-  const ev = {
-    year: start.y, m: start.m, d: start.d,
-    cat: catKey, program, title,
-    desc: String(row['Descripción corta'] || '').trim(),
-    long: String(row['Descripción larga'] || row['Descripción corta'] || '').trim(),
-    estado,
-    link: safeURL(row['Enlace / formulario']),
-    sessionLink: safeURL(row['Enlace de la sesión']),
-    recording: safeURL(row['Enlace de la grabación']),
-  };
-  const end = parseExcelDate(row['Fecha fin (opcional)']);
-  if (end) {
-    if (new Date(end.y, end.m-1, end.d) > new Date(start.y, start.m-1, start.d)) {
-      ev.y2 = end.y; ev.m2 = end.m; ev.d2 = end.d;
-    } else if (new Date(end.y, end.m-1, end.d) < new Date(start.y, start.m-1, start.d)) {
-      console.warn('Fecha fin anterior a la de inicio; se ignora la fecha fin:', title);
-    }
-  }
-  return ev;
-}
+// Las evidencias son opcionales: si no existen o fallan, la página funciona igual sin ellas.
+const evidencePromise = fetchJSON(EVIDENCE_URL).catch(err => { console.warn('Sin evidencias:', err); return {}; });
 
-/* ================== cargar el Excel desde Drive (vía Drive API) y arrancar la página ================== */
-setStatus('Cargando actividades desde Google Drive…', false);
-
-// Las evidencias se cargan en paralelo y son opcionales: si fallan, la página funciona igual sin ellas.
-const evidencePromise = loadEvidence().catch(err => { console.warn('No se pudieron cargar las evidencias:', err); return {}; });
-
-fetch(DATA_FILE)
-  .then(res => { if (!res.ok) throw new Error('HTTP ' + res.status); return res.arrayBuffer(); })
-  .then(async buf => {
-    const wb = XLSX.read(buf, { type:'array', cellDates:false }) /* fechas como número serial: sin conversiones de zona horaria */;
-    const sheetName = wb.SheetNames.includes(DATA_SHEET) ? DATA_SHEET : wb.SheetNames[0];
-    const sheet = wb.Sheets[sheetName];
-    const rows = XLSX.utils.sheet_to_json(sheet, { defval:null });
-    const allEvents = rows.map(excelRowToEvent).filter(Boolean);
+fetchJSON(EVENTS_URL)
+  .then(async data => {
+    const allEvents = Array.isArray(data.events) ? data.events : [];
     const eventsPregrado = allEvents.filter(e => e.program === 'Pregrado');
     const eventsPosgrado = allEvents.filter(e => e.program !== 'Pregrado');
-    if (allEvents.length === 0) {
-      setStatus('El archivo se cargó desde Drive pero no tiene actividades válidas. Revisa las columnas Programa, Categoría, Título y Fecha inicio.', true);
-    } else {
-      setStatus('', false);
-    }
+    setStatus(allEvents.length === 0 ? 'Todavía no hay actividades publicadas.' : '', allEvents.length === 0);
     init(eventsPregrado, eventsPosgrado, await evidencePromise);
   })
   .catch(err => {
     console.error(err);
-    setStatus('No se pudo cargar el archivo desde Google Drive. Verifica que DRIVE_API_KEY y DRIVE_FILE_ID estén bien puestos, que la Drive API esté habilitada en tu proyecto de Google Cloud, y que el archivo esté compartido como "Cualquier persona con el enlace: Lector".', true);
+    setStatus('No se pudieron cargar las actividades. Intenta de nuevo en unos minutos.', true);
     init([], [], {});
   });
 
@@ -716,7 +620,19 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO, EVIDENCE){
     const rows = document.createElement('div');
     rows.className = 'rows';
 
+    // Marcador "HOY": va dentro de la lista, justo antes de la primera actividad de hoy o posterior (orden cronológico)
+    const isTodayMonth = (monthNum === TODAY.getMonth()+1 && year === TODAY.getFullYear());
+    let todayPlaced = false;
+    function placeTodayRow(){
+      const todayRow = document.createElement('div');
+      todayRow.className = 'today-row';
+      todayRow.innerHTML = `<div></div><div class="today-node"></div><div class="today-flag">${TODAY.getDate()} de ${MONTHS[TODAY.getMonth()].toLowerCase()}</div>`;
+      rows.appendChild(todayRow);
+      todayPlaced = true;
+    }
+
     monthEvents.forEach(e => {
+      if (isTodayMonth && !todayPlaced && e.d >= TODAY.getDate()) placeTodayRow();
       sideToggle = !sideToggle;
       const c = CATS[e.cat];
       const row = document.createElement('div');
@@ -732,7 +648,7 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO, EVIDENCE){
       const evid = evidenceOf(e);
       if (evid.length) tags.push(`<span class="card-tag evidence">📎 ${evid.length} ${evid.length === 1 ? 'evidencia' : 'evidencias'}</span>`);
       const evidStrip = evid.length ? `<div class="evid-strip">${evid.slice(0,3).map(f => {
-        const t = evidThumbURL(f, 160);
+        const t = evidThumbURL(f);
         return `<span class="evid-thumb"${t ? ` style="background-image:url('${escapeHTML(t)}')"` : ''}>${t ? '' : evidKind(f).icon}</span>`;
       }).join('')}${evid.length > 3 ? `<span class="evid-more">+${evid.length - 3}</span>` : ''}</div>` : '';
 
@@ -761,14 +677,8 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO, EVIDENCE){
       rows.appendChild(row);
     });
 
+    if (isTodayMonth && !todayPlaced) placeTodayRow(); // todas las actividades del mes ya pasaron
     block.appendChild(rows);
-
-    if (monthNum === TODAY.getMonth()+1 && year === TODAY.getFullYear()) {
-      const todayRow = document.createElement('div');
-      todayRow.className = 'today-row';
-      todayRow.innerHTML = `<div></div><div class="today-node"></div><div class="today-flag">${TODAY.getDate()} de ${MONTHS[TODAY.getMonth()].toLowerCase()}</div>`;
-      block.appendChild(todayRow);
-    }
 
     timelineEl.appendChild(block);
   });
@@ -1067,10 +977,10 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO, EVIDENCE){
     const evid = evidenceOf(e);
     evidList.innerHTML = '';
     evid.forEach(f => {
-      const k = evidKind(f), t = evidThumbURL(f, 200);
+      const k = evidKind(f), t = evidThumbURL(f);
       const a = document.createElement('a');
       a.className = 'evid-item';
-      a.href = f.webViewLink || ('https://drive.google.com/file/d/' + f.id + '/view');
+      a.href = /^https:\/\//.test(f.url) ? f.url : "#";
       a.target = '_blank'; a.rel = 'noopener';
       const th = document.createElement('span');
       th.className = 'evid-thumb';
