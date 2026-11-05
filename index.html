@@ -716,7 +716,19 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO, EVIDENCE){
     const rows = document.createElement('div');
     rows.className = 'rows';
 
+    // Marcador "HOY": va dentro de la lista, justo antes de la primera actividad de hoy o posterior (orden cronológico)
+    const isTodayMonth = (monthNum === TODAY.getMonth()+1 && year === TODAY.getFullYear());
+    let todayPlaced = false;
+    function placeTodayRow(){
+      const todayRow = document.createElement('div');
+      todayRow.className = 'today-row';
+      todayRow.innerHTML = `<div></div><div class="today-node"></div><div class="today-flag">${TODAY.getDate()} de ${MONTHS[TODAY.getMonth()].toLowerCase()}</div>`;
+      rows.appendChild(todayRow);
+      todayPlaced = true;
+    }
+
     monthEvents.forEach(e => {
+      if (isTodayMonth && !todayPlaced && e.d >= TODAY.getDate()) placeTodayRow();
       sideToggle = !sideToggle;
       const c = CATS[e.cat];
       const row = document.createElement('div');
@@ -761,14 +773,8 @@ function init(EVENTS_PREGRADO, EVENTS_POSGRADO, EVIDENCE){
       rows.appendChild(row);
     });
 
+    if (isTodayMonth && !todayPlaced) placeTodayRow(); // todas las actividades del mes ya pasaron
     block.appendChild(rows);
-
-    if (monthNum === TODAY.getMonth()+1 && year === TODAY.getFullYear()) {
-      const todayRow = document.createElement('div');
-      todayRow.className = 'today-row';
-      todayRow.innerHTML = `<div></div><div class="today-node"></div><div class="today-flag">${TODAY.getDate()} de ${MONTHS[TODAY.getMonth()].toLowerCase()}</div>`;
-      block.appendChild(todayRow);
-    }
 
     timelineEl.appendChild(block);
   });
